@@ -1,0 +1,54 @@
+# controller
+ND-controller-NAME = Sonos Controller
+CMD-ctl-QUERY-NAME = Query
+CMD-ctl-DISCOVER-NAME = Re-Discover
+CMD-ctl-UPDATE_PROFILE-NAME = Update Profile
+CMD-ctl-REMOVE_NOTICES_ALL-NAME = Remove All Notices
+CMD-ctl-REMOVE_NOTICE_TEST-NAME = Remove Notice Test
+ST-ctl-ST-NAME = NodeServer Online
+
+# mynodetype
+ND-tmplnode-NAME = Template Node
+ST-tmplnode-ST-NAME = Node Status
+
+# Sonos Player
+ND-PLAYER-NAME = Sonos Player
+ND-PLAYER-ICON = GenericCtl
+ST-PLAYER-ST-NAME = Status
+ST-PLAYER-SVOL-NAME = Volume
+ST-PLAYER-GV0-NAME = Mute
+ST-PLAYER-GV1-NAME = Shuffle
+
+CMD-PLAYER-PLAY-NAME = Play
+CMD-PLAYER-PAUSE-NAME = Pause
+CMD-PLAYER-STOP-NAME = Stop
+CMD-PLAYER-PREVIOUS-NAME = Previous
+CMD-PLAYER-NEXT-NAME = Next
+CMD-PLAYER-MUTE-NAME = Mute
+CMD-PLAYER-UNMUTE-NAME = UnMute
+CMD-PLAYER-SHUFFLEON-NAME = Shuffle On
+CMD-PLAYER-SHUFFLEOFF-NAME = Shuffle Off
+CMD-PLAYER-SVOL-NAME = Volume
+CMD-PLAYER-BASS-NAME = Bass
+CMD-PLAYER-TREBLE-NAME = Treble
+CMD-PLAYER-PLAYLST-NAME = Playlist
+CMD-PLAYER-FAV-NAME = Favorite
+
+PLAY_MODE-0 = N/A
+PLAY_MODE-1 = Playing
+PLAY_MODE-2 = Transitioning
+PLAY_MODE-3 = Paused
+PLAY_MODE-4 = Stopped
+
+FAVORITE-0 = 101.5 | 101-5 Bob Rocks (Rock Music)
+FAVORITE-2 = 37 - Octane
+FAVORITE-1 = 35 - SiriusXMU
+FAVORITE-4 = 41 - SiriusXM Turbo with Kayla
+PLAY_LIST-6 = Hello new project
+PLAY_LIST-8 = Wakeup
+PLAY_LIST-7 = Goodnight Time
+PLAY_LIST-2 = Test
+PLAY_LIST-4 = ISY-Test
+PLAY_LIST-3 = Assorted List
+PLAY_LIST-5 = HomeSeer Fairwell
+PLAY_LIST-9 = Nobodies Home
