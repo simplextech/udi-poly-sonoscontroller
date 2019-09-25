@@ -1,6 +1,9 @@
 
-import polyinterface
-
+try:
+    import polyinterface
+except ImportError:
+    import pgc_interface as polyinterface
+    CLOUD = True
 
 class PlaylistNode(polyinterface.Node):
     def __init__(self, controller, primary, address, name):
