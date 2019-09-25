@@ -2,13 +2,14 @@
     "name": "SonosController",
     "docs": "https://github.com/Einstein42/udi-poly-template-python",
     "type": "python3",
-    "executable": "template-poly.py",
+    "executable": "SonosController.py",
     "install": "install.sh",
     "install_cloud": "install_cloud.sh",
     "description": "Template Node Server",
     "notice": "Your disclaimer here",
     "shortPoll": "60",
     "longPoll": "240",
+    "testMode": true,
     "credits": [
         {
             "title": "mypoly: a NodeServer for Template Integration",

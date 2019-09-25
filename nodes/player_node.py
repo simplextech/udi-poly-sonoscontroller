@@ -1,67 +1,74 @@
+try:
+    import polyinterface
+except ImportError:
+    import pgc_interface as polyinterface
+    CLOUD = True
 
-import polyinterface
+from sonos import SonosControl as SonosControl
 
 
 class PlayerNode(polyinterface.Node):
-    def __init__(self, controller, primary, address, name):
+    def __init__(self, controller, primary, address, name, sonos_players, household):
         super(PlayerNode, self).__init__(controller, primary, address, name)
+        self.sonos = SonosControl()
+        self.sonos_players = sonos_players
+        self.household = household
 
-    # def start(self):
-    #     print('Starting Player: ' + self.name + ' ------------------')
-    #
-    #     r = requests.get('http://192.168.1.10:5005/zones')
-    #     _zones = r.json()
-    #     if len(_zones) > 0:
-    #         for z in _zones:
-    #             _uuid = str(z['coordinator']['uuid']).lower().split('_')[1]
-    #             zone_uuid = _uuid[0:-4]
-    #             if zone_uuid == self.address:
-    #                 _playbackState = str(z['coordinator']['state']['playbackState'])
-    #                 if _playbackState == 'PLAYING':
-    #                     playbackstate = 1
-    #                 elif _playbackState == 'TRANSITIONING':
-    #                     playbackstate = 2
-    #                 elif _playbackState == 'PAUSED':
-    #                     playbackstate = 3
-    #                 elif _playbackState == 'STOPPED':
-    #                     playbackstate = 4
-    #                 else:
-    #                     playbackstate = 0
-    #
-    #                 self.setDriver('ST', playbackstate)
-    #
-    #                 _volume = z['coordinator']['state']['volume']
-    #                 self.setDriver('SVOL', _volume)
-    #
-    # def player_volume(self, command):
-    #     # print('Volume command: ', command)
-    #     player = self.name
-    #     val = command['value']
-    #     r = requests.get('http://192.168.1.10:5005/' + player + '/volume/' + val)
-    #     resp = r.json()
-    #     if resp['status'] == 'success':
-    #         self.setDriver('SVOL', val)
-    #
-    # def player_playlist(self, command):
-    #     print('Playlist: ', command)
-    #     pl_number = int(command['value']) - 1
-    #     r = requests.get('http://192.168.1.10:5005/playlists')
-    #     _play_list = r.json()
-    #     print('Playlist Number: ' + str(pl_number))
-    #     print('Sonos Playlist: ' + _play_list[pl_number])
-    #     playlist = _play_list[pl_number]
-    #     self.controller.play_playlist(self.name, playlist)
-    #
-    # def player_favorite(self, command):
-    #     print('Favorite: ', command)
-    #     fav_number = int(command['value']) - 1
-    #     r = requests.get('http://192.168.1.10:5005/favorites')
-    #     _favorites = r.json()
-    #     print('Favorite Number: ' + str(fav_number))
-    #     print('Sonos Playlist: ' + _favorites[fav_number])
-    #     favorite = _favorites[fav_number]
-    #     self.controller.play_favorite(self.name, favorite)
+    def start(self):
+        print('Starting Player: ' + self.name + ' ------------------')
+        if self.get_player_volume():
+            self.setDriver('ST', 1)
+        else:
+            self.setDriver('ST', 0)
 
+    def get_player_volume(self):
+        print('Get Volume command')
+        for player in self.sonos_players:
+            id = player['id']
+            address = id.split('_')[1][0:-4].lower()
+            if address == self.address:
+                volume = SonosControl.get_player_volume(self.sonos, id)
+                if volume:
+                    self.setDriver('SVOL', volume[0])
+                else:
+                    print('Error: ' + volume)
+
+    def set_player_volume(self, command):
+        print('Set Volume command: ', command)
+        volume = command['value']
+        for player in self.sonos_players:
+            id = player['id']
+            address = id.split('_')[1][0:-4].lower()
+            if address == self.address:
+                _status = SonosControl.set_player_volume(self.sonos, id, volume)
+                if _status:
+                    self.setDriver('SVOL', volume)
+                else:
+                    print('Error: ' + _status)
+
+    def set_player_mute(self, command):
+        print('Mute Command: ', command)
+        for player in self.sonos_players:
+            id = player['id']
+            address = id.split('_')[1][0:-4].lower()
+            if address == self.address:
+                _status = SonosControl.set_player_mute(self.sonos, id)
+                if _status:
+                    self.setDriver('GV0', 1)
+                else:
+                    print('Error: ' + _status)
+
+    def set_player_unmute(self, command):
+        print('unMute Command: ', command)
+        for player in self.sonos_players:
+            id = player['id']
+            address = id.split('_')[1][0:-4].lower()
+            if address == self.address:
+                _status = SonosControl.set_player_unmute(self.sonos, id)
+                if _status:
+                    self.setDriver('GV0', 0)
+                else:
+                    print('Error: ' + _status)
 
     def query(self):
         self.reportDrivers()
@@ -69,16 +76,15 @@ class PlayerNode(polyinterface.Node):
     # "Hints See: https://github.com/UniversalDevicesInc/hints"
     # hint = [1,2,3,4]
     drivers = [
-                {'driver': 'ST', 'value': 0, 'uom': 25},
-                {'driver': 'SVOL', 'value': 0, 'uom': 51},
-                {'driver': 'GV01', 'value': 0, 'uom': 25},
-                {'driver': 'GV02', 'value': 0, 'uom': 25}
-            ]
+        {'driver': 'ST', 'value': 0, 'uom': 2},
+        {'driver': 'SVOL', 'value': 0, 'uom': 51},
+        {'driver': 'GV0', 'value': 0, 'uom': 2},  # Mute/unMute
+    ]
 
     id = 'PLAYER'
 
     commands = {
-                    # 'DON': setOn, 'DOF': setOff
-                    # 'SVOL': player_volume, 'GV01': player_playlist,
-                    # 'GV02': player_favorite
-                }
+        'SVOL': set_player_volume,
+        'MUTE': set_player_mute,
+        'UNMUTE': set_player_unmute
+        }

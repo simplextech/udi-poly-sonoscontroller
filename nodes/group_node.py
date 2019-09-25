@@ -1,5 +1,9 @@
+try:
+    import polyinterface
+except ImportError:
+    import pgc_interface as polyinterface
+    CLOUD = True
 
-import polyinterface
 from sonos import SonosControl as SonosControl
 
 
@@ -31,49 +35,49 @@ class GroupNode(polyinterface.Node):
                     playbackstate = 0
                 self.setDriver('ST', playbackstate)
 
-                volume = SonosControl.get_groupVolume(self.sonos, self.household, id)
+                volume = SonosControl.get_group_volume(self.sonos, self.household, id)
                 # List 0=volume, 1=muted, 2=fixed(true/false)
                 self.setDriver('SVOL', volume[0])
                 self.setDriver('GV0', volume[1])
 
-    def player_volume(self, command):
+    def group_volume(self, command):
         print('Volume command: ', command)
         volume = command['value']
         for group in self.sonos_groups:
             id = group['id']
             address = str(id.split(':')[1]).lower()
             if address == self.address:
-                _status = SonosControl.set_groupVolume(self.sonos, self.household, id, volume)
+                _status = SonosControl.set_group_volume(self.sonos, self.household, id, volume)
                 if _status:
                     self.setDriver('SVOL', volume)
                 else:
                     print('Error: ' + _status)
 
-    def player_mute(self, command):
+    def group_mute(self, command):
         print('Mute Command: ', command)
         for group in self.sonos_groups:
             id = group['id']
             address = str(id.split(':')[1]).lower()
             if address == self.address:
-                _status = SonosControl.set_groupMute(self.sonos, self.household, id, mute=True)
+                _status = SonosControl.set_group_mute(self.sonos, self.household, id, mute=True)
                 if _status:
                     self.setDriver('GV0', 1)
                 else:
                     print('Error: ' + _status)
 
-    def player_unmute(self, command):
+    def group_unmute(self, command):
         print('unMute Command: ', command)
         for group in self.sonos_groups:
             id = group['id']
             address = str(id.split(':')[1]).lower()
             if address == self.address:
-                _status = SonosControl.set_groupMute(self.sonos, self.household, id, mute=False)
+                _status = SonosControl.set_group_mute(self.sonos, self.household, id, mute=False)
                 if _status:
                     self.setDriver('GV0', 0)
                 else:
                     print('Error: ' + _status)
 
-    def player_playlist(self, command):
+    def group_playlist(self, command):
         print('Playlist: ', command)
         playlist = command['value']
         for group in self.sonos_groups:
@@ -86,7 +90,7 @@ class GroupNode(polyinterface.Node):
                 else:
                     print('Error: ' + _status)
 
-    def player_favorite(self, command):
+    def group_favorite(self, command):
         print('Favorite: ', command)
         favorite = command['value']
         for group in self.sonos_groups:
@@ -99,7 +103,7 @@ class GroupNode(polyinterface.Node):
                 else:
                     print('Error: ' + _status)
 
-    def player_play(self, command):
+    def group_play(self, command):
         print('Play: ', command)
         for group in self.sonos_groups:
             id = group['id']
@@ -111,7 +115,7 @@ class GroupNode(polyinterface.Node):
                 else:
                     print('Error: ' + _status)
 
-    def player_pause(self, command):
+    def group_pause(self, command):
         print('Pause: ', command)
         for group in self.sonos_groups:
             id = group['id']
@@ -123,7 +127,7 @@ class GroupNode(polyinterface.Node):
                 else:
                     print('Error: ' + _status)
 
-    def player_skipToPreviousTrack(self, command):
+    def group_skip_to_previous_track(self, command):
         print('Previous Track ', command)
         for group in self.sonos_groups:
             id = group['id']
@@ -135,8 +139,7 @@ class GroupNode(polyinterface.Node):
                 else:
                     print('Error: ' + _status)
 
-
-    def player_skipToNextTrack(self, command):
+    def group_skip_to_next_track(self, command):
         print('Previous Track ', command)
         for group in self.sonos_groups:
             id = group['id']
@@ -148,12 +151,12 @@ class GroupNode(polyinterface.Node):
                 else:
                     print('Error: ' + _status)
 
-    def player_shuffle_on(self, command):
+    def group_shuffle_on(self, command):
         print('Shuffle: ', command)
         self.setDriver('GV1', 1)
         self.shuffle = True
 
-    def player_shuffle_off(self, command):
+    def group_shuffle_off(self, command):
         print('Shuffle: ', command)
         self.setDriver('GV1', 0)
         self.shuffle = False
@@ -172,18 +175,18 @@ class GroupNode(polyinterface.Node):
         {'driver': 'GV1', 'value': 0, 'uom': 2}  # Shuffle
     ]
 
-    id = 'PLAYER'
+    id = 'GROUP'
 
     commands = {
-        'SVOL': player_volume,
-        'PLAY': player_play,
-        'PAUSE': player_pause,
-        'PREVIOUS': player_skipToPreviousTrack,
-        'NEXT': player_skipToNextTrack,
-        'MUTE': player_mute,
-        'UNMUTE': player_unmute,
-        'PLAYLST': player_playlist,
-        'FAV': player_favorite,
-        'SHUFFLEON': player_shuffle_on,
-        'SHUFFLEOFF': player_shuffle_off
+        'SVOL': group_volume,
+        'PLAY': group_play,
+        'PAUSE': group_pause,
+        'PREVIOUS': group_skip_to_previous_track,
+        'NEXT': group_skip_to_next_track,
+        'MUTE': group_mute,
+        'UNMUTE': group_unmute,
+        'PLAYLST': group_playlist,
+        'FAV': group_favorite,
+        'SHUFFLEON': group_shuffle_on,
+        'SHUFFLEOFF': group_shuffle_off
         }
