@@ -5,9 +5,13 @@ except ImportError:
     import pgc_interface as polyinterface
     CLOUD = True
 
+from sonos import SonosControl as SonosControl
+
 class PlaylistNode(polyinterface.Node):
     def __init__(self, controller, primary, address, name):
         super(PlaylistNode, self).__init__(controller, primary, address, name)
+        access_token = self.polyConfig['customParams']['access_token']
+        self.sonos = SonosControl(access_token)
 
     def start(self):
         print('Starting Group: ' + self.name + ' ------------------')
