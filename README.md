@@ -17,6 +17,10 @@
 - ISY994i Firmware 5.x
 - Polyglot Cloud
 
+#### Support / Contributions
+- Open Source Software is free but the hardware to develop against and time is not.
+[Please support development](https://www.paypal.me/simplextech)
+
 #### Attributions
 - [Universal Devices](https://www.universal-devices.com/)
 - [Polyglot](https://github.com/UniversalDevicesInc/polyglot-v2)
