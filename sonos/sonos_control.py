@@ -2,25 +2,26 @@ import requests
 
 
 class SonosControl:
-    def __init__(self):
-        self.auth_host = 'api.sonos.com'
+    def __init__(self, access_token):
+        # self.auth_host = 'api.sonos.com'
         self.api_host = 'api.ws.sonos.com'
         # self.client_key = '9b381a14-1ce0-4789-ab69-61aedfda21c6'
         # self.client_secret = '6cd01138-4a40-45b2-808e-6281417b5bea'
         # self.redirect_uri = 'https://webhook.site/a45c16b3-1db8-44de-bd05-985956bfa461'
         # self.scope = 'playback-control-all'
-        self.auth_url = 'https://' + self.auth_host + '/login/v3/oauth'
-        self.token_url = 'https://' + self.auth_host + '/login/v3/oauth/access'
+        # self.auth_url = 'https://' + self.auth_host + '/login/v3/oauth'
+        # self.token_url = 'https://' + self.auth_host + '/login/v3/oauth/access'
         self.household_url = 'https://' + self.api_host + '/control/api/v1/households'
         self.groups_url = 'https://' + self.api_host + '/control/api/v1/groups/'
         self.players_url = 'https://' + self.api_host + '/control/api/v1/players/'
         # self.household = None
 
+        self.bearer_token = 'Bearer ' + access_token
         self.headers = {
-            'Authorization': "Bearer 7ebfbcd5-38de-47e1-9171-2b341c8c35ff",
+            'Authorization': self.bearer_token,
             'Accept': "*/*",
             'Cache-Control': "no-cache",
-            'Host': "api.ws.sonos.com",
+            'Host': self.api_host,
             'Accept-Encoding': "gzip, deflate",
             'Connection': "keep-alive",
             'cache-control': "no-cache"
@@ -30,7 +31,7 @@ class SonosControl:
         """
         Get the Household ID's
         """
-        household = {}
+        # household = {}
         r = requests.get(self.household_url, headers=self.headers)
         r_json = r.json()
         if len(r_json['households']) > 1:
