@@ -8,18 +8,20 @@ from sonos import SonosControl as SonosControl
 
 
 class PlayerNode(polyinterface.Node):
-    def __init__(self, controller, primary, address, name, sonos_players, household):
+    def __init__(self, controller, primary, address, name, sonos, sonos_players, household):
         super(PlayerNode, self).__init__(controller, primary, address, name)
-        self.sonos = SonosControl()
+        # access_token = self.polyConfig['customParams']['access_token']
+        # self.sonos = SonosControl(access_token)
+        self.sonos = sonos
         self.sonos_players = sonos_players
         self.household = household
 
     def start(self):
         print('Starting Player: ' + self.name + ' ------------------')
         if self.get_player_volume():
-            self.setDriver('ST', 1)
+            self.setDriver('ST', 1, force=True)
         else:
-            self.setDriver('ST', 0)
+            self.setDriver('ST', 0, force=True)
 
     def get_player_volume(self):
         print('Get Volume command')
@@ -29,9 +31,16 @@ class PlayerNode(polyinterface.Node):
             if address == self.address:
                 volume = SonosControl.get_player_volume(self.sonos, id)
                 if volume:
+                    # List 0=volume, 1=muted, 2=fixed(true/false)
                     self.setDriver('SVOL', volume[0])
+                    if volume[1] == 'true':
+                        self.setDriver('GV0', 1, force=True)
+                    else:
+                        self.setDriver('GV0', 0, force=True)
+                    return True
                 else:
                     print('Error: ' + volume)
+                    return False
 
     def set_player_volume(self, command):
         print('Set Volume command: ', command)
