@@ -1,15 +1,15 @@
 # controller
 ND-controller-NAME = Sonos Controller
-CMD-ctl-QUERY-NAME = Query
+#CMD-ctl-QUERY-NAME = Query
 CMD-ctl-DISCOVER-NAME = Re-Discover
 CMD-ctl-UPDATE_PROFILE-NAME = Update Profile
-CMD-ctl-REMOVE_NOTICES_ALL-NAME = Remove All Notices
-CMD-ctl-REMOVE_NOTICE_TEST-NAME = Remove Notice Test
+#CMD-ctl-REMOVE_NOTICES_ALL-NAME = Remove All Notices
+#CMD-ctl-REMOVE_NOTICE_TEST-NAME = Remove Notice Test
 ST-ctl-ST-NAME = NodeServer Online
 
 # Sonos Group/Player Parent Container
 ND-PARENT-NAME = Sonos Container
-CMD-PARENT-QUERY-NAME = Query
+#CMD-PARENT-QUERY-NAME = Query
 CMD-PARENT-DISCOVER-NAME = Re-Discover
 CMD-PARENT-UPDATE_PROFILE-NAME = Update Profile
 ST-PARENT-ST-NAME = Sonos Container Online
