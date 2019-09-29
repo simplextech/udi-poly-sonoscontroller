@@ -40,6 +40,7 @@ class Controller(polyinterface.Controller):
         self.cloud = CLOUD
 
     def get_credentials(self):
+        print('---- Environment: ' + self.poly.stage + '----')
         if 'clientId' in self.poly.init['oauth']:
             self.server_data['clientId'] = self.poly.init['oauth']['clientId']
         else:
