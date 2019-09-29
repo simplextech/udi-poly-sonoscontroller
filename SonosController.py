@@ -39,36 +39,26 @@ class Controller(polyinterface.Controller):
         self.server_data = {}
         self.cloud = CLOUD
 
-    def local_get_credentials(self):
-        self.server_data = {'clientId': '9b381a14-1ce0-4789-ab69-61aedfda21c6',
-                            'clientSecret': '6cd01138-4a40-45b2-808e-6281417b5bea',
-                            'url': 'https://pgtest.isy.io/api/oauth/callback',
-                            'worker': self.poly.init['worker']}
-        if 'worker' in self.server_data:
-            return True
+    def get_credentials(self):
+        if 'clientId' in self.poly.init['oauth']:
+            self.server_data['clientId'] = self.poly.init['oauth']['clientId']
+        else:
+            LOGGER.error('Unable to find Client ID in the init data')
+            return False
+        if 'clientSecret' in self.poly.init['oauth']:
+            self.server_data['clientSecret'] = self.poly.init['oauth']['clientSecret']
+        else:
+            LOGGER.error('Unable to find Client Secret in the init data')
+            return False
+        if 'url' in self.poly.init['oauth']:
+            self.server_data['url'] = self.poly.init['oauth']['url']
+        else:
+            LOGGER.error('Unable to find URL in the init data')
+            return False
+        if self.poly.init['worker']:
+            self.server_data['worker'] = self.poly.init['worker']
         else:
             return False
-
-    # def get_credentials(self):
-    #     if 'clientId' in self.poly.init['oauth']:
-    #         self.server_data['clientId'] = self.poly.init['oauth']['clientId']
-    #     else:
-    #         LOGGER.error('Unable to find Client ID in the init data')
-    #         return False
-    #     if 'clientSecret' in self.poly.init['oauth']:
-    #         self.server_data['clientSecret'] = self.poly.init['oauth']['clientSecret']
-    #     else:
-    #         LOGGER.error('Unable to find Client Secret in the init data')
-    #         return False
-    #     if 'url' in self.poly.init['oauth']:
-    #         self.server_data['url'] = self.poly.init['oauth']['url']
-    #     else:
-    #         LOGGER.error('Unable to find URL in the init data')
-    #         return False
-    #     if self.poly.init['worker']:
-    #         self.server_data['worker'] = self.poly.init['worker']
-    #     else:
-    #         return False
 
     def auth_prompt(self):
         print('------------' + self.server_data['worker'] + '----------------------------')
@@ -158,9 +148,8 @@ class Controller(polyinterface.Controller):
             return False
 
     def start(self):
-        LOGGER.info('Started Template NodeServer')
-        # self.get_credentials()
-        self.local_get_credentials()
+        LOGGER.info('Started SonosController NodeServer')
+        self.get_credentials()
         if 'access_token' not in self.polyConfig['customParams']:
             self.auth_prompt()
         else:
@@ -293,34 +282,6 @@ class Controller(polyinterface.Controller):
     def check_params(self):
         pass
 
-        # self.addNotice('Hello Friends! (with key)','hello')
-        # self.addNotice('Hello Friends! (without key)')
-        # default_user = "YourUserName"
-        # default_password = "YourPassword"
-        # if 'user' in self.polyConfig['customParams']:
-        #     self.user = self.polyConfig['customParams']['user']
-        # else:
-        #     self.user = default_user
-        #     LOGGER.error('check_params: user not defined in customParams, please add it.  Using {}'.format(self.user))
-        #     st = False
-        #
-        # if 'password' in self.polyConfig['customParams']:
-        #     self.password = self.polyConfig['customParams']['password']
-        # else:
-        #     self.password = default_password
-        #     LOGGER.error('check_params: password not defined in customParams, please add it.  Using {}'.format(self.password))
-        #     st = False
-        #
-        # # Make sure they are in the params
-        # self.addCustomParam({'password': self.password, 'user': self.user, 'some_example': '{ "type": "TheType", "host": "host_or_IP", "port": "port_number" }'})
-        #
-        # # Add a notice if they need to change the user/password from the default.
-        # # if self.user == default_user or self.password == default_password:
-        #     # This doesn't pass a key to test the old way.
-        #     # self.addNotice('Please set proper user and password in configuration page, and restart this nodeserver')
-        # # This one passes a key to test the new way.
-        # # self.addNotice('This is a test','test')
-
     def remove_notice_test(self,command):
         LOGGER.info('remove_notice_test: notices={}'.format(self.poly.config['notices']))
         # Remove all existing notices
@@ -349,7 +310,7 @@ class Controller(polyinterface.Controller):
 
 if __name__ == "__main__":
     try:
-        polyglot = polyinterface.Interface('Template')
+        polyglot = polyinterface.Interface('SonosController')
         polyglot.start()
         control = Controller(polyglot)
         control.runForever()
