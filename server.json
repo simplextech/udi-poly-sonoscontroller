@@ -1,22 +1,22 @@
 {
     "name": "SonosController",
-    "docs": "https://github.com/Einstein42/udi-poly-template-python",
+    "docs": "https://github.com/simplextech/udi-poly-sonoscontroller",
     "type": "python3",
     "executable": "SonosController.py",
     "install": "install.sh",
     "install_cloud": "install_cloud.sh",
-    "description": "Template Node Server",
-    "notice": "Your disclaimer here",
-    "shortPoll": "60",
-    "longPoll": "240",
+    "description": "Sonos Controller Node Server",
+    "notice": "",
+    "shortPoll": "15",
+    "longPoll": "14400",
     "testMode": true,
     "credits": [
         {
-            "title": "mypoly: a NodeServer for Template Integration",
-            "author": "James Milne (Einstein.42)",
-            "version": "2.0.5",
-            "date": "November 8, 2017",
-            "source": "https://github.com/Einstein42/udi-poly-template-python",
+            "title": "SonosController: a NodeServer for Sonos Integration",
+            "author": "Simplex Technology",
+            "version": "1.0.0",
+            "date": "September 27, 2017",
+            "source": "https://github.com/simplextech/udi-poly-sonoscontroller",
             "license": "https://raw.githubusercontent.com/Einstein42/udi-poly-template-python/master/LICENSE"
         }
     ]
