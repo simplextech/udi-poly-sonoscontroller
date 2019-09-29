@@ -5,10 +5,6 @@ except ImportError:
     import pgc_interface as polyinterface
     CLOUD = True
 
-# from ...sonos import SonosControl
-# from .. import sonos
-from sonos import SonosControl as SonosControl
-
 
 class GroupParentNode(polyinterface.Node):
     def __init__(self, controller, primary, address, name):
@@ -16,19 +12,14 @@ class GroupParentNode(polyinterface.Node):
 
     def start(self):
         # print('Starting Group: ' + self.name + ' ------------------')
-        self.setDriver('ST', 1)
+        self.setDriver('ST', 1, force=True)
 
     def query(self):
         self.reportDrivers()
 
     # "Hints See: https://github.com/UniversalDevicesInc/hints"
     # hint = [1,2,3,4]
-    drivers = [
-                {'driver': 'ST', 'value': 1, 'uom': 2},
-                # {'driver': 'SVOL', 'value': 0, 'uom': 51},
-                # {'driver': 'GV01', 'value': 0, 'uom': 25},
-                # {'driver': 'GV02', 'value': 0, 'uom': 25}
-            ]
+    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2}]
 
     id = 'PARENT'
 
