@@ -30,7 +30,7 @@ class Controller(polyinterface.Controller):
     def __init__(self, polyglot):
         super(Controller, self).__init__(polyglot)
         self.name = 'Sonos Controller'
-        self.poly.onConfig(self.process_config)
+        # self.poly.onConfig(self.process_config)
         self.auth_url = 'https://api.sonos.com/login/v3/oauth'
         self.token_url = 'https://api.sonos.com/login/v3/oauth/access'
         self.household_url = 'https://api.ws.sonos.com/control/api/v1/households'
@@ -40,26 +40,48 @@ class Controller(polyinterface.Controller):
         self.cloud = CLOUD
 
     def get_credentials(self):
-        print('---- Environment: ' + self.poly.stage + '----')
-        if 'clientId' in self.poly.init['oauth']:
-            self.server_data['clientId'] = self.poly.init['oauth']['clientId']
-        else:
-            LOGGER.error('Unable to find Client ID in the init data')
-            return False
-        if 'clientSecret' in self.poly.init['oauth']:
-            self.server_data['clientSecret'] = self.poly.init['oauth']['clientSecret']
-        else:
-            LOGGER.error('Unable to find Client Secret in the init data')
-            return False
-        if 'url' in self.poly.init['oauth']:
-            self.server_data['url'] = self.poly.init['oauth']['url']
-        else:
-            LOGGER.error('Unable to find URL in the init data')
-            return False
-        if self.poly.init['worker']:
-            self.server_data['worker'] = self.poly.init['worker']
-        else:
-            return False
+        print('---- Environment: ' + self.poly.stage + ' ----')
+
+        if self.poly.stage == 'test':
+            if 'clientId' in self.poly.init['oauth']['test']:
+                self.server_data['clientId'] = self.poly.init['oauth']['test']['clientId']
+            else:
+                LOGGER.error('Unable to find Client ID in the init data')
+                return False
+            if 'secret' in self.poly.init['oauth']['test']:
+                self.server_data['clientSecret'] = self.poly.init['oauth']['test']['secret']
+            else:
+                LOGGER.error('Unable to find Client Secret in the init data')
+                return False
+            if 'redirectUrl' in self.poly.init['oauth']['test']:
+                self.server_data['url'] = self.poly.init['oauth']['test']['redirectUrl']
+            else:
+                LOGGER.error('Unable to find URL in the init data')
+                return False
+            if self.poly.init['worker']:
+                self.server_data['worker'] = self.poly.init['worker']
+            else:
+                return False
+        elif self.poly.stage == 'prod':
+            if 'clientId' in self.poly.init['oauth']['prod']:
+                self.server_data['clientId'] = self.poly.init['oauth']['prod']['clientId']
+            else:
+                LOGGER.error('Unable to find Client ID in the init data')
+                return False
+            if 'secret' in self.poly.init['oauth']['test']:
+                self.server_data['clientSecret'] = self.poly.init['oauth']['prod']['secret']
+            else:
+                LOGGER.error('Unable to find Client Secret in the init data')
+                return False
+            if 'redirectUrl' in self.poly.init['oauth']['test']:
+                self.server_data['url'] = self.poly.init['oauth']['prod']['redirectUrl']
+            else:
+                LOGGER.error('Unable to find URL in the init data')
+                return False
+            if self.poly.init['worker']:
+                self.server_data['worker'] = self.poly.init['worker']
+            else:
+                return False
 
     def auth_prompt(self):
         print('------------' + self.server_data['worker'] + '----------------------------')
