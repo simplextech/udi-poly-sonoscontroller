@@ -8,9 +8,11 @@ from sonos import SonosControl as SonosControl
 
 
 class GroupNode(polyinterface.Node):
-    def __init__(self, controller, primary, address, name, sonos_groups, household):
+    def __init__(self, controller, primary, address, name, sonos, sonos_groups, household):
         super(GroupNode, self).__init__(controller, primary, address, name)
-        self.sonos = SonosControl()
+        # self.access_token = self.polyConfig['customParams']['access_token']
+        # self.sonos = SonosControl(self.access_token)
+        self.sonos = sonos
         self.sonos_groups = sonos_groups
         self.household = household
         self.shuffle = False
@@ -37,8 +39,11 @@ class GroupNode(polyinterface.Node):
 
                 volume = SonosControl.get_group_volume(self.sonos, self.household, id)
                 # List 0=volume, 1=muted, 2=fixed(true/false)
-                self.setDriver('SVOL', volume[0])
-                self.setDriver('GV0', volume[1])
+                self.setDriver('SVOL', volume[0], force=True)
+                if volume[1] == 'true':
+                    self.setDriver('GV0', 1, force=True)
+                else:
+                    self.setDriver('GV0', 0, force=True)
 
     def group_volume(self, command):
         print('Volume command: ', command)
