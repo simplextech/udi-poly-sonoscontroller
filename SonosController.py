@@ -165,6 +165,7 @@ class Controller(polyinterface.Controller):
                                      'expires_in': expires_in})
 
                 self.sonos = SonosControl(access_token)
+                self.removeNoticesAll()
                 return True
             else:
                 return False
@@ -175,9 +176,11 @@ class Controller(polyinterface.Controller):
     def start(self):
         LOGGER.info('Started SonosController NodeServer')
         if self.get_credentials():
-            self.removeNoticesAll()
-            self.refresh_token()
-            self.discover()
+            if self.refresh_token():
+                self.removeNoticesAll()
+                self.discover()
+            else:
+                self.auth_prompt()
         else:
             self.auth_prompt()
         # self.get_credentials()
