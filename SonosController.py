@@ -86,7 +86,7 @@ class Controller(polyinterface.Controller):
             return True
 
     def auth_prompt(self):
-        print('------------' + self.server_data['worker'] + '----------------------------')
+        # print('------------' + self.server_data['worker'] + '----------------------------')
 
         _redirect_uri = self.server_data['url']
         redirect_uri = requests.utils.quote(_redirect_uri)
@@ -108,10 +108,10 @@ class Controller(polyinterface.Controller):
                 self.discover()
 
     def get_token(self, code):
-        print('-------- Getting the Sonos Token -----------')
-        print('---- Code: ' + code + '----')
-        print('---- Client Key: ' + self.server_data['clientId'])
-        print('---- Secret: ' + self.server_data['clientSecret'])
+        # print('-------- Getting the Sonos Token -----------')
+        # print('---- Code: ' + code + '----')
+        # print('---- Client Key: ' + self.server_data['clientId'])
+        # print('---- Secret: ' + self.server_data['clientSecret'])
 
         _encode_string = self.server_data['clientId'] + ':' + self.server_data['clientSecret']
         byte_encoded = base64.b64encode(_encode_string.encode('UTF-8'))

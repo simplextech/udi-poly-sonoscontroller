@@ -17,14 +17,14 @@ class PlayerNode(polyinterface.Node):
         self.household = household
 
     def start(self):
-        print('Starting Player: ' + self.name + ' ------------------')
+        # print('Starting Player: ' + self.name + ' ------------------')
         if self.get_player_volume():
             self.setDriver('ST', 1, force=True)
         else:
             self.setDriver('ST', 0, force=True)
 
     def get_player_volume(self):
-        print('Get Volume command')
+        # print('Get Volume command')
         for player in self.sonos_players:
             id = player['id']
             address = id.split('_')[1][0:-4].lower()
@@ -43,7 +43,7 @@ class PlayerNode(polyinterface.Node):
                     return False
 
     def set_player_volume(self, command):
-        print('Set Volume command: ', command)
+        # print('Set Volume command: ', command)
         volume = command['value']
         for player in self.sonos_players:
             id = player['id']
@@ -56,7 +56,7 @@ class PlayerNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def set_player_mute(self, command):
-        print('Mute Command: ', command)
+        # print('Mute Command: ', command)
         for player in self.sonos_players:
             id = player['id']
             address = id.split('_')[1][0:-4].lower()
@@ -68,7 +68,7 @@ class PlayerNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def set_player_unmute(self, command):
-        print('unMute Command: ', command)
+        # print('unMute Command: ', command)
         for player in self.sonos_players:
             id = player['id']
             address = id.split('_')[1][0:-4].lower()

@@ -18,7 +18,7 @@ class GroupNode(polyinterface.Node):
         self.shuffle = False
 
     def start(self):
-        print('Starting Group: ' + self.name + ' ------------------')
+        # print('Starting Group: ' + self.name + ' ------------------')
         # print(self.sonos_groups)
         for group in self.sonos_groups:
             id = group['id']
@@ -46,7 +46,7 @@ class GroupNode(polyinterface.Node):
                     self.setDriver('GV0', 0, force=True)
 
     def group_volume(self, command):
-        print('Volume command: ', command)
+        # print('Volume command: ', command)
         volume = command['value']
         for group in self.sonos_groups:
             id = group['id']
@@ -59,7 +59,7 @@ class GroupNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def group_mute(self, command):
-        print('Mute Command: ', command)
+        # print('Mute Command: ', command)
         for group in self.sonos_groups:
             id = group['id']
             address = str(id.split(':')[1]).lower()
@@ -71,7 +71,7 @@ class GroupNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def group_unmute(self, command):
-        print('unMute Command: ', command)
+        # print('unMute Command: ', command)
         for group in self.sonos_groups:
             id = group['id']
             address = str(id.split(':')[1]).lower()
@@ -83,7 +83,7 @@ class GroupNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def group_playlist(self, command):
-        print('Playlist: ', command)
+        # print('Playlist: ', command)
         playlist = command['value']
         for group in self.sonos_groups:
             id = group['id']
@@ -96,7 +96,7 @@ class GroupNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def group_favorite(self, command):
-        print('Favorite: ', command)
+        # print('Favorite: ', command)
         favorite = command['value']
         for group in self.sonos_groups:
             id = group['id']
@@ -109,7 +109,7 @@ class GroupNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def group_play(self, command):
-        print('Play: ', command)
+        # print('Play: ', command)
         for group in self.sonos_groups:
             id = group['id']
             address = str(id.split(':')[1]).lower()
@@ -121,7 +121,7 @@ class GroupNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def group_pause(self, command):
-        print('Pause: ', command)
+        # print('Pause: ', command)
         for group in self.sonos_groups:
             id = group['id']
             address = str(id.split(':')[1]).lower()
@@ -133,7 +133,7 @@ class GroupNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def group_skip_to_previous_track(self, command):
-        print('Previous Track ', command)
+        # print('Previous Track ', command)
         for group in self.sonos_groups:
             id = group['id']
             address = str(id.split(':')[1]).lower()
@@ -145,7 +145,7 @@ class GroupNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def group_skip_to_next_track(self, command):
-        print('Previous Track ', command)
+        # print('Previous Track ', command)
         for group in self.sonos_groups:
             id = group['id']
             address = str(id.split(':')[1]).lower()
@@ -157,12 +157,12 @@ class GroupNode(polyinterface.Node):
                     print('Error: ' + _status)
 
     def group_shuffle_on(self, command):
-        print('Shuffle: ', command)
+        # print('Shuffle: ', command)
         self.setDriver('GV1', 1)
         self.shuffle = True
 
     def group_shuffle_off(self, command):
-        print('Shuffle: ', command)
+        # print('Shuffle: ', command)
         self.setDriver('GV1', 0)
         self.shuffle = False
 
