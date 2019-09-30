@@ -188,13 +188,6 @@ class Controller(polyinterface.Controller):
                 self.auth_prompt()
         else:
             self.auth_prompt()
-        # self.get_credentials()
-        # if 'access_token' not in self.polyConfig['customParams']:
-        #     self.auth_prompt()
-        # else:
-        #     self.removeNoticesAll()
-        #     self.refresh_token()
-        #     self.discover()
 
     def shortPoll(self):
         # print('Running ShortPoll')
