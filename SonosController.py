@@ -62,6 +62,7 @@ class Controller(polyinterface.Controller):
                 self.server_data['worker'] = self.poly.init['worker']
             else:
                 return False
+            return True
         elif self.poly.stage == 'prod':
             if 'clientId' in self.poly.init['oauth']['prod']:
                 self.server_data['clientId'] = self.poly.init['oauth']['prod']['clientId']
@@ -82,6 +83,7 @@ class Controller(polyinterface.Controller):
                 self.server_data['worker'] = self.poly.init['worker']
             else:
                 return False
+            return True
 
     def auth_prompt(self):
         print('------------' + self.server_data['worker'] + '----------------------------')
@@ -172,13 +174,19 @@ class Controller(polyinterface.Controller):
 
     def start(self):
         LOGGER.info('Started SonosController NodeServer')
-        self.get_credentials()
-        if 'access_token' not in self.polyConfig['customParams']:
-            self.auth_prompt()
-        else:
+        if self.get_credentials():
             self.removeNoticesAll()
             self.refresh_token()
             self.discover()
+        else:
+            self.auth_prompt()
+        # self.get_credentials()
+        # if 'access_token' not in self.polyConfig['customParams']:
+        #     self.auth_prompt()
+        # else:
+        #     self.removeNoticesAll()
+        #     self.refresh_token()
+        #     self.discover()
 
     def shortPoll(self):
         # print('Running ShortPoll')
@@ -205,8 +213,8 @@ class Controller(polyinterface.Controller):
 
                     volume = SonosControl.get_group_volume(self.sonos, household, id)
                     # List 0=volume, 1=muted, 2=fixed(true/false)
-                    self.nodes[address].setDriver('SVOL', volume[0], force=True)
-                    self.nodes[address].setDriver('GV0', volume[1], force=True)
+                    self.nodes[address].setDriver('SVOL', volume[0])
+                    self.nodes[address].setDriver('GV0', volume[1])
 
     def longPoll(self):
         self.refresh_token()
