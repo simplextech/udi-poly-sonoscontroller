@@ -131,9 +131,11 @@ class Controller(polyinterface.Controller):
             refresh_token = resp['refresh_token']
             expires_in = resp['expires_in']
 
-            self.addCustomParam({'access_token': access_token,
-                                 'refresh_token': refresh_token,
-                                 'expires_in': expires_in})
+            cust_data = {'access_token': access_token,
+                         'refresh_token': refresh_token,
+                         'expires_in': expires_in}
+
+            self.saveCustomData(cust_data)
 
             self.sonos = SonosControl(access_token)
             return True
@@ -148,8 +150,9 @@ class Controller(polyinterface.Controller):
         headers = {'Authorization': 'Basic ' + string_encoded,
                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
 
-        if 'refresh_token' in self.polyConfig['customParams']:
-            refresh_token = self.polyConfig['customParams']['refresh_token']
+        if 'refresh_token' in self.polyConfig['customData']:
+            refresh_token = self.polyConfig['customData']['refresh_token']
+
             payload = {'grant_type': 'refresh_token', 'refresh_token': refresh_token}
 
             r = requests.post(self.token_url, headers=headers, data=payload)
@@ -160,9 +163,11 @@ class Controller(polyinterface.Controller):
                 refresh_token = resp['refresh_token']
                 expires_in = resp['expires_in']
 
-                self.addCustomParam({'access_token': access_token,
-                                     'refresh_token': refresh_token,
-                                     'expires_in': expires_in})
+                cust_data = {'access_token': access_token,
+                             'refresh_token': refresh_token,
+                             'expires_in': expires_in}
+
+                self.saveCustomData(cust_data)
 
                 self.sonos = SonosControl(access_token)
                 self.removeNoticesAll()
