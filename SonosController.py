@@ -195,6 +195,7 @@ class Controller(polyinterface.Controller):
             for key in self.household:
                 household = self.household[key]
                 sonos_groups = SonosControl.get_groups(self.sonos, household)
+                sonos_players = SonosControl.get_players(self.sonos, household)
                 for group in sonos_groups:
                     id = group['id']
                     address = str(id.split(':')[1]).lower()
@@ -212,10 +213,17 @@ class Controller(polyinterface.Controller):
                         playbackstate = 0
                     self.nodes[address].setDriver('ST', playbackstate)
 
-                    volume = SonosControl.get_group_volume(self.sonos, household, id)
+                    group_volume = SonosControl.get_group_volume(self.sonos, household, id)
                     # List 0=volume, 1=muted, 2=fixed(true/false)
-                    self.nodes[address].setDriver('SVOL', volume[0])
-                    self.nodes[address].setDriver('GV0', volume[1])
+                    self.nodes[address].setDriver('SVOL', group_volume[0])
+                    self.nodes[address].setDriver('GV0', group_volume[1])
+                for player in sonos_players:
+                    id = player['id']
+                    address = id.split('_')[1][0:-4].lower()
+                    player_volume = SonosControl.get_player_volume(self.sonos, id)
+                    # List 0=volume, 1=muted, 2=fixed(true/false)
+                    self.nodes[address].setDriver('SVOL', player_volume[0])
+                    self.nodes[address].setDriver('GV0', player_volume[1])
 
     def longPoll(self):
         self.refresh_token()

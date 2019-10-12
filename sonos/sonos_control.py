@@ -24,7 +24,8 @@ class SonosControl:
             'Host': self.api_host,
             'Accept-Encoding': "gzip, deflate",
             'Connection': "keep-alive",
-            'cache-control': "no-cache"
+            'cache-control': "no-cache",
+            'Content-Type': "application/json"
         }
 
     def get_households(self):
@@ -154,7 +155,7 @@ class SonosControl:
 
     def set_favorite(self, group, value):
         setFavorite_url = self.groups_url + group + '/favorites'
-        payload = "{\n\t\"favoriteId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": true\n\t}\n}"
+        payload = "{\n\t\"favoriteId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": false\n\t}\n}"
         r = requests.post(setFavorite_url, headers=self.headers, data=payload)
         if r.status_code == requests.codes.ok:
             return True
