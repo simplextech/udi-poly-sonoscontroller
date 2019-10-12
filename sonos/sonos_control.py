@@ -136,7 +136,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return False
+            return r.status_code
 
     def set_group_mute(self, household, group, mute):
         if mute:
@@ -150,7 +150,7 @@ class SonosControl:
             print(r.content)
             return True
         else:
-            return False
+            return r.status_code
 
     def set_favorite(self, group, value):
         setFavorite_url = self.groups_url + group + '/favorites'
@@ -159,7 +159,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return False
+            return r.status_code
 
     def set_playlist(self, group, value, shuffle):
         setPlaylist_url = self.groups_url + group + '/playlists'
@@ -171,7 +171,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return False
+            return r.status_code
 
     def set_pause(self, group):
         setPause_url = self.groups_url + group + '/playback/pause'
@@ -179,7 +179,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return False
+            return r.status_code
 
     def set_play(self, group):
         setPlay_url = self.groups_url + group + '/playback/play'
@@ -187,7 +187,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return False
+            return r.status_code
 
     def skipToPreviousTrack(self, group):
         setPlay_url = self.groups_url + group + '/playback/skipToPreviousTrack'
@@ -195,7 +195,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return False
+            return r.status_code
 
     def skipToNextTrack(self, group):
         setPlay_url = self.groups_url + group + '/playback/skipToNextTrack'
@@ -203,7 +203,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return False
+            return r.status_code
 
     def get_player_volume(self, player):
         player_volume_url = self.players_url + player + '/playerVolume'
@@ -214,7 +214,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return volume
         else:
-            return False
+            return r.status_code
 
     def set_player_volume(self, player, volume):
         payload = "{\r\n  \"volume\": " + volume + "\r\n}"
@@ -223,7 +223,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return False
+            return r.status_code
 
     def set_player_mute(self, player):
         payload = "{\r\n  \"muted\": true\r\n}"
@@ -232,7 +232,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return False
+            return r.status_code
 
     def set_player_unmute(self, player):
         payload = "{\r\n  \"muted\": false\r\n}"
@@ -241,6 +241,6 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return False
+            return r.status_code
 
 
