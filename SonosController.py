@@ -248,7 +248,7 @@ class Controller(polyinterface.Controller):
                     # RINCON_7828CA96B78201400:2253119126
                     id = group['id']
                     coordinator_id = group['coordinatorId']
-                    name = group['name']
+                    name = group['name'].split('+')[0]
                     # address = str(id.split(':')[1]).lower()
                     address = coordinator_id.lower()
                     self.addNode(GroupNode(self, 'groups', address, name, self.sonos, sonos_groups, household))
