@@ -9,7 +9,7 @@
     "notice": "",
     "shortPoll": "15",
     "longPoll": "14400",
-    "testMode": false,
+    "testMode": true,
     "credits": [
         {
             "title": "SonosController: a NodeServer for Sonos Integration",
@@ -17,7 +17,7 @@
             "version": "1.0.6",
             "date": "September 27, 2017",
             "source": "https://github.com/simplextech/udi-poly-sonoscontroller",
-            "license": "https://raw.githubusercontent.com/Einstein42/udi-poly-template-python/master/LICENSE"
+            "license": "https://github.com/simplextech/udi-poly-sonoscontroller/blob/master/LICENSE"
         }
     ]
 }

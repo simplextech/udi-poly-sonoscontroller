@@ -3,19 +3,10 @@ import requests
 
 class SonosControl:
     def __init__(self, access_token):
-        # self.auth_host = 'api.sonos.com'
         self.api_host = 'api.ws.sonos.com'
-        # self.client_key = '9b381a14-1ce0-4789-ab69-61aedfda21c6'
-        # self.client_secret = '6cd01138-4a40-45b2-808e-6281417b5bea'
-        # self.redirect_uri = 'https://webhook.site/a45c16b3-1db8-44de-bd05-985956bfa461'
-        # self.scope = 'playback-control-all'
-        # self.auth_url = 'https://' + self.auth_host + '/login/v3/oauth'
-        # self.token_url = 'https://' + self.auth_host + '/login/v3/oauth/access'
         self.household_url = 'https://' + self.api_host + '/control/api/v1/households'
         self.groups_url = 'https://' + self.api_host + '/control/api/v1/groups/'
         self.players_url = 'https://' + self.api_host + '/control/api/v1/players/'
-        # self.household = None
-
         self.bearer_token = 'Bearer ' + access_token
         self.headers = {
             'Authorization': self.bearer_token,
@@ -32,7 +23,6 @@ class SonosControl:
         """
         Get the Household ID's
         """
-        # household = {}
         r = requests.get(self.household_url, headers=self.headers)
         r_json = r.json()
         if len(r_json['households']) > 1:
@@ -51,7 +41,7 @@ class SonosControl:
             return household
 
     def get_groups(self, household):
-        print('DEBUG------- ', household)
+        # print('DEBUG------- ', household)
         """
         Get Household Groups
         """
@@ -59,9 +49,9 @@ class SonosControl:
         r = requests.get(groups_url, headers=self.headers)
         r_json = r.json()
         groups = r_json['groups']
-        sonos_groups = {}
-        for group in groups:
-            sonos_groups.update({group['id']: group['name']})
+        # sonos_groups = {}
+        # for group in groups:
+        #     sonos_groups.update({group['id']: group['name']})
         # return sonos_groups
         return groups
 
