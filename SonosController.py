@@ -201,7 +201,7 @@ class Controller(polyinterface.Controller):
                 for group in sonos_groups:
                     group_id = group['id']
                     coordinator_id = group['coordinatorId']
-                    group_address = 'g' + coordinator_id.split('_')[1][0:-4].lower()
+                    group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
                     playback_state = group['playbackState']
 
                     if playback_state == 'PLAYBACK_STATE_PLAYING':
