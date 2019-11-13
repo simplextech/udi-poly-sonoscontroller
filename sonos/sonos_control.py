@@ -41,7 +41,6 @@ class SonosControl:
             return household
 
     def get_groups(self, household):
-        # print('DEBUG------- ', household)
         """
         Get Household Groups
         """
@@ -49,24 +48,7 @@ class SonosControl:
         r = requests.get(groups_url, headers=self.headers)
         r_json = r.json()
         groups = r_json['groups']
-        # sonos_groups = {}
-        # for group in groups:
-        #     sonos_groups.update({group['id']: group['name']})
-        # return sonos_groups
         return groups
-
-    # def get_group_status(self, household):
-    #     """
-    #     Get Household Groups
-    #     """
-    #     groups_url = self.household_url + '/' + household + '/groups'
-    #     r = requests.get(groups_url, headers=self.headers)
-    #     r_json = r.json()
-    #     groups = r_json['groups']
-    #     sonos_group_status = {}
-    #     for group in groups:
-    #         sonos_group_status.update({group['id']: group['playbackState']})
-    #     return sonos_group_status
 
     def get_players(self, household):
         """
@@ -78,10 +60,6 @@ class SonosControl:
         r = requests.get(players_url, headers=self.headers)
         r_json = r.json()
         players = r_json['players']
-        # sonos_players = {}
-        # for player in players:
-        #     sonos_players.update({player['id']: player['name']})
-        # return sonos_players
         return players
 
     def get_favorites(self, household):
@@ -91,7 +69,6 @@ class SonosControl:
         favorites_url = self.household_url + '/' + household + '/favorites'
         r = requests.get(favorites_url, headers=self.headers)
         r_json = r.json()
-        # print(r_json)
         favorites = r_json['items']
         sonos_favorites = {}
         for fav in favorites:
@@ -105,7 +82,6 @@ class SonosControl:
         playlists_url = self.household_url + '/' + household + '/playlists'
         r = requests.get(playlists_url, headers=self.headers)
         r_json = r.json()
-        # print(r_json)
         playlists = r_json['playlists']
         sonos_playlists = {}
         for pl in playlists:

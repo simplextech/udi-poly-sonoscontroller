@@ -26,10 +26,10 @@ class PlayerNode(polyinterface.Node):
     def get_player_volume(self):
         # print('Get Volume command')
         for player in self.sonos_players:
-            id = player['id']
-            address = id.split('_')[1][0:-4].lower()
-            if address == self.address:
-                volume = SonosControl.get_player_volume(self.sonos, id)
+            player_id = player['id']
+            player_address = 'p' + player_id.split('_')[1][0:-4].lower()
+            if player_address == self.address:
+                volume = SonosControl.get_player_volume(self.sonos, player_id)
                 if volume:
                     # List 0=volume, 1=muted, 2=fixed(true/false)
                     self.setDriver('SVOL', volume[0])
@@ -46,10 +46,10 @@ class PlayerNode(polyinterface.Node):
         # print('Set Volume command: ', command)
         volume = command['value']
         for player in self.sonos_players:
-            id = player['id']
-            address = id.split('_')[1][0:-4].lower()
-            if address == self.address:
-                _status = SonosControl.set_player_volume(self.sonos, id, volume)
+            player_id = player['id']
+            player_address = 'p' + player_id.split('_')[1][0:-4].lower()
+            if player_address == self.address:
+                _status = SonosControl.set_player_volume(self.sonos, player_id, volume)
                 if _status:
                     self.setDriver('SVOL', volume)
                 else:
@@ -58,10 +58,10 @@ class PlayerNode(polyinterface.Node):
     def set_player_mute(self, command):
         # print('Mute Command: ', command)
         for player in self.sonos_players:
-            id = player['id']
-            address = id.split('_')[1][0:-4].lower()
-            if address == self.address:
-                _status = SonosControl.set_player_mute(self.sonos, id)
+            player_id = player['id']
+            player_address = 'p' + player_id.split('_')[1][0:-4].lower()
+            if player_address == self.address:
+                _status = SonosControl.set_player_mute(self.sonos, player_id)
                 if _status:
                     self.setDriver('GV0', 1)
                 else:
@@ -70,10 +70,10 @@ class PlayerNode(polyinterface.Node):
     def set_player_unmute(self, command):
         # print('unMute Command: ', command)
         for player in self.sonos_players:
-            id = player['id']
-            address = id.split('_')[1][0:-4].lower()
-            if address == self.address:
-                _status = SonosControl.set_player_unmute(self.sonos, id)
+            player_id = player['id']
+            player_address = 'p' + player_id.split('_')[1][0:-4].lower()
+            if player_address == self.address:
+                _status = SonosControl.set_player_unmute(self.sonos, player_id)
                 if _status:
                     self.setDriver('GV0', 0)
                 else:
