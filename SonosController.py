@@ -226,7 +226,7 @@ class Controller(polyinterface.Controller):
 
                 for player in sonos_players:
                     player_id = player['id']
-                    player_address = 'p' + player_id.split('_')[1][0:-4].lower()
+                    player_address = 'p' + player_id.split('_')[1][0:-5].lower()
                     player_volume = SonosControl.get_player_volume(self.sonos, player_id)
                     # List 0=volume, 1=muted, 2=fixed(true/false)
                     self.nodes[player_address].setDriver('SVOL', player_volume[0])
