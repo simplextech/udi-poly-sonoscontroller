@@ -27,7 +27,7 @@ class PlayerNode(polyinterface.Node):
         # print('Get Volume command')
         for player in self.sonos_players:
             player_id = player['id']
-            player_address = 'p' + player_id.split('_')[1][0:-4].lower()
+            player_address = 'p' + player_id.split('_')[1][0:-5].lower()
             if player_address == self.address:
                 volume = SonosControl.get_player_volume(self.sonos, player_id)
                 if volume:
@@ -47,7 +47,7 @@ class PlayerNode(polyinterface.Node):
         volume = command['value']
         for player in self.sonos_players:
             player_id = player['id']
-            player_address = 'p' + player_id.split('_')[1][0:-4].lower()
+            player_address = 'p' + player_id.split('_')[1][0:-5].lower()
             if player_address == self.address:
                 _status = SonosControl.set_player_volume(self.sonos, player_id, volume)
                 if _status:
@@ -59,7 +59,7 @@ class PlayerNode(polyinterface.Node):
         # print('Mute Command: ', command)
         for player in self.sonos_players:
             player_id = player['id']
-            player_address = 'p' + player_id.split('_')[1][0:-4].lower()
+            player_address = 'p' + player_id.split('_')[1][0:-5].lower()
             if player_address == self.address:
                 _status = SonosControl.set_player_mute(self.sonos, player_id)
                 if _status:
@@ -71,7 +71,7 @@ class PlayerNode(polyinterface.Node):
         # print('unMute Command: ', command)
         for player in self.sonos_players:
             player_id = player['id']
-            player_address = 'p' + player_id.split('_')[1][0:-4].lower()
+            player_address = 'p' + player_id.split('_')[1][0:-5].lower()
             if player_address == self.address:
                 _status = SonosControl.set_player_unmute(self.sonos, player_id)
                 if _status:
