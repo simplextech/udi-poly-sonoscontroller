@@ -78,9 +78,9 @@ class SonosControl:
         r = requests.get(players_url, headers=self.headers)
         r_json = r.json()
         players = r_json['players']
-        sonos_players = {}
-        for player in players:
-            sonos_players.update({player['id']: player['name']})
+        # sonos_players = {}
+        # for player in players:
+        #     sonos_players.update({player['id']: player['name']})
         # return sonos_players
         return players
 

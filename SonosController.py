@@ -197,8 +197,13 @@ class Controller(polyinterface.Controller):
                 sonos_groups = SonosControl.get_groups(self.sonos, household)
                 sonos_players = SonosControl.get_players(self.sonos, household)
                 for group in sonos_groups:
-                    id = group['id']
-                    address = str(id.split(':')[1]).lower()
+                    group_id = group['id']
+                    coordinator_id = group['coordinatorId']
+                    name = group['name'].split("+")[0]
+                    group_address = str(group_id.split(':')[1]).lower()
+                    # raw_coord_id = str(coordinator_id.split('_')[1])[:-4].lower()
+                    # address = raw_coord_id
+                    # address = str(id.split(':')[1]).lower()
                     playback_state = group['playbackState']
 
                     if playback_state == 'PLAYBACK_STATE_PLAYING':
@@ -211,19 +216,31 @@ class Controller(polyinterface.Controller):
                         playbackstate = 4
                     else:
                         playbackstate = 0
-                    self.nodes[address].setDriver('ST', playbackstate)
+                    self.nodes[group_address].setDriver('ST', playbackstate)
 
-                    group_volume = SonosControl.get_group_volume(self.sonos, household, id)
+                    group_volume = SonosControl.get_group_volume(self.sonos, household, group_id)
                     # List 0=volume, 1=muted, 2=fixed(true/false)
-                    self.nodes[address].setDriver('SVOL', group_volume[0])
-                    self.nodes[address].setDriver('GV0', group_volume[1])
+                    print(group_volume)
+                    if group_volume[1] == 'false':
+                        group_muted = 0
+                    else:
+                        group_muted = 1
+                    self.nodes[group_address].setDriver('SVOL', group_volume[0])
+                    self.nodes[group_address].setDriver('GV0', group_muted)
+                    # self.nodes[group_address].setDriver('GV0', group_volume[1])
+
                 for player in sonos_players:
-                    id = player['id']
-                    address = id.split('_')[1][0:-4].lower()
-                    player_volume = SonosControl.get_player_volume(self.sonos, id)
+                    player_id = player['id']
+                    player_address = player_id.split('_')[1][0:-4].lower()
+                    player_volume = SonosControl.get_player_volume(self.sonos, player_id)
                     # List 0=volume, 1=muted, 2=fixed(true/false)
-                    self.nodes[address].setDriver('SVOL', player_volume[0])
-                    self.nodes[address].setDriver('GV0', player_volume[1])
+                    if player_volume[1] == 'false':
+                        player_muted = 0
+                    else:
+                        player_muted = 1
+                    self.nodes[player_address].setDriver('SVOL', player_volume[0])
+                    self.nodes[player_address].setDriver('GV0', player_muted)
+                    # self.nodes[player_address].setDriver('GV0', player_volume[1])
 
     def longPoll(self):
         self.refresh_token()
@@ -240,32 +257,37 @@ class Controller(polyinterface.Controller):
             for key in self.household:
                 household = self.household[key]
 
-                # print('Sonos Groups -----------------------------------------------')
+                print('Sonos Groups -----------------------------------------------')
                 sonos_groups = SonosControl.get_groups(self.sonos, household)
                 self.addNode(GroupParentNode(self, 'groups', 'groups', 'Sonos Groups'))
+                time.sleep(1)
 
                 for group in sonos_groups:
                     # RINCON_7828CA96B78201400:2253119126
-                    id = group['id']
-                    coordinator_id = group['coordinatorId']
-                    name = group['name'].split('+')[0]
-                    # address = str(id.split(':')[1]).lower()
-                    address = coordinator_id.lower()
+                    group_id = group['id']
+                    # coordinator_id = group['coordinatorId']
+                    name = group['name']  # .split("+")[0]
+                    address = str(group_id.split(':')[1]).lower()
+                    # address = str(coordinator_id.split('_')[1])[0:-4].lower()
+                    # address = group_id.split('_')[1][0:-4].lower()
+                    print("DEBUG-ADDRESS: " + address)
                     self.addNode(GroupNode(self, 'groups', address, name, self.sonos, sonos_groups, household))
-                # print('End ---------------------------------------------------------')
+                    time.sleep(1)
+                print('End ---------------------------------------------------------')
 
-
-                # print('Sonos Players ------------------------------------------------')
+                print('Sonos Players ------------------------------------------------')
                 sonos_players = SonosControl.get_players(self.sonos, household)
                 self.addNode(GroupParentNode(self, 'players', 'players', 'Sonos Players'))
+                time.sleep(1)
 
                 for player in sonos_players:
                     # RINCON_48A6B8A2895201400
-                    id = player['id']
+                    player_id = player['id']
                     name = player['name']
-                    address = id.split('_')[1][0:-4].lower()
+                    address = player_id.split('_')[1][0:-4].lower()
                     self.addNode(PlayerNode(self, 'players', address, name, self.sonos, sonos_players, household))
-                # print('End -----------------------------------------------------------')
+                    time.sleep(1)
+                print('End -----------------------------------------------------------')
 
                 """
                 Updating of Favorites and Playlists modifies the profile and sends the update

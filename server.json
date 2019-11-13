@@ -7,14 +7,14 @@
     "install_cloud": "install_cloud.sh",
     "description": "Sonos Controller Node Server",
     "notice": "",
-    "shortPoll": "15",
+    "shortPoll": "60",
     "longPoll": "14400",
     "testMode": true,
     "credits": [
         {
             "title": "SonosController: a NodeServer for Sonos Integration",
             "author": "Simplex Technology",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "date": "September 27, 2017",
             "source": "https://github.com/simplextech/udi-poly-sonoscontroller",
             "license": "https://github.com/simplextech/udi-poly-sonoscontroller/blob/master/LICENSE"
