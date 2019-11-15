@@ -227,7 +227,9 @@ class Controller(polyinterface.Controller):
                                 self.nodes[group_address].setDriver('GV0', 0)
                         except:  # Catch All
                             e = sys.exc_info()[0]
-                            print("shortPoll Group Volume Error: " + e)
+                            print("shortPoll Sonos Groups Error: " + e)
+                    else:
+                        print("shortPoll Sonos Groups Error: " + str(sonos_groups))
                 except KeyError as ex:
                     print('shortPoll Sonos Groups Error: ' + ex)
                     time.sleep(1)
@@ -245,6 +247,8 @@ class Controller(polyinterface.Controller):
                                 self.nodes[player_address].setDriver('GV0', 1)
                             else:
                                 self.nodes[player_address].setDriver('GV0', 0)
+                    else:
+                        print("shortPoll Sonos Players Error: " + str(sonos_players))
                 except KeyError as ex:
                     print("shortPoll Get Players: " + ex)
 
