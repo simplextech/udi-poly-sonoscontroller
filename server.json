@@ -3,7 +3,6 @@
     "docs": "https://github.com/simplextech/udi-poly-sonoscontroller",
     "type": "python3",
     "executable": "SonosController.py",
-    "install": "install.sh",
     "install_cloud": "install_cloud.sh",
     "description": "Sonos Controller Node Server",
     "notice": "",

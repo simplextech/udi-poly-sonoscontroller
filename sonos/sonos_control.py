@@ -46,9 +46,14 @@ class SonosControl:
         """
         groups_url = self.household_url + '/' + household + '/groups'
         r = requests.get(groups_url, headers=self.headers)
-        r_json = r.json()
-        groups = r_json['groups']
-        return groups
+        if r.status_code == requests.codes.ok:
+            r_json = r.json()
+            if r_json['groups']:
+                return r_json['groups']
+            else:
+                return None
+        else:
+            return r.content
 
     def get_players(self, household):
         """
@@ -58,9 +63,14 @@ class SonosControl:
         """
         players_url = self.household_url + '/' + household + '/groups'
         r = requests.get(players_url, headers=self.headers)
-        r_json = r.json()
-        players = r_json['players']
-        return players
+        if r.status_code == requests.codes.ok:
+            r_json = r.json()
+            if r_json['players']:
+                return r_json['players']
+            else:
+                return None
+        else:
+            return None
 
     def get_favorites(self, household):
         """
@@ -68,12 +78,15 @@ class SonosControl:
         """
         favorites_url = self.household_url + '/' + household + '/favorites'
         r = requests.get(favorites_url, headers=self.headers)
-        r_json = r.json()
-        favorites = r_json['items']
-        sonos_favorites = {}
-        for fav in favorites:
-            sonos_favorites.update({fav['id']: fav['name']})
-        return sonos_favorites
+        if r.status_code == requests.codes.ok:
+            r_json = r.json()
+            favorites = r_json['items']
+            sonos_favorites = {}
+            for fav in favorites:
+                sonos_favorites.update({fav['id']: fav['name']})
+            return sonos_favorites
+        else:
+            return None
 
     def get_playlists(self, household):
         """
@@ -81,20 +94,29 @@ class SonosControl:
         """
         playlists_url = self.household_url + '/' + household + '/playlists'
         r = requests.get(playlists_url, headers=self.headers)
-        r_json = r.json()
-        playlists = r_json['playlists']
-        sonos_playlists = {}
-        for pl in playlists:
-            sonos_playlists.update({pl['id']: pl['name']})
-        return sonos_playlists
+        if r.status_code == requests.codes.ok:
+            r_json = r.json()
+            playlists = r_json['playlists']
+            sonos_playlists = {}
+            for pl in playlists:
+                sonos_playlists.update({pl['id']: pl['name']})
+            return sonos_playlists
+        else:
+            return None
 
     def get_group_volume(self, household, group):
         groupVolume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
         r = requests.get(groupVolume_url, headers=self.headers)
-        r_json = r.json()
-        # List 0=volume, 1=muted, 2=fixed(true/false)
-        volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
-        return volume
+        if r.status_code == requests.codes.ok:
+            r_json = r.json()
+            if r_json['volume']:
+                # List 0=volume, 1=muted, 2=fixed(true/false)
+                volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
+                return volume
+            else:
+                return None
+        else:
+            return None
 
     def set_group_volume(self, household, group, volume):
         payload = {"volume": volume}
@@ -209,5 +231,3 @@ class SonosControl:
             return True
         else:
             return r.status_code
-
-
