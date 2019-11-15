@@ -13,8 +13,8 @@
         {
             "title": "SonosController: a NodeServer for Sonos Integration",
             "author": "Simplex Technology",
-            "version": "1.0.8",
-            "date": "September 27, 2017",
+            "version": "1.0.10",
+            "date": "September 27, 2019",
             "source": "https://github.com/simplextech/udi-poly-sonoscontroller",
             "license": "https://github.com/simplextech/udi-poly-sonoscontroller/blob/master/LICENSE"
         }
