@@ -269,6 +269,62 @@ class Controller(polyinterface.Controller):
         for node in self.nodes:
             self.nodes[node].reportDrivers()
 
+    def update_playlists(self):
+        """
+        Updating of Playlists modifies the profile and sends the update
+        """
+        if self.household is not None:
+            for key in self.household:
+                household = self.household[key]
+                file_input = 'profile/nls/en_us.txt'
+
+                # Remove PLAY_LIST-NAME Entries
+                for line in fileinput.input(file_input, inplace=True, backup='.bak'):
+                    if re.match(r'^PLAY_LIST-\d+\s=\s\w+.+', line):
+                        pass
+                    else:
+                        print(line.rstrip())
+
+                # Add new PLAY_LIST-NAME Entries
+                nls_file = open(file_input, 'a')
+
+                # print('Sonos Playlists')
+                sonos_playlists = SonosControl.get_playlists(self.sonos, household)
+                for playlist in sonos_playlists:
+                    name = sonos_playlists[playlist]
+                    nls_file.write('PLAY_LIST-' + str(playlist) + ' = ' + name + '\n')
+
+                nls_file.close()
+                # self.poly.installprofile()
+
+    def update_favorites(self):
+        """
+        Updating of Favorites modifies the profile and sends the update
+        """
+        if self.household is not None:
+            for key in self.household:
+                household = self.household[key]
+                file_input = 'profile/nls/en_us.txt'
+
+                # Remove FAVORITE-NAME Entries
+                for line in fileinput.input(file_input, inplace=True, backup='.bak'):
+                    if re.match(r'^FAVORITE-\d+\s=\s\w+.+', line):
+                        pass
+                    else:
+                        print(line.rstrip())
+
+                # Add new FAVORITE-NAME Entries
+                nls_file = open(file_input, 'a')
+
+                # print('Sonos Favorites')
+                sonos_favorites = SonosControl.get_favorites(self.sonos, household)
+                for favorite in sonos_favorites:
+                    name = sonos_favorites[favorite]
+                    nls_file.write('FAVORITE-' + str(favorite) + ' = ' + name + '\n')
+
+                nls_file.close()
+                # self.poly.installprofile()
+
     def discover(self, *args, **kwargs):
         if self.sonos is not None:
             self.household = SonosControl.get_households(self.sonos)
@@ -307,47 +363,51 @@ class Controller(polyinterface.Controller):
                     time.sleep(1)
                 # print('End -----------------------------------------------------------')
 
-                """
-                Updating of Favorites and Playlists modifies the profile and sends the update
-                """
-                file_input = 'profile/nls/en_us.txt'
+                self.update_favorites
+                self.update_playlists
+                self.update_profile
 
-                # Remove PLAY_LIST-NAME Entries
-                for line in fileinput.input(file_input, inplace=True, backup='.bak'):
-                    if re.match(r'^PLAY_LIST-\d+\s=\s\w+.+', line):
-                        pass
-                    elif re.match(r'^FAVORITE-\d+\s=\s\w+.+', line):
-                        pass
-                    else:
-                        print(line.rstrip())
-
-                # Add new PLAY_LIST-NAME Entries
-                nls_file = open(file_input, 'a')
-
-                # print('Sonos Favorites')
-                sonos_favorites = SonosControl.get_favorites(self.sonos, household)
-                # self.addNode(FavoriteNode(self, 'favorites', 'favorites', 'Sonos Favorites'))
-
-                for favorite in sonos_favorites:
-                    # address = 'fav_' + str(favorite)
-                    name = sonos_favorites[favorite]
-                    nls_file.write('FAVORITE-' + str(favorite) + ' = ' + name + '\n')
-                    # self.addNode(FavoriteNode(self, 'favorites', address, name))
-                # print('End------------')
-
-                # print('Sonos Playlists')
-                sonos_playlists = SonosControl.get_playlists(self.sonos, household)
-                # self.addNode(PlaylistNode(self, 'playlists', 'playlists', 'Sonos Playlists'))
-
-                for playlist in sonos_playlists:
-                    # address = 'playlist_' + str(playlist)
-                    name = sonos_playlists[playlist]
-                    nls_file.write('PLAY_LIST-' + str(playlist) + ' = ' + name + '\n')
-                    # self.addNode(PlaylistNode(self, 'playlists', address, name))
-                # print('End------------')
-
-                nls_file.close()
-                self.poly.installprofile()
+                # """
+                # Updating of Favorites and Playlists modifies the profile and sends the update
+                # """
+                # file_input = 'profile/nls/en_us.txt'
+                #
+                # # Remove PLAY_LIST-NAME Entries
+                # for line in fileinput.input(file_input, inplace=True, backup='.bak'):
+                #     if re.match(r'^PLAY_LIST-\d+\s=\s\w+.+', line):
+                #         pass
+                #     elif re.match(r'^FAVORITE-\d+\s=\s\w+.+', line):
+                #         pass
+                #     else:
+                #         print(line.rstrip())
+                #
+                # # Add new PLAY_LIST-NAME Entries
+                # nls_file = open(file_input, 'a')
+                #
+                # # print('Sonos Favorites')
+                # sonos_favorites = SonosControl.get_favorites(self.sonos, household)
+                # # self.addNode(FavoriteNode(self, 'favorites', 'favorites', 'Sonos Favorites'))
+                #
+                # for favorite in sonos_favorites:
+                #     # address = 'fav_' + str(favorite)
+                #     name = sonos_favorites[favorite]
+                #     nls_file.write('FAVORITE-' + str(favorite) + ' = ' + name + '\n')
+                #     # self.addNode(FavoriteNode(self, 'favorites', address, name))
+                # # print('End------------')
+                #
+                # # print('Sonos Playlists')
+                # sonos_playlists = SonosControl.get_playlists(self.sonos, household)
+                # # self.addNode(PlaylistNode(self, 'playlists', 'playlists', 'Sonos Playlists'))
+                #
+                # for playlist in sonos_playlists:
+                #     # address = 'playlist_' + str(playlist)
+                #     name = sonos_playlists[playlist]
+                #     nls_file.write('PLAY_LIST-' + str(playlist) + ' = ' + name + '\n')
+                #     # self.addNode(PlaylistNode(self, 'playlists', address, name))
+                # # print('End------------')
+                #
+                # nls_file.close()
+                # self.poly.installprofile()
 
     def delete(self):
         LOGGER.info('Removing SonosController Nodeserver')
@@ -364,18 +424,20 @@ class Controller(polyinterface.Controller):
     def check_params(self):
         pass
 
-    def remove_notice_test(self,command):
+    def remove_notice_test(self, command):
         LOGGER.info('remove_notice_test: notices={}'.format(self.poly.config['notices']))
         # Remove all existing notices
         self.removeNotice('test')
 
-    def remove_notices_all(self,command):
+    def remove_notices_all(self, command):
         LOGGER.info('remove_notices_all: notices={}'.format(self.poly.config['notices']))
         # Remove all existing notices
         self.removeNoticesAll()
 
-    def update_profile(self,command):
+    def update_profile(self, command):
         LOGGER.info('update_profile:')
+        self.update_favorites
+        self.update_playlists
         st = self.poly.installprofile()
         return st
 
