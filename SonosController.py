@@ -40,7 +40,7 @@ class Controller(polyinterface.Controller):
         self.cloud = CLOUD
 
     def get_credentials(self):
-        print('---- Environment: ' + self.poly.stage + ' ----')
+        LOGGER.info('---- Environment: ' + self.poly.stage + ' ----')
 
         if self.poly.stage == 'test':
             if 'clientId' in self.poly.init['oauth']['test']:
@@ -200,7 +200,7 @@ class Controller(polyinterface.Controller):
                 try:
                     sonos_groups = SonosControl.get_groups(self.sonos, household)
                 except KeyError as ex:
-                    print('shortPoll Sonos Groups Error: ' + str(ex))
+                    LOGGER.error('shortPoll Sonos Groups Error: ' + str(ex))
                     time.sleep(1)
                     sonos_groups = SonosControl.get_groups(self.sonos, household)
 
@@ -234,17 +234,17 @@ class Controller(polyinterface.Controller):
                                 else:
                                     self.nodes[group_address].setDriver('GV0', 0)
                             else:
-                                print("shortPoll group_volume is None")
+                                LOGGER.error("shortPoll group_volume is None")
                         except:  # Catch All
                             e = sys.exc_info()[0]
-                            print("shortPoll Sonos Groups Error: " + e)
+                            LOGGER.error("shortPoll Sonos Groups Error: " + e)
                 else:
-                    print("shortPoll: Sonos Groups is None")
+                    LOGGER.error("shortPoll: Sonos Groups is None")
 
                 try:
                     sonos_players = SonosControl.get_players(self.sonos, household)
                 except KeyError as ex:
-                    print("shortPoll Get Players: " + str(ex))
+                    LOGGER.error("shortPoll Get Players: " + str(ex))
                     time.sleep(1)
                     sonos_players = SonosControl.get_players(self.sonos, household)
 
@@ -260,7 +260,7 @@ class Controller(polyinterface.Controller):
                         else:
                             self.nodes[player_address].setDriver('GV0', 0)
                 else:
-                    print("shortPoll: Sonos Players is None")
+                    LOGGER.error("shortPoll: Sonos Players is None")
 
     def longPoll(self):
         self.refresh_token()
