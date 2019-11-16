@@ -38,6 +38,7 @@ class Controller(polyinterface.Controller):
         self.sonos = None
         self.server_data = {}
         self.cloud = CLOUD
+        self.disco = 0
 
     def get_credentials(self):
         LOGGER.info('---- Environment: ' + self.poly.stage + ' ----')
@@ -182,88 +183,89 @@ class Controller(polyinterface.Controller):
 
     def start(self):
         LOGGER.info('Started SonosController NodeServer')
+        self.voice_rss()  # Add configuration parameters for Voice RSS
+        self.say_tts_params()
+
         if self.get_credentials():
             if self.refresh_token():
                 self.removeNoticesAll()
-                self.voice_rss()  # Add configuration parameters for Voice RSS
-                self.say_tts_params()
                 self.discover()
             else:
                 self.auth_prompt()
         else:
             self.auth_prompt()
 
-
     def shortPoll(self):
         # print('Running ShortPoll')
-        if self.household is not None:
-            for key in self.household:
-                household = self.household[key]
+        if self.disco == 1:
+            if self.household is not None:
+                for key in self.household:
+                    household = self.household[key]
 
-                try:
-                    sonos_groups = SonosControl.get_groups(self.sonos, household)
-                except KeyError as ex:
-                    LOGGER.error('shortPoll Sonos Groups Error: ' + str(ex))
-                    time.sleep(1)
-                    sonos_groups = SonosControl.get_groups(self.sonos, household)
+                    try:
+                        sonos_groups = SonosControl.get_groups(self.sonos, household)
+                    except KeyError as ex:
+                        LOGGER.error('shortPoll Sonos Groups Error: ' + str(ex))
+                        time.sleep(1)
+                        sonos_groups = SonosControl.get_groups(self.sonos, household)
 
-                if sonos_groups is not None:
-                    for group in sonos_groups:
-                        group_id = group['id']
-                        coordinator_id = group['coordinatorId']
-                        group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
-                        playback_state = group['playbackState']
+                    if sonos_groups is not None:
+                        for group in sonos_groups:
+                            group_id = group['id']
+                            coordinator_id = group['coordinatorId']
+                            group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
+                            playback_state = group['playbackState']
 
-                        if playback_state == 'PLAYBACK_STATE_PLAYING':
-                            playbackstate = 1
-                        elif playback_state == 'PLAYBACK_STATE_TRANSITIONING':
-                            playbackstate = 2
-                        elif playback_state == 'PLAYBACK_STATE_PAUSED':
-                            playbackstate = 3
-                        elif playback_state == 'PLAYBACK_STATE_IDLE':
-                            playbackstate = 4
-                        else:
-                            playbackstate = 0
-
-                        self.nodes[group_address].setDriver('ST', playbackstate)
-
-                        try:
-                            # List 0=volume, 1=muted, 2=fixed(true/false)
-                            group_volume = SonosControl.get_group_volume(self.sonos, household, group_id)
-                            if group_volume is not None:
-                                self.nodes[group_address].setDriver('SVOL', group_volume[0])
-                                if group_volume[1] == 'true':
-                                    self.nodes[group_address].setDriver('GV0', 1)
-                                else:
-                                    self.nodes[group_address].setDriver('GV0', 0)
+                            if playback_state == 'PLAYBACK_STATE_PLAYING':
+                                playbackstate = 1
+                            elif playback_state == 'PLAYBACK_STATE_TRANSITIONING':
+                                playbackstate = 2
+                            elif playback_state == 'PLAYBACK_STATE_PAUSED':
+                                playbackstate = 3
+                            elif playback_state == 'PLAYBACK_STATE_IDLE':
+                                playbackstate = 4
                             else:
-                                LOGGER.error("shortPoll group_volume is None")
-                        except:  # Catch All
-                            e = sys.exc_info()[0]
-                            LOGGER.error("shortPoll Sonos Groups Error: " + e)
-                else:
-                    LOGGER.error("shortPoll: Sonos Groups is None")
+                                playbackstate = 0
 
-                try:
-                    sonos_players = SonosControl.get_players(self.sonos, household)
-                except KeyError as ex:
-                    LOGGER.error("shortPoll Get Players: " + str(ex))
-                    time.sleep(1)
-                    sonos_players = SonosControl.get_players(self.sonos, household)
+                            self.nodes[group_address].setDriver('ST', playbackstate)
 
-                if sonos_players is not None:
-                    for player in sonos_players:
-                        player_id = player['id']
-                        player_address = 'p' + player_id.split('_')[1][0:-5].lower()
-                        player_volume = SonosControl.get_player_volume(self.sonos, player_id)
-                        # List 0=volume, 1=muted, 2=fixed(true/false)
-                        self.nodes[player_address].setDriver('SVOL', player_volume[0])
-                        if player_volume[1] == 'true':
-                            self.nodes[player_address].setDriver('GV0', 1)
-                        else:
-                            self.nodes[player_address].setDriver('GV0', 0)
-                else:
-                    LOGGER.error("shortPoll: Sonos Players is None")
+                            try:
+                                # List 0=volume, 1=muted, 2=fixed(true/false)
+                                group_volume = SonosControl.get_group_volume(self.sonos, household, group_id)
+                                if group_volume is not None:
+                                    self.nodes[group_address].setDriver('SVOL', group_volume[0])
+                                    if group_volume[1] == 'true':
+                                        self.nodes[group_address].setDriver('GV0', 1)
+                                    else:
+                                        self.nodes[group_address].setDriver('GV0', 0)
+                                else:
+                                    LOGGER.error("shortPoll group_volume is None")
+                            except:  # Catch All
+                                e = sys.exc_info()[0]
+                                LOGGER.error("shortPoll Sonos Groups Error: " + e)
+                    else:
+                        LOGGER.error("shortPoll: Sonos Groups is None")
+
+                    try:
+                        sonos_players = SonosControl.get_players(self.sonos, household)
+                    except KeyError as ex:
+                        LOGGER.error("shortPoll Get Players: " + str(ex))
+                        time.sleep(1)
+                        sonos_players = SonosControl.get_players(self.sonos, household)
+
+                    if sonos_players is not None:
+                        for player in sonos_players:
+                            player_id = player['id']
+                            player_address = 'p' + player_id.split('_')[1][0:-5].lower()
+                            player_volume = SonosControl.get_player_volume(self.sonos, player_id)
+                            # List 0=volume, 1=muted, 2=fixed(true/false)
+                            self.nodes[player_address].setDriver('SVOL', player_volume[0])
+                            if player_volume[1] == 'true':
+                                self.nodes[player_address].setDriver('GV0', 1)
+                            else:
+                                self.nodes[player_address].setDriver('GV0', 0)
+                    else:
+                        LOGGER.error("shortPoll: Sonos Players is None")
 
     def longPoll(self):
         self.refresh_token()
@@ -294,23 +296,28 @@ class Controller(polyinterface.Controller):
         if 'SAY_TTS-5' not in self.polyConfig['customParams']:
             self.addCustomParam({'SAY_TTS-5': 'empty'})
 
-    def update_playlists(self):
+    def update_nls(self):
         """
         Updating of Playlists modifies the profile and sends the update
         """
+        file_input = 'profile/nls/en_us.txt'
+
         if self.household is not None:
             for key in self.household:
                 household = self.household[key]
-                file_input = 'profile/nls/en_us.txt'
 
-                # Remove PLAY_LIST-NAME Entries
+                # Remove PLAY_LIST-NAME, FAVORITE-, SAY_TTS- Entries
                 for line in fileinput.input(file_input, inplace=True, backup='.bak'):
                     if re.match(r'^PLAY_LIST-\d+\s=\s\w+.+', line):
+                        pass
+                    elif re.match(r'^FAVORITE-\d+\s=\s\w+.+', line):
+                        pass
+                    elif re.match(r'^SAY_TTS-\d+\s=\s\w+.+', line):
                         pass
                     else:
                         print(line.rstrip())
 
-                # Add new PLAY_LIST-NAME Entries
+                # Open NLS File in Append Mode
                 nls_file = open(file_input, 'a')
 
                 # print('Sonos Playlists')
@@ -319,65 +326,115 @@ class Controller(polyinterface.Controller):
                     name = sonos_playlists[playlist]
                     nls_file.write('PLAY_LIST-' + str(playlist) + ' = ' + name + '\n')
 
-                nls_file.close()
-                # self.poly.installprofile()
-
-    def update_favorites(self):
-        """
-        Updating of Favorites modifies the profile and sends the update
-        """
-        if self.household is not None:
-            for key in self.household:
-                household = self.household[key]
-                file_input = 'profile/nls/en_us.txt'
-
-                # Remove FAVORITE-NAME Entries
-                for line in fileinput.input(file_input, inplace=True, backup='.bak'):
-                    if re.match(r'^FAVORITE-\d+\s=\s\w+.+', line):
-                        pass
-                    else:
-                        print(line.rstrip())
-
-                # Add new FAVORITE-NAME Entries
-                nls_file = open(file_input, 'a')
-
                 # print('Sonos Favorites')
                 sonos_favorites = SonosControl.get_favorites(self.sonos, household)
                 for favorite in sonos_favorites:
                     name = sonos_favorites[favorite]
                     nls_file.write('FAVORITE-' + str(favorite) + ' = ' + name + '\n')
 
+                # Add new SAY_TTS Entries
+                if 'SAY_TTS-1' in self.polyConfig['customParams']:
+                    SAY_TTS1 = self.polyConfig['customParams']['SAY_TTS-1']
+                    nls_file.write('SAY_TTS-1' + ' = ' + SAY_TTS1 + '\n')
+                if 'SAY_TTS-2' in self.polyConfig['customParams']:
+                    SAY_TTS2 = self.polyConfig['customParams']['SAY_TTS-2']
+                    nls_file.write('SAY_TTS-2' + ' = ' + SAY_TTS2 + '\n')
+                if 'SAY_TTS-3' in self.polyConfig['customParams']:
+                    SAY_TTS3 = self.polyConfig['customParams']['SAY_TTS-3']
+                    nls_file.write('SAY_TTS-3' + ' = ' + SAY_TTS3 + '\n')
+                if 'SAY_TTS-4' in self.polyConfig['customParams']:
+                    SAY_TTS4 = self.polyConfig['customParams']['SAY_TTS-4']
+                    nls_file.write('SAY_TTS-4' + ' = ' + SAY_TTS4 + '\n')
+                if 'SAY_TTS-5' in self.polyConfig['customParams']:
+                    SAY_TTS5 = self.polyConfig['customParams']['SAY_TTS-5']
+                    nls_file.write('SAY_TTS-5' + ' = ' + SAY_TTS5 + '\n')
+
                 nls_file.close()
-                # self.poly.installprofile()
 
-    def update_say_tts(self):
-        file_input = 'profile/nls/en_us.txt'
-        # Remove SAY_TTS- Entries
-        for line in fileinput.input(file_input, inplace=True, backup='.bak'):
-            if re.match(r'^SAY_TTS-\d+\s=\s\w+.+', line):
-                pass
-            else:
-                print(line.rstrip())
+    # def update_playlists(self):
+    #     """
+    #     Updating of Playlists modifies the profile and sends the update
+    #     """
+    #     if self.household is not None:
+    #         for key in self.household:
+    #             household = self.household[key]
+    #             file_input = 'profile/nls/en_us.txt'
+    #
+    #             # Remove PLAY_LIST-NAME Entries
+    #             for line in fileinput.input(file_input, inplace=True, backup='.bak'):
+    #                 if re.match(r'^PLAY_LIST-\d+\s=\s\w+.+', line):
+    #                     pass
+    #                 else:
+    #                     print(line.rstrip())
+    #
+    #             # Add new PLAY_LIST-NAME Entries
+    #             nls_file = open(file_input, 'a')
+    #
+    #             # print('Sonos Playlists')
+    #             sonos_playlists = SonosControl.get_playlists(self.sonos, household)
+    #             for playlist in sonos_playlists:
+    #                 name = sonos_playlists[playlist]
+    #                 nls_file.write('PLAY_LIST-' + str(playlist) + ' = ' + name + '\n')
+    #
+    #             nls_file.close()
+    #             # self.poly.installprofile()
 
-        # Add new SAY_TTS Entries
-        nls_file = open(file_input, 'a')
-        if 'SAY_TTS-1' in self.polyConfig['customParams']:
-            SAY_TTS1 = self.polyConfig['customParams']['SAY_TTS-1']
-            nls_file.write('SAY_TTS-1' + ' = ' + SAY_TTS1 + '\n')
-        if 'SAY_TTS-2' in self.polyConfig['customParams']:
-            SAY_TTS2 = self.polyConfig['customParams']['SAY_TTS-2']
-            nls_file.write('SAY_TTS-2' + ' = ' + SAY_TTS2 + '\n')
-        if 'SAY_TTS-3' in self.polyConfig['customParams']:
-            SAY_TTS3 = self.polyConfig['customParams']['SAY_TTS-3']
-            nls_file.write('SAY_TTS-3' + ' = ' + SAY_TTS3 + '\n')
-        if 'SAY_TTS-4' in self.polyConfig['customParams']:
-            SAY_TTS4 = self.polyConfig['customParams']['SAY_TTS-4']
-            nls_file.write('SAY_TTS-4' + ' = ' + SAY_TTS4 + '\n')
-        if 'SAY_TTS-5' in self.polyConfig['customParams']:
-            SAY_TTS5 = self.polyConfig['customParams']['SAY_TTS-5']
-            nls_file.write('SAY_TTS-5' + ' = ' + SAY_TTS5 + '\n')
+    # def update_favorites(self):
+    #     """
+    #     Updating of Favorites modifies the profile and sends the update
+    #     """
+    #     if self.household is not None:
+    #         for key in self.household:
+    #             household = self.household[key]
+    #             file_input = 'profile/nls/en_us.txt'
+    #
+    #             # Remove FAVORITE-NAME Entries
+    #             for line in fileinput.input(file_input, inplace=True, backup='.bak'):
+    #                 if re.match(r'^FAVORITE-\d+\s=\s\w+.+', line):
+    #                     pass
+    #                 else:
+    #                     print(line.rstrip())
+    #
+    #             # Add new FAVORITE-NAME Entries
+    #             nls_file = open(file_input, 'a')
+    #
+    #             # print('Sonos Favorites')
+    #             sonos_favorites = SonosControl.get_favorites(self.sonos, household)
+    #             for favorite in sonos_favorites:
+    #                 name = sonos_favorites[favorite]
+    #                 nls_file.write('FAVORITE-' + str(favorite) + ' = ' + name + '\n')
+    #
+    #             nls_file.close()
+    #             # self.poly.installprofile()
 
-        nls_file.close()
+    # def update_say_tts(self):
+        # file_input = 'profile/nls/en_us.txt'
+        # # Remove SAY_TTS- Entries
+        # for line in fileinput.input(file_input, inplace=True, backup='.bak'):
+        #     if re.match(r'^SAY_TTS-\d+\s=\s\w+.+', line):
+        #         pass
+        #     else:
+        #         print(line.rstrip())
+        #
+        # # Add new SAY_TTS Entries
+        # nls_file = open(file_input, 'a')
+        # if 'SAY_TTS-1' in self.polyConfig['customParams']:
+        #     SAY_TTS1 = self.polyConfig['customParams']['SAY_TTS-1']
+        #     nls_file.write('SAY_TTS-1' + ' = ' + SAY_TTS1 + '\n')
+        # if 'SAY_TTS-2' in self.polyConfig['customParams']:
+        #     SAY_TTS2 = self.polyConfig['customParams']['SAY_TTS-2']
+        #     nls_file.write('SAY_TTS-2' + ' = ' + SAY_TTS2 + '\n')
+        # if 'SAY_TTS-3' in self.polyConfig['customParams']:
+        #     SAY_TTS3 = self.polyConfig['customParams']['SAY_TTS-3']
+        #     nls_file.write('SAY_TTS-3' + ' = ' + SAY_TTS3 + '\n')
+        # if 'SAY_TTS-4' in self.polyConfig['customParams']:
+        #     SAY_TTS4 = self.polyConfig['customParams']['SAY_TTS-4']
+        #     nls_file.write('SAY_TTS-4' + ' = ' + SAY_TTS4 + '\n')
+        # if 'SAY_TTS-5' in self.polyConfig['customParams']:
+        #     SAY_TTS5 = self.polyConfig['customParams']['SAY_TTS-5']
+        #     nls_file.write('SAY_TTS-5' + ' = ' + SAY_TTS5 + '\n')
+        #
+        # nls_file.close()
 
     def discover(self, *args, **kwargs):
         if self.sonos is not None:
@@ -417,9 +474,13 @@ class Controller(polyinterface.Controller):
                     time.sleep(1)
                 # print('End -----------------------------------------------------------')
 
-                self.update_favorites()
-                self.update_playlists()
+                # self.update_favorites()
+                # self.update_playlists()
+                self.update_nls()
                 self.poly.installprofile()
+
+        time.sleep(3)
+        self.disco = 1
 
     def delete(self):
         LOGGER.info('Removing SonosController Nodeserver')
@@ -448,9 +509,10 @@ class Controller(polyinterface.Controller):
 
     def update_profile(self, command):
         LOGGER.info('update_profile:')
-        self.update_favorites()
-        self.update_playlists()
-        self.update_say_tts()
+        # self.update_favorites()
+        # self.update_playlists()
+        # self.update_say_tts()
+        self.update_nls()
         st = self.poly.installprofile()
         return st
 
