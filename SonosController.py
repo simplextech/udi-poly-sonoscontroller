@@ -275,25 +275,43 @@ class Controller(polyinterface.Controller):
             self.nodes[node].reportDrivers()
 
     def voice_rss(self):
-        if 'api_key' not in self.polyConfig['customParams']:
+        if 'api_key' in self.polyConfig['customParams']:
+            pass
+        else:
             self.addCustomParam({'api_key': 'none'})
-        if 'language' not in self.polyConfig['customParams']:
+        if 'language' in self.polyConfig['customParams']:
+            pass
+        else:
             self.addCustomParam({'language': 'en-us'})
-        if 'codec' not in self.polyConfig['customParams']:
+        if 'codec' in self.polyConfig['customParams']:
+            pass
+        else:
             self.addCustomParam({'codec': 'mp3'})
-        if 'format' not in self.polyConfig['customParams']:
+        if 'format' in self.polyConfig['customParams']:
+            pass
+        else:
             self.addCustomParam({'format': '24khz_16bit_stereo'})
 
     def say_tts_params(self):
-        if 'SAY_TTS-1' not in self.polyConfig['customParams']:
+        if 'SAY_TTS-1' in self.polyConfig['customParams']:
+            pass
+        else:
             self.addCustomParam({'SAY_TTS-1': 'empty'})
-        if 'SAY_TTS-2' not in self.polyConfig['customParams']:
+        if 'SAY_TTS-2' in self.polyConfig['customParams']:
+            pass
+        else:
             self.addCustomParam({'SAY_TTS-2': 'empty'})
-        if 'SAY_TTS-3' not in self.polyConfig['customParams']:
+        if 'SAY_TTS-3' in self.polyConfig['customParams']:
+            pass
+        else:
             self.addCustomParam({'SAY_TTS-3': 'empty'})
-        if 'SAY_TTS-4' not in self.polyConfig['customParams']:
+        if 'SAY_TTS-4' in self.polyConfig['customParams']:
+            pass
+        else:
             self.addCustomParam({'SAY_TTS-4': 'empty'})
-        if 'SAY_TTS-5' not in self.polyConfig['customParams']:
+        if 'SAY_TTS-5' in self.polyConfig['customParams']:
+            pass
+        else:
             self.addCustomParam({'SAY_TTS-5': 'empty'})
 
     def update_nls(self):
@@ -476,6 +494,9 @@ class Controller(polyinterface.Controller):
 
                 # self.update_favorites()
                 # self.update_playlists()
+                self.voice_rss()
+                self.say_tts_params()
+                time.sleep(3)
                 self.update_nls()
                 self.poly.installprofile()
 
