@@ -192,6 +192,7 @@ class Controller(polyinterface.Controller):
             self.auth_prompt()
 
         self.voice_rss()  # Add configuration parameters for Voice RSS
+        self.say_tts_params()
 
 
     def shortPoll(self):
@@ -373,6 +374,42 @@ class Controller(polyinterface.Controller):
     def voice_rss(self):
         self.addCustomParam({'apiKey': 'none', 'language': 'en', 'codec': 'mp3', 'format': '24khz_16bit_stereo'})
 
+    def say_tts_params(self):
+        self.addCustomParam({'say0': 'empty',
+                             'say1': 'empty',
+                             'say2': 'empty',
+                             'say3': 'empty',
+                             'say4': 'empty'})
+
+    def update_say_tts(self):
+        file_input = 'profile/nls/en_us.txt'
+
+        # Remove SAY_TTS- Entries
+        for line in fileinput.input(file_input, inplace=True, backup='.bak'):
+            if re.match(r'^SAY_TTS-\d+\s=\s\w+.+', line):
+                pass
+            else:
+                print(line.rstrip())
+
+        # Add new SAY_TTS Entries
+        nls_file = open(file_input, 'a')
+
+        if 'say0' in self.polyConfig['customParams']:
+            say0 = self.polyConfig['customParams']['say0']
+            nls_file.write('SAY_TTS-' + '0' + ' = ' + say0 + '\n')
+
+        if 'say1' in self.polyConfig['customParams']:
+            say1 = self.polyConfig['customParams']['say1']
+            nls_file.write('SAY_TTS-' + '1' + ' = ' + say1 + '\n')
+
+        if 'say2' in self.polyConfig['customParams']:
+            say2 = self.polyConfig['customParams']['say2']
+            nls_file.write('SAY_TTS-' + '2' + ' = ' + say2 + '\n')
+
+
+
+        nls_file.close()
+
     def delete(self):
         LOGGER.info('Removing SonosController Nodeserver')
 
@@ -402,6 +439,7 @@ class Controller(polyinterface.Controller):
         LOGGER.info('update_profile:')
         self.update_favorites()
         self.update_playlists()
+        self.update_say_tts()
         st = self.poly.installprofile()
         return st
 

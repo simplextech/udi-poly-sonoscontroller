@@ -78,6 +78,9 @@
             <cmd id="SVOL">
                 <p id="" editor="SVOL" init="SVOL" />
             </cmd>
+            <cmd id="SAY_TTS">
+                <p id="" editor="SAY_TTS" init="SAY_TTS" />
+            </cmd>
             <cmd id="MUTE" />
             <cmd id="UNMUTE" />
         </accepts>

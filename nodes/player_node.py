@@ -87,6 +87,7 @@ class PlayerNode(polyinterface.Node):
     drivers = [
         {'driver': 'ST', 'value': 0, 'uom': 2},
         {'driver': 'SVOL', 'value': 0, 'uom': 51},
+        {'driver': 'SAY_TTS', 'value': 0, 'uom': 25},
         {'driver': 'GV0', 'value': 0, 'uom': 2},  # Mute/unMute
     ]
 

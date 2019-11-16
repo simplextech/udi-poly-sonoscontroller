@@ -45,6 +45,7 @@ ST-PLAYER-SVOL-NAME = Volume
 ST-PLAYER-GV0-NAME = Mute
 CMD-PLAYER-MUTE-NAME = Mute
 CMD-PLAYER-UNMUTE-NAME = UnMute
+CMD-SAY_TTS-NAME = Say / TTS
 
 PLAY_MODE-0 = N/A
 PLAY_MODE-1 = Playing
@@ -64,3 +65,5 @@ PLAY_LIST-3 = Assorted List
 PLAY_LIST-2 = Test
 PLAY_LIST-9 = Nobodies Home
 PLAY_LIST-6 = Hello new project
+SAY_TTS-1 = Hello World
+SAY_TTS-2 = This is a test
