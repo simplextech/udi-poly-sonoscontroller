@@ -53,17 +53,3 @@ PLAY_MODE-2 = Transitioning
 PLAY_MODE-3 = Paused
 PLAY_MODE-4 = Stopped
 
-FAVORITE-4 = 41 - SiriusXM Turbo with Kayla
-FAVORITE-2 = 37 - Octane
-FAVORITE-0 = 101.5 | 101-5 Bob Rocks (Rock Music)
-FAVORITE-1 = 35 - SiriusXMU
-PLAY_LIST-7 = Goodnight Time
-PLAY_LIST-8 = Wakeup
-PLAY_LIST-4 = ISY-Test
-PLAY_LIST-5 = HomeSeer Fairwell
-PLAY_LIST-3 = Assorted List
-PLAY_LIST-2 = Test
-PLAY_LIST-9 = Nobodies Home
-PLAY_LIST-6 = Hello new project
-SAY_TTS-1 = Hello World
-SAY_TTS-2 = This is a test

@@ -21,6 +21,6 @@
     </editor>
 
     <editor id="SAY_TTS">
-        <range uom="25" subset="0-5" nls="SAY_TTS" />
+        <range uom="25" subset="1-5" nls="SAY_TTS" />
     </editor>
 </editors>

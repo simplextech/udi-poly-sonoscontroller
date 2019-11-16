@@ -185,14 +185,13 @@ class Controller(polyinterface.Controller):
         if self.get_credentials():
             if self.refresh_token():
                 self.removeNoticesAll()
+                self.voice_rss()  # Add configuration parameters for Voice RSS
+                self.say_tts_params()
                 self.discover()
             else:
                 self.auth_prompt()
         else:
             self.auth_prompt()
-
-        self.voice_rss()  # Add configuration parameters for Voice RSS
-        self.say_tts_params()
 
 
     def shortPoll(self):
@@ -273,6 +272,22 @@ class Controller(polyinterface.Controller):
         for node in self.nodes:
             self.nodes[node].reportDrivers()
 
+    def voice_rss(self):
+        if 'apiKey' not in self.polyConfig['customParams']:
+            self.addCustomParam({'apiKey': 'none', 'language': 'en', 'codec': 'mp3', 'format': '24khz_16bit_stereo'})
+
+    def say_tts_params(self):
+        if 'SAY_TTS_1' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS_1': 'empty'})
+        if 'SAY_TTS_2' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS_2': 'empty'})
+        if 'SAY_TTS_3' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS_3': 'empty'})
+        if 'SAY_TTS_4' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS_4': 'empty'})
+        if 'SAY_TTS_5' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS_5': 'empty'})
+
     def update_playlists(self):
         """
         Updating of Playlists modifies the profile and sends the update
@@ -329,6 +344,35 @@ class Controller(polyinterface.Controller):
                 nls_file.close()
                 # self.poly.installprofile()
 
+    def update_say_tts(self):
+        file_input = 'profile/nls/en_us.txt'
+        # Remove SAY_TTS- Entries
+        for line in fileinput.input(file_input, inplace=True, backup='.bak'):
+            if re.match(r'^SAY_TTS-\d+\s=\s\w+.+', line):
+                pass
+            else:
+                print(line.rstrip())
+
+        # Add new SAY_TTS Entries
+        nls_file = open(file_input, 'a')
+        if 'SAY_TTS_1' in self.polyConfig['customParams']:
+            SAY_TTS_1 = self.polyConfig['customParams']['SAY_TTS_1']
+            nls_file.write('SAY_TTS-' + '1' + ' = ' + SAY_TTS_1 + '\n')
+        if 'SAY_TTS_2' in self.polyConfig['customParams']:
+            SAY_TTS_2 = self.polyConfig['customParams']['SAY_TTS_2']
+            nls_file.write('SAY_TTS-' + '2' + ' = ' + SAY_TTS_2 + '\n')
+        if 'SAY_TTS_3' in self.polyConfig['customParams']:
+            SAY_TTS_3 = self.polyConfig['customParams']['SAY_TTS_3']
+            nls_file.write('SAY_TTS-' + '3' + ' = ' + SAY_TTS_3 + '\n')
+        if 'SAY_TTS_4' in self.polyConfig['customParams']:
+            SAY_TTS_4 = self.polyConfig['customParams']['SAY_TTS_4']
+            nls_file.write('SAY_TTS-' + '4' + ' = ' + SAY_TTS_4 + '\n')
+        if 'SAY_TTS_5' in self.polyConfig['customParams']:
+            SAY_TTS_5 = self.polyConfig['customParams']['SAY_TTS_5']
+            nls_file.write('SAY_TTS-' + '5' + ' = ' + SAY_TTS_5 + '\n')
+
+        nls_file.close()
+
     def discover(self, *args, **kwargs):
         if self.sonos is not None:
             self.household = SonosControl.get_households(self.sonos)
@@ -369,46 +413,7 @@ class Controller(polyinterface.Controller):
 
                 self.update_favorites()
                 self.update_playlists()
-                self.update_profile('command')
-
-    def voice_rss(self):
-        self.addCustomParam({'apiKey': 'none', 'language': 'en', 'codec': 'mp3', 'format': '24khz_16bit_stereo'})
-
-    def say_tts_params(self):
-        self.addCustomParam({'say0': 'empty',
-                             'say1': 'empty',
-                             'say2': 'empty',
-                             'say3': 'empty',
-                             'say4': 'empty'})
-
-    def update_say_tts(self):
-        file_input = 'profile/nls/en_us.txt'
-
-        # Remove SAY_TTS- Entries
-        for line in fileinput.input(file_input, inplace=True, backup='.bak'):
-            if re.match(r'^SAY_TTS-\d+\s=\s\w+.+', line):
-                pass
-            else:
-                print(line.rstrip())
-
-        # Add new SAY_TTS Entries
-        nls_file = open(file_input, 'a')
-
-        if 'say0' in self.polyConfig['customParams']:
-            say0 = self.polyConfig['customParams']['say0']
-            nls_file.write('SAY_TTS-' + '0' + ' = ' + say0 + '\n')
-
-        if 'say1' in self.polyConfig['customParams']:
-            say1 = self.polyConfig['customParams']['say1']
-            nls_file.write('SAY_TTS-' + '1' + ' = ' + say1 + '\n')
-
-        if 'say2' in self.polyConfig['customParams']:
-            say2 = self.polyConfig['customParams']['say2']
-            nls_file.write('SAY_TTS-' + '2' + ' = ' + say2 + '\n')
-
-
-
-        nls_file.close()
+                self.poly.installprofile()
 
     def delete(self):
         LOGGER.info('Removing SonosController Nodeserver')
