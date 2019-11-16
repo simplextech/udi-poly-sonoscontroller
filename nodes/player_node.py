@@ -83,20 +83,12 @@ class PlayerNode(polyinterface.Node):
         val = command['value']
         say_cmd = 'SAY_TTS_' + str(val)
         say_tts = self.controller.polyConfig['customParams'][say_cmd]
-        print("TTS DEBUG======: " + say_tts)
-
-        # if say_cmd == 'SAY_TTS_1':
-        #     print("-----TTS DEBUG======: " + say_cmd)
-        #     say_tts = self.controller.polyConfig['customParams']['SAY_TTS_1']
-        #     print("PRE-----TTS DEBUG======: " + say_tts)
-        # elif say_cmd == 'SAY_TTS_2':
-        #     say_tts = self.controller.polyConfig['customParams']['SAY_TTS_2']
-        #     print("TTS DEBUG======: " + say_tts)
 
         codec = self.controller.polyConfig['customParams']['codec']
         format = self.controller.polyConfig['customParams']['format']
         language = self.controller.polyConfig['customParams']['language']
         apiKey = self.controller.polyConfig['customParams']['apiKey']
+
         if apiKey != 'None':
             raw_url = 'http://api.voicerss.org/?key=' + \
                       apiKey + \
@@ -105,15 +97,12 @@ class PlayerNode(polyinterface.Node):
                       '&f=' + format + \
                       '&src=' + say_tts
 
-            print("SEND DEBUG: " + raw_url)
-
             for player in self.sonos_players:
                 player_id = player['id']
                 player_address = 'p' + player_id.split('_')[1][0:-5].lower()
                 if player_address == self.address:
-                    print("Sending to VoiceRSS for Player: " + player_id)
+                    polyinterface.LOGGER.info("Sending to VoiceRSS for Player: " + player_id)
                     _status = SonosControl.send_voice_rss(self.sonos, player_id, raw_url)
-                    print("DEBUG STATUS: " + str(_status))
 
     def query(self):
         self.reportDrivers()

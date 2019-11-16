@@ -234,7 +234,6 @@ class SonosControl:
 
     def send_voice_rss(self, player, raw_url):
         stream_url = requests.utils.requote_uri(raw_url)
-        print("StreamURL: " + stream_url)
         payload = {
             'name': "Sonos TTS",
             'appId': "net.simplextech",
@@ -242,15 +241,9 @@ class SonosControl:
             'clipType': "CUSTOM",
             'priority': "high"
         }
-
-        # payload = "{\n\t\"name\": \"Sonos TTS\",\n\t\"appId\": \"net.simplextech\",\n" \
-        #           "\t\"streamUrl\": \"http://api.voicerss.org/?key=255a5d74f6ac4130b0fce57ce915c8f7&hl=en-us&src=Hello,%20world&c=mp3&f=24khz_16bit_stereo\",\n" \
-        #           "\t\"clipType\": \"CUSTOM\",\n\t\"priority\": \"high\"\n}"
-
         audio_clip_url = self.players_url + player + '/audioClip'
         r = requests.post(audio_clip_url, headers=self.headers, json=payload)
         if r.status_code == requests.codes.ok:
             return True
         else:
-            print(r.content)
             return r.status_code
