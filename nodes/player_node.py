@@ -87,11 +87,11 @@ class PlayerNode(polyinterface.Node):
         codec = self.controller.polyConfig['customParams']['codec']
         format = self.controller.polyConfig['customParams']['format']
         language = self.controller.polyConfig['customParams']['language']
-        apiKey = self.controller.polyConfig['customParams']['apiKey']
+        api_key = self.controller.polyConfig['customParams']['api_key']
 
-        if apiKey != 'none':
+        if api_key != 'none':
             raw_url = 'http://api.voicerss.org/?key=' + \
-                      apiKey + \
+                      api_key + \
                       '&hl=' + language + \
                       '&c=' + codec + \
                       '&f=' + format + \

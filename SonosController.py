@@ -275,8 +275,8 @@ class Controller(polyinterface.Controller):
             self.nodes[node].reportDrivers()
 
     def voice_rss(self):
-        if 'apiKey' not in self.polyConfig['customParams']:
-            self.addCustomParam({'apiKey': 'none'})
+        if 'api_key' not in self.polyConfig['customParams']:
+            self.addCustomParam({'api_key': 'none'})
         if 'language' not in self.polyConfig['customParams']:
             self.addCustomParam({'language': 'en-us'})
         if 'codec' not in self.polyConfig['customParams']:
