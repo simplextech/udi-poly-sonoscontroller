@@ -183,9 +183,7 @@ class Controller(polyinterface.Controller):
 
     def start(self):
         LOGGER.info('Started SonosController NodeServer')
-        self.voice_rss()  # Add configuration parameters for Voice RSS
-        self.say_tts_params()
-
+        self.check_params()
         if self.get_credentials():
             if self.refresh_token():
                 self.removeNoticesAll()
@@ -492,10 +490,6 @@ class Controller(polyinterface.Controller):
                     time.sleep(1)
                 # print('End -----------------------------------------------------------')
 
-                # self.update_favorites()
-                # self.update_playlists()
-                self.voice_rss()
-                self.say_tts_params()
                 time.sleep(3)
                 self.update_nls()
                 self.poly.installprofile()
@@ -516,7 +510,10 @@ class Controller(polyinterface.Controller):
         LOGGER.info("process_config: Exit");
 
     def check_params(self):
-        pass
+        self.voice_rss()
+        time.sleep(1)
+        self.say_tts_params()
+        time.sleep(1)
 
     def remove_notice_test(self, command):
         LOGGER.info('remove_notice_test: notices={}'.format(self.poly.config['notices']))
