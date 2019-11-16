@@ -274,19 +274,25 @@ class Controller(polyinterface.Controller):
 
     def voice_rss(self):
         if 'apiKey' not in self.polyConfig['customParams']:
-            self.addCustomParam({'apiKey': 'none', 'language': 'en', 'codec': 'mp3', 'format': '24khz_16bit_stereo'})
+            self.addCustomParam({'apiKey': 'none'})
+        if 'language' not in self.polyConfig['customParams']:
+            self.addCustomParam({'language': 'en-us'})
+        if 'codec' not in self.polyConfig['customParams']:
+            self.addCustomParam({'codec': 'mp3'})
+        if 'format' not in self.polyConfig['customParams']:
+            self.addCustomParam({'format': '24khz_16bit_stereo'})
 
     def say_tts_params(self):
-        if 'SAY_TTS_1' not in self.polyConfig['customParams']:
-            self.addCustomParam({'SAY_TTS_1': 'empty'})
-        if 'SAY_TTS_2' not in self.polyConfig['customParams']:
-            self.addCustomParam({'SAY_TTS_2': 'empty'})
-        if 'SAY_TTS_3' not in self.polyConfig['customParams']:
-            self.addCustomParam({'SAY_TTS_3': 'empty'})
-        if 'SAY_TTS_4' not in self.polyConfig['customParams']:
-            self.addCustomParam({'SAY_TTS_4': 'empty'})
-        if 'SAY_TTS_5' not in self.polyConfig['customParams']:
-            self.addCustomParam({'SAY_TTS_5': 'empty'})
+        if 'SAY_TTS-1' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-1': 'empty'})
+        if 'SAY_TTS-2' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-2': 'empty'})
+        if 'SAY_TTS-3' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-3': 'empty'})
+        if 'SAY_TTS-4' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-4': 'empty'})
+        if 'SAY_TTS-5' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-5': 'empty'})
 
     def update_playlists(self):
         """
@@ -355,21 +361,21 @@ class Controller(polyinterface.Controller):
 
         # Add new SAY_TTS Entries
         nls_file = open(file_input, 'a')
-        if 'SAY_TTS_1' in self.polyConfig['customParams']:
-            SAY_TTS_1 = self.polyConfig['customParams']['SAY_TTS_1']
-            nls_file.write('SAY_TTS-' + '1' + ' = ' + SAY_TTS_1 + '\n')
-        if 'SAY_TTS_2' in self.polyConfig['customParams']:
-            SAY_TTS_2 = self.polyConfig['customParams']['SAY_TTS_2']
-            nls_file.write('SAY_TTS-' + '2' + ' = ' + SAY_TTS_2 + '\n')
-        if 'SAY_TTS_3' in self.polyConfig['customParams']:
-            SAY_TTS_3 = self.polyConfig['customParams']['SAY_TTS_3']
-            nls_file.write('SAY_TTS-' + '3' + ' = ' + SAY_TTS_3 + '\n')
-        if 'SAY_TTS_4' in self.polyConfig['customParams']:
-            SAY_TTS_4 = self.polyConfig['customParams']['SAY_TTS_4']
-            nls_file.write('SAY_TTS-' + '4' + ' = ' + SAY_TTS_4 + '\n')
-        if 'SAY_TTS_5' in self.polyConfig['customParams']:
-            SAY_TTS_5 = self.polyConfig['customParams']['SAY_TTS_5']
-            nls_file.write('SAY_TTS-' + '5' + ' = ' + SAY_TTS_5 + '\n')
+        if 'SAY_TTS-1' in self.polyConfig['customParams']:
+            SAY_TTS1 = self.polyConfig['customParams']['SAY_TTS-1']
+            nls_file.write('SAY_TTS-1' + ' = ' + SAY_TTS1 + '\n')
+        if 'SAY_TTS-2' in self.polyConfig['customParams']:
+            SAY_TTS2 = self.polyConfig['customParams']['SAY_TTS-2']
+            nls_file.write('SAY_TTS-2' + ' = ' + SAY_TTS2 + '\n')
+        if 'SAY_TTS-3' in self.polyConfig['customParams']:
+            SAY_TTS3 = self.polyConfig['customParams']['SAY_TTS-3']
+            nls_file.write('SAY_TTS-3' + ' = ' + SAY_TTS3 + '\n')
+        if 'SAY_TTS-4' in self.polyConfig['customParams']:
+            SAY_TTS4 = self.polyConfig['customParams']['SAY_TTS-4']
+            nls_file.write('SAY_TTS-4' + ' = ' + SAY_TTS4 + '\n')
+        if 'SAY_TTS-5' in self.polyConfig['customParams']:
+            SAY_TTS5 = self.polyConfig['customParams']['SAY_TTS-5']
+            nls_file.write('SAY_TTS-5' + ' = ' + SAY_TTS5 + '\n')
 
         nls_file.close()
 

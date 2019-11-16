@@ -20,7 +20,7 @@
         <range uom="25" subset="0-50" nls="FAVORITE" />
     </editor>
 
-    <editor id="SAY_TTS">
+    <editor id="SAYTTS">
         <range uom="25" subset="1-5" nls="SAY_TTS" />
     </editor>
 </editors>

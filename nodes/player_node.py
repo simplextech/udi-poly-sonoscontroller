@@ -81,7 +81,7 @@ class PlayerNode(polyinterface.Node):
 
     def send_say_tts(self, command):
         val = command['value']
-        say_cmd = 'SAY_TTS_' + str(val)
+        say_cmd = 'SAY_TTS-' + str(val)
         say_tts = self.controller.polyConfig['customParams'][say_cmd]
 
         codec = self.controller.polyConfig['customParams']['codec']
@@ -89,7 +89,7 @@ class PlayerNode(polyinterface.Node):
         language = self.controller.polyConfig['customParams']['language']
         apiKey = self.controller.polyConfig['customParams']['apiKey']
 
-        if apiKey != 'None':
+        if apiKey != 'none':
             raw_url = 'http://api.voicerss.org/?key=' + \
                       apiKey + \
                       '&hl=' + language + \
@@ -103,6 +103,7 @@ class PlayerNode(polyinterface.Node):
                 if player_address == self.address:
                     polyinterface.LOGGER.info("Sending to VoiceRSS for Player: " + player_id)
                     _status = SonosControl.send_voice_rss(self.sonos, player_id, raw_url)
+                    print("send_say_tts: " + str(_status))
 
     def query(self):
         self.reportDrivers()
@@ -112,7 +113,7 @@ class PlayerNode(polyinterface.Node):
     drivers = [
         {'driver': 'ST', 'value': 0, 'uom': 2},
         {'driver': 'SVOL', 'value': 0, 'uom': 51},
-        {'driver': 'SAY_TTS', 'value': 0, 'uom': 25},
+        {'driver': 'SAYTTS', 'value': 0, 'uom': 25},
         {'driver': 'GV0', 'value': 0, 'uom': 2},  # Mute/unMute
     ]
 
@@ -122,5 +123,5 @@ class PlayerNode(polyinterface.Node):
         'SVOL': set_player_volume,
         'MUTE': set_player_mute,
         'UNMUTE': set_player_unmute,
-        'SAY_TTS': send_say_tts
+        'SAYTTS': send_say_tts
         }

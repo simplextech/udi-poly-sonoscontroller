@@ -241,9 +241,12 @@ class SonosControl:
             'clipType': "CUSTOM",
             'priority': "high"
         }
+        print("VoiceRSS Payload: " + str(payload))
         audio_clip_url = self.players_url + player + '/audioClip'
         r = requests.post(audio_clip_url, headers=self.headers, json=payload)
         if r.status_code == requests.codes.ok:
+            print("Success: " + str(r.content))
             return True
         else:
+            print("DEBUG: " + str(r.content))
             return r.status_code
