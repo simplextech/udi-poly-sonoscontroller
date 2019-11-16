@@ -191,6 +191,9 @@ class Controller(polyinterface.Controller):
         else:
             self.auth_prompt()
 
+        self.voice_rss()  # Add configuration parameters for Voice RSS
+
+
     def shortPoll(self):
         # print('Running ShortPoll')
         if self.household is not None:
@@ -366,6 +369,9 @@ class Controller(polyinterface.Controller):
                 self.update_favorites()
                 self.update_playlists()
                 self.update_profile('command')
+
+    def voice_rss(self):
+        self.addCustomParam({'apiKey': 'none', 'language': 'en', 'codec': 'mp3', 'format': '24khz_16bit_stereo'})
 
     def delete(self):
         LOGGER.info('Removing SonosController Nodeserver')
