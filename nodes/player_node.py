@@ -104,6 +104,8 @@ class PlayerNode(polyinterface.Node):
                     polyinterface.LOGGER.info("Sending to VoiceRSS for Player: " + player_id)
                     _status = SonosControl.send_voice_rss(self.sonos, player_id, raw_url)
                     print("send_say_tts: " + str(_status))
+        else:
+            polyinterface.LOGGER.info(("VoiceRSS API Key is NOT Set"))
 
     def query(self):
         self.reportDrivers()
