@@ -231,3 +231,19 @@ class SonosControl:
             return True
         else:
             return r.status_code
+
+    def send_voice_rss(self, player, raw_url):
+        stream_url = requests.utils.requote_uri(raw_url)
+        payload = {
+            'name': 'Sonos TTS',
+            'appId': 'net.simplextech',
+            'streamUrl': stream_url,
+            'clipType': 'CUSTOM',
+            'priority': 'high'
+        }
+        audio_clip_url = self.players_url + player + '/audioClip'
+        r = requests.post(audio_clip_url, headers=self.headers, data=payload)
+        if r.status_code == requests.codes.ok:
+            return True
+        else:
+            return r.status_code

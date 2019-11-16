@@ -79,6 +79,35 @@ class PlayerNode(polyinterface.Node):
                 else:
                     print('Error: ' + _status)
 
+    def send_say_tts(self, command):
+        saytts = command['value']
+
+        apiKey = '000'
+        codec = 'mp3'
+        format = '24khz_16bit_stereo'
+        language = 'en'
+
+        if 'apiKey' in self.polyConfig['customParams']:
+            apiKey = self.polyConfig['customParams']['apiKey']
+        if 'codec' in self.polyConfig['customParams']:
+            codec = self.polyConfig['customParams']['codec']
+        if 'format' in self.polyConfig['customParams']:
+            format = self.polyConfig['customParams']['format']
+        if 'language' in self.polyConfig['customParams']:
+            language = self.polyConfig['customParams']['language']
+
+        raw_url = 'http://api.voicerss.org/?key=' + apiKey + \
+                  '&hl=' + language + \
+                  '&c=' + codec + \
+                  '&f=' + format + \
+                  '/' + saytts
+
+        for player in self.sonos_players:
+            player_id = player['id']
+            player_address = 'p' + player_id.split('_')[1][0:-5].lower()
+            if player_address == self.address:
+                _status = SonosControl.send_voice_rss(self.sonos, player_id, raw_url)
+
     def query(self):
         self.reportDrivers()
 
@@ -96,5 +125,6 @@ class PlayerNode(polyinterface.Node):
     commands = {
         'SVOL': set_player_volume,
         'MUTE': set_player_mute,
-        'UNMUTE': set_player_unmute
+        'UNMUTE': set_player_unmute,
+        'SAY_TTS': send_say_tts
         }
