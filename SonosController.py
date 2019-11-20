@@ -202,68 +202,62 @@ class Controller(polyinterface.Controller):
 
                     try:
                         sonos_groups = SonosControl.get_groups(self.sonos, household)
+                        if sonos_groups is not None:
+                            for group in sonos_groups:
+                                group_id = group['id']
+                                coordinator_id = group['coordinatorId']
+                                group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
+                                playback_state = group['playbackState']
+
+                                if playback_state == 'PLAYBACK_STATE_PLAYING':
+                                    playbackstate = 1
+                                elif playback_state == 'PLAYBACK_STATE_TRANSITIONING':
+                                    playbackstate = 2
+                                elif playback_state == 'PLAYBACK_STATE_PAUSED':
+                                    playbackstate = 3
+                                elif playback_state == 'PLAYBACK_STATE_IDLE':
+                                    playbackstate = 4
+                                else:
+                                    playbackstate = 0
+
+                                self.nodes[group_address].setDriver('ST', playbackstate)
+
+                                try:
+                                    # List 0=volume, 1=muted, 2=fixed(true/false)
+                                    group_volume = SonosControl.get_group_volume(self.sonos, household, group_id)
+                                    if group_volume is not None:
+                                        self.nodes[group_address].setDriver('SVOL', group_volume[0])
+                                        if group_volume[1] == 'true':
+                                            self.nodes[group_address].setDriver('GV0', 1)
+                                        else:
+                                            self.nodes[group_address].setDriver('GV0', 0)
+                                    else:
+                                        LOGGER.error("shortPoll group_volume is None")
+                                except:  # Catch All
+                                    e = sys.exc_info()[0]
+                                    LOGGER.error("shortPoll Sonos Groups Error: " + e)
+                        else:
+                            LOGGER.error("shortPoll: Sonos Groups is None")
                     except KeyError as ex:
                         LOGGER.error('shortPoll Sonos Groups Error: ' + str(ex))
-                        time.sleep(1)
-                        sonos_groups = SonosControl.get_groups(self.sonos, household)
-
-                    if sonos_groups is not None:
-                        for group in sonos_groups:
-                            group_id = group['id']
-                            coordinator_id = group['coordinatorId']
-                            group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
-                            playback_state = group['playbackState']
-
-                            if playback_state == 'PLAYBACK_STATE_PLAYING':
-                                playbackstate = 1
-                            elif playback_state == 'PLAYBACK_STATE_TRANSITIONING':
-                                playbackstate = 2
-                            elif playback_state == 'PLAYBACK_STATE_PAUSED':
-                                playbackstate = 3
-                            elif playback_state == 'PLAYBACK_STATE_IDLE':
-                                playbackstate = 4
-                            else:
-                                playbackstate = 0
-
-                            self.nodes[group_address].setDriver('ST', playbackstate)
-
-                            try:
-                                # List 0=volume, 1=muted, 2=fixed(true/false)
-                                group_volume = SonosControl.get_group_volume(self.sonos, household, group_id)
-                                if group_volume is not None:
-                                    self.nodes[group_address].setDriver('SVOL', group_volume[0])
-                                    if group_volume[1] == 'true':
-                                        self.nodes[group_address].setDriver('GV0', 1)
-                                    else:
-                                        self.nodes[group_address].setDriver('GV0', 0)
-                                else:
-                                    LOGGER.error("shortPoll group_volume is None")
-                            except:  # Catch All
-                                e = sys.exc_info()[0]
-                                LOGGER.error("shortPoll Sonos Groups Error: " + e)
-                    else:
-                        LOGGER.error("shortPoll: Sonos Groups is None")
 
                     try:
                         sonos_players = SonosControl.get_players(self.sonos, household)
+                        if sonos_players is not None:
+                            for player in sonos_players:
+                                player_id = player['id']
+                                player_address = 'p' + player_id.split('_')[1][0:-5].lower()
+                                player_volume = SonosControl.get_player_volume(self.sonos, player_id)
+                                # List 0=volume, 1=muted, 2=fixed(true/false)
+                                self.nodes[player_address].setDriver('SVOL', player_volume[0])
+                                if player_volume[1] == 'true':
+                                    self.nodes[player_address].setDriver('GV0', 1)
+                                else:
+                                    self.nodes[player_address].setDriver('GV0', 0)
+                        else:
+                            LOGGER.error("shortPoll: Sonos Players is None")
                     except KeyError as ex:
                         LOGGER.error("shortPoll Get Players: " + str(ex))
-                        time.sleep(1)
-                        sonos_players = SonosControl.get_players(self.sonos, household)
-
-                    if sonos_players is not None:
-                        for player in sonos_players:
-                            player_id = player['id']
-                            player_address = 'p' + player_id.split('_')[1][0:-5].lower()
-                            player_volume = SonosControl.get_player_volume(self.sonos, player_id)
-                            # List 0=volume, 1=muted, 2=fixed(true/false)
-                            self.nodes[player_address].setDriver('SVOL', player_volume[0])
-                            if player_volume[1] == 'true':
-                                self.nodes[player_address].setDriver('GV0', 1)
-                            else:
-                                self.nodes[player_address].setDriver('GV0', 0)
-                    else:
-                        LOGGER.error("shortPoll: Sonos Players is None")
 
     def longPoll(self):
         self.refresh_token()
