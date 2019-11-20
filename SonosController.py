@@ -202,7 +202,7 @@ class Controller(polyinterface.Controller):
 
                     try:
                         sonos_groups = SonosControl.get_groups(self.sonos, household)
-                        if sonos_groups is not None:
+                        if sonos_groups is not None or sonos_groups is not False:
                             for group in sonos_groups:
                                 group_id = group['id']
                                 coordinator_id = group['coordinatorId']
