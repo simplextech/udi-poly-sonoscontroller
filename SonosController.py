@@ -363,36 +363,40 @@ class Controller(polyinterface.Controller):
             for key in self.household:
                 household = self.household[key]
 
-                # print('Sonos Groups -----------------------------------------------')
-                sonos_groups = SonosControl.get_groups(self.sonos, household)
-                self.addNode(GroupParentNode(self, 'groups', 'groups', 'Sonos Groups'))
-                time.sleep(2)
+                try:
+                    sonos_groups = SonosControl.get_groups(self.sonos, household)
+                    if sonos_groups is not None:
+                        self.addNode(GroupParentNode(self, 'groups', 'groups', 'Sonos Groups'))
+                        time.sleep(2)
+                        for group in sonos_groups:
+                            coordinator_id = group['coordinatorId']
+                            group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
+                            group_name = group['name'].split("+")[0]
+                            self.addNode(GroupNode(self, 'groups', group_address, group_name, self.sonos, sonos_groups, household))
+                            time.sleep(2)
+                    else:
+                        LOGGER.error("SonosControl.get_groups is None")
+                except KeyError as ex:
+                    LOGGER.error("SonosControl.get_groups Error: " + str(ex))
 
-                for group in sonos_groups:
-                    coordinator_id = group['coordinatorId']
-                    group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
-                    group_name = group['name'].split("+")[0]
-                    self.addNode(GroupNode(self, 'groups', group_address, group_name, self.sonos, sonos_groups, household))
-                    time.sleep(2)
-                # print('End ---------------------------------------------------------')
+                try:
+                    sonos_players = SonosControl.get_players(self.sonos, household)
+                    if sonos_players is not None:
+                        self.addNode(GroupParentNode(self, 'players', 'players', 'Sonos Players'))
+                        time.sleep(2)
+                        for player in sonos_players:
+                            player_id = player['id']
+                            name = player['name']
+                            player_address = 'p' + player_id.split('_')[1][0:-5].lower()
+                            self.addNode(PlayerNode(self, 'players', player_address, name, self.sonos, sonos_players, household))
+                            time.sleep(2)
+                    else:
+                        LOGGER.error("SonosControl.get_players is None")
+                except KeyError as ex:
+                    LOGGER.error("SonosControl.get_players Error: " + str(ex))
 
-                # print('Sonos Players ------------------------------------------------')
-                sonos_players = SonosControl.get_players(self.sonos, household)
-                self.addNode(GroupParentNode(self, 'players', 'players', 'Sonos Players'))
-                time.sleep(2)
-
-                for player in sonos_players:
-                    player_id = player['id']
-                    name = player['name']
-                    player_address = 'p' + player_id.split('_')[1][0:-5].lower()
-                    self.addNode(PlayerNode(self, 'players', player_address, name, self.sonos, sonos_players, household))
-                    time.sleep(2)
-                # print('End -----------------------------------------------------------')
-
-                time.sleep(3)
-                self.update_nls()
-                self.poly.installprofile()
-
+        self.update_nls()
+        self.poly.installprofile()
         time.sleep(3)
         self.disco = 1
 
