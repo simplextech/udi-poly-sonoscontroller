@@ -267,44 +267,35 @@ class Controller(polyinterface.Controller):
             self.nodes[node].reportDrivers()
 
     def voice_rss(self):
-        if 'api_key' in self.polyConfig['customParams']:
-            pass
-        else:
+        if 'api_key' not in self.polyConfig['customParams']:
             self.addCustomParam({'api_key': 'none'})
-        if 'language' in self.polyConfig['customParams']:
-            pass
-        else:
+            time.sleep(2)
+        if 'language' not in self.polyConfig['customParams']:
             self.addCustomParam({'language': 'en-us'})
-        if 'codec' in self.polyConfig['customParams']:
-            pass
-        else:
+            time.sleep(2)
+        if 'codec' not in self.polyConfig['customParams']:
             self.addCustomParam({'codec': 'mp3'})
-        if 'format' in self.polyConfig['customParams']:
-            pass
-        else:
+            time.sleep(2)
+        if 'format' not in self.polyConfig['customParams']:
             self.addCustomParam({'format': '24khz_16bit_stereo'})
+            time.sleep(2)
 
     def say_tts_params(self):
-        if 'SAY_TTS-1' in self.polyConfig['customParams']:
-            pass
-        else:
+        if 'SAY_TTS-1' not in self.polyConfig['customParams']:
             self.addCustomParam({'SAY_TTS-1': 'empty'})
-        if 'SAY_TTS-2' in self.polyConfig['customParams']:
-            pass
-        else:
+            time.sleep(2)
+        if 'SAY_TTS-2' not in self.polyConfig['customParams']:
             self.addCustomParam({'SAY_TTS-2': 'empty'})
-        if 'SAY_TTS-3' in self.polyConfig['customParams']:
-            pass
-        else:
+            time.sleep(2)
+        if 'SAY_TTS-3' not in self.polyConfig['customParams']:
             self.addCustomParam({'SAY_TTS-3': 'empty'})
-        if 'SAY_TTS-4' in self.polyConfig['customParams']:
-            pass
-        else:
+            time.sleep(2)
+        if 'SAY_TTS-4' not in self.polyConfig['customParams']:
             self.addCustomParam({'SAY_TTS-4': 'empty'})
-        if 'SAY_TTS-5' in self.polyConfig['customParams']:
-            pass
-        else:
+            time.sleep(2)
+        if 'SAY_TTS-5' not in self.polyConfig['customParams']:
             self.addCustomParam({'SAY_TTS-5': 'empty'})
+            time.sleep(2)
 
     def update_nls(self):
         """
