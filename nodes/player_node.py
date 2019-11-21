@@ -39,7 +39,7 @@ class PlayerNode(polyinterface.Node):
                         self.setDriver('GV0', 0, force=True)
                     return True
                 else:
-                    print('Error: ' + volume)
+                    polyinterface.LOGGER.error('Error: ' + volume)
                     return False
 
     def set_player_volume(self, command):
@@ -53,7 +53,7 @@ class PlayerNode(polyinterface.Node):
                 if _status:
                     self.setDriver('SVOL', volume)
                 else:
-                    print('Error: ' + _status)
+                    polyinterface.LOGGER.error('Error: ' + _status)
 
     def set_player_mute(self, command):
         # print('Mute Command: ', command)
@@ -65,7 +65,7 @@ class PlayerNode(polyinterface.Node):
                 if _status:
                     self.setDriver('GV0', 1)
                 else:
-                    print('Error: ' + _status)
+                    polyinterface.LOGGER.error('Error: ' + _status)
 
     def set_player_unmute(self, command):
         # print('unMute Command: ', command)
@@ -77,7 +77,7 @@ class PlayerNode(polyinterface.Node):
                 if _status:
                     self.setDriver('GV0', 0)
                 else:
-                    print('Error: ' + _status)
+                    polyinterface.LOGGER.error('Error: ' + _status)
 
     def send_say_tts(self, command):
         val = command['value']
@@ -103,7 +103,7 @@ class PlayerNode(polyinterface.Node):
                 if player_address == self.address:
                     polyinterface.LOGGER.info("Sending to VoiceRSS for Player: " + player_id)
                     _status = SonosControl.send_voice_rss(self.sonos, player_id, raw_url)
-                    print("send_say_tts: " + str(_status))
+                    polyinterface.LOGGER.info("send_say_tts: " + str(_status))
         else:
             polyinterface.LOGGER.info(("VoiceRSS API Key is NOT Set"))
 
