@@ -84,17 +84,17 @@ class PlayerNode(polyinterface.Node):
         say_cmd = 'SAY_TTS-' + str(val)
         say_tts = self.controller.polyConfig['customParams'][say_cmd]
 
-        codec = self.controller.polyConfig['customParams']['codec']
-        format = self.controller.polyConfig['customParams']['format']
-        language = self.controller.polyConfig['customParams']['language']
-        api_key = self.controller.polyConfig['customParams']['api_key']
+        voice_rss_codec = self.controller.polyConfig['customParams']['codec']
+        voice_rss_format = self.controller.polyConfig['customParams']['format']
+        voice_rss_language = self.controller.polyConfig['customParams']['language']
+        voice_rss_api_key = self.controller.polyConfig['customParams']['api_key']
 
-        if api_key != 'none':
+        if voice_rss_api_key != 'none':
             raw_url = 'http://api.voicerss.org/?key=' + \
-                      api_key + \
-                      '&hl=' + language + \
-                      '&c=' + codec + \
-                      '&f=' + format + \
+                      voice_rss_api_key + \
+                      '&hl=' + voice_rss_language + \
+                      '&c=' + voice_rss_codec + \
+                      '&f=' + voice_rss_format + \
                       '&src=' + say_tts
 
             for player in self.sonos_players:
