@@ -505,9 +505,9 @@ class Controller(polyinterface.Controller):
 
     def check_params(self):
         self.voice_rss()
-        time.sleep(1)
+        time.sleep(2)
         self.say_tts_params()
-        time.sleep(1)
+        time.sleep(2)
 
     def remove_notice_test(self, command):
         LOGGER.info('remove_notice_test: notices={}'.format(self.poly.config['notices']))
