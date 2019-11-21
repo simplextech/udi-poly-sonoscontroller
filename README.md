@@ -43,7 +43,7 @@
 - Polyglot Cloud
 
 #### Support / Contributions
-[Please support development](https://www.paypal.me/simplextech)
+[Support/Contributions/Coffee](https://www.paypal.me/simplextech)
 
 #### Attributions
 - [Universal Devices](https://www.universal-devices.com/)
