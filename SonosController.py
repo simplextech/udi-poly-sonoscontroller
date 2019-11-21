@@ -363,31 +363,27 @@ class Controller(polyinterface.Controller):
                 # print('Sonos Groups -----------------------------------------------')
                 sonos_groups = SonosControl.get_groups(self.sonos, household)
                 self.addNode(GroupParentNode(self, 'groups', 'groups', 'Sonos Groups'))
-                time.sleep(1)
+                time.sleep(2)
 
                 for group in sonos_groups:
-                    # RINCON_7828CA96B78201400:2253119126
-                    group_id = group['id']
-                    # address = str(group_id.split(':')[1]).lower()
                     coordinator_id = group['coordinatorId']
                     group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
                     group_name = group['name'].split("+")[0]
                     self.addNode(GroupNode(self, 'groups', group_address, group_name, self.sonos, sonos_groups, household))
-                    time.sleep(1)
+                    time.sleep(2)
                 # print('End ---------------------------------------------------------')
 
                 # print('Sonos Players ------------------------------------------------')
                 sonos_players = SonosControl.get_players(self.sonos, household)
                 self.addNode(GroupParentNode(self, 'players', 'players', 'Sonos Players'))
-                time.sleep(1)
+                time.sleep(2)
 
                 for player in sonos_players:
-                    # RINCON_48A6B8A2895201400
                     player_id = player['id']
                     name = player['name']
                     player_address = 'p' + player_id.split('_')[1][0:-5].lower()
                     self.addNode(PlayerNode(self, 'players', player_address, name, self.sonos, sonos_players, household))
-                    time.sleep(1)
+                    time.sleep(2)
                 # print('End -----------------------------------------------------------')
 
                 time.sleep(3)
