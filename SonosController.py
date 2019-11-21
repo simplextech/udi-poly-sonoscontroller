@@ -234,8 +234,8 @@ class Controller(polyinterface.Controller):
                                     else:
                                         LOGGER.error("shortPoll group_volume is None")
                                 except:  # Catch All
-                                    e = sys.exc_info()[0]
-                                    LOGGER.error("shortPoll Sonos Groups Error: " + e)
+                                    ex = sys.exc_info()[0]
+                                    LOGGER.error("shortPoll Sonos Groups Error: " + ex)
                         else:
                             LOGGER.error("shortPoll: Sonos Groups is None")
                     except KeyError as ex:
