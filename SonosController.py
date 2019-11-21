@@ -423,9 +423,6 @@ class Controller(polyinterface.Controller):
 
     def update_profile(self, command):
         LOGGER.info('update_profile:')
-        # self.update_favorites()
-        # self.update_playlists()
-        # self.update_say_tts()
         self.update_nls()
         st = self.poly.installprofile()
         return st
