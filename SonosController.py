@@ -249,13 +249,16 @@ class Controller(polyinterface.Controller):
                                 player_address = 'p' + player_id.split('_')[1][0:-5].lower()
                                 player_volume = SonosControl.get_player_volume(self.sonos, player_id)
                                 # List 0=volume, 1=muted, 2=fixed(true/false)
-                                self.nodes[player_address].setDriver('SVOL', player_volume[0])
-                                if player_volume[1] == 'true':
-                                    self.nodes[player_address].setDriver('GV0', 1)
+                                if player_volume is not None:
+                                    self.nodes[player_address].setDriver('SVOL', player_volume[0])
+                                    if player_volume[1] == 'true':
+                                        self.nodes[player_address].setDriver('GV0', 1)
+                                    else:
+                                        self.nodes[player_address].setDriver('GV0', 0)
                                 else:
-                                    self.nodes[player_address].setDriver('GV0', 0)
+                                    LOGGER.error("shortPoll: SonosControl.get_player_volume is None")
                         else:
-                            LOGGER.error("shortPoll: Sonos Players is None")
+                            LOGGER.error("shortPoll: SonosControl.get_players is None")
                     except KeyError as ex:
                         LOGGER.error("shortPoll Get Players: " + str(ex))
 
