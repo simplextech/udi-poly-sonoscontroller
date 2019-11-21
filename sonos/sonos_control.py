@@ -53,8 +53,8 @@ class SonosControl:
             else:
                 return None
         else:
-            print("Error sonos_control.get_groups: " + r.content)
-            return False
+            print("Error sonos_control.get_groups: " + str(r.content))
+            return None
 
     def get_players(self, household):
         """
@@ -71,6 +71,7 @@ class SonosControl:
             else:
                 return None
         else:
+            print("Error sonos_control.get_players: " + str(r.content))
             return None
 
     def get_favorites(self, household):
@@ -250,4 +251,4 @@ class SonosControl:
             return True
         else:
             print("DEBUG: " + str(r.content))
-            return r.status_code
+            return False
