@@ -205,7 +205,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return volume
         else:
-            return r.status_code
+            print("get_player_volume: " + str(r.content))
+            return None
 
     def set_player_volume(self, player, volume):
         payload = "{\r\n  \"volume\": " + volume + "\r\n}"
