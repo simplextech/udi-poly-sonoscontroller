@@ -4,7 +4,7 @@
     "type": "python3",
     "executable": "SonosController.py",
     "install_cloud": "install_cloud.sh",
-    "description": "Sonos Controller Node Server",
+    "description": "Sonos Controller NodeServer",
     "notice": "",
     "shortPoll": "60",
     "longPoll": "14400",
