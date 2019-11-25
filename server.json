@@ -7,7 +7,7 @@
     "description": "Sonos Controller NodeServer",
     "notice": "",
     "shortPoll": "60",
-    "longPoll": "14400",
+    "longPoll": "7200",
     "testMode": true,
     "credits": [
         {
