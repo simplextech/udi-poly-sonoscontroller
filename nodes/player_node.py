@@ -11,16 +11,20 @@ LOGGER = polyinterface.LOGGER
 
 
 class PlayerNode(polyinterface.Node):
-    def __init__(self, controller, primary, address, name, sonos, sonos_players, household):
+    # def __init__(self, controller, primary, address, name, sonos, sonos_players, household):
+    def __init__(self, controller, primary, address, name, sonos_players, household):
         super(PlayerNode, self).__init__(controller, primary, address, name)
-        # access_token = controller.polyConfig['customParams']['access_token']
-        # self.sonos = SonosControl(access_token)
-        self.sonos = sonos
+        # self.sonos = sonos
+        self.access_token = None
+        self.sonos = None
         self.sonos_players = sonos_players
         self.household = household
 
     def start(self):
         # print('Starting Player: ' + self.name + ' ------------------')
+        self.access_token = self.controller.polyConfig['customData']['access_token']
+        self.sonos = SonosControl(self.access_token)
+
         if self.get_player_volume():
             self.setDriver('ST', 1, force=True)
         else:

@@ -23,7 +23,8 @@ class GroupNode(polyinterface.Node):
 
     def start(self):
         # print('Starting Group: ' + self.name + ' ------------------')
-        self.access_token = self.controller.polyConfig['customData']['access_token']
+        # print(self.sonos_groups)
+        self.access_token = self.controller.polyConfig['customParams']['access_token']
         self.sonos = SonosControl(self.access_token)
 
         for group in self.sonos_groups:

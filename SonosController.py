@@ -378,7 +378,8 @@ class Controller(polyinterface.Controller):
                             coordinator_id = group['coordinatorId']
                             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
                             group_name = group['name'].split("+")[0]
-                            self.addNode(GroupNode(self, 'groups', group_address, group_name, self.sonos, sonos_groups, household))
+                            # self.addNode(GroupNode(self, 'groups', group_address, group_name, self.sonos, sonos_groups, household))
+                            self.addNode(GroupNode(self, 'groups', group_address, group_name, sonos_groups, household))
                             time.sleep(2)
                     else:
                         LOGGER.error("SonosControl.get_groups is None")
@@ -394,7 +395,8 @@ class Controller(polyinterface.Controller):
                             player_id = player['id']
                             name = player['name']
                             player_address = 'p' + player_id.split('_')[1][0:-5].lower()
-                            self.addNode(PlayerNode(self, 'players', player_address, name, self.sonos, sonos_players, household))
+                            # self.addNode(PlayerNode(self, 'players', player_address, name, self.sonos, sonos_players, household))
+                            self.addNode(PlayerNode(self, 'players', player_address, name, sonos_players, household))
                             time.sleep(2)
                     else:
                         LOGGER.error("SonosControl.get_players is None")
