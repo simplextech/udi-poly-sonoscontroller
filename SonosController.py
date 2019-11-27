@@ -41,7 +41,8 @@ class Controller(polyinterface.Controller):
         self.token_url = 'https://api.sonos.com/login/v3/oauth/access'
         self.household_url = 'https://api.ws.sonos.com/control/api/v1/households'
         self.household = {}
-        self.sonos = None
+        # self.sonos = None
+        self.SonosControl = None
         self.server_data = {}
         self.cloud = CLOUD
         self.disco = 0
@@ -158,7 +159,8 @@ class Controller(polyinterface.Controller):
 
             self.saveCustomData(cust_data)
 
-            self.sonos = SonosControl(access_token)
+            # self.sonos = SonosControl(access_token)
+            self.SonosControl = SonosControl(access_token)
             return True
         else:
             return False
@@ -190,7 +192,9 @@ class Controller(polyinterface.Controller):
 
                 self.saveCustomData(cust_data)
 
-                self.sonos = SonosControl(access_token)
+                # self.sonos = SonosControl(access_token)
+                self.SonosControl = SonosControl(access_token)
+
                 self.removeNoticesAll()
                 return True
             else:
@@ -206,7 +210,7 @@ class Controller(polyinterface.Controller):
                 for key in self.household:
                     household = self.household[key]
                     try:
-                        sonos_groups = SonosControl.get_groups(self.sonos, household)
+                        sonos_groups = self.SonosControl.get_groups(household)
                         if sonos_groups is not None:
                             for group in sonos_groups:
                                 group_id = group['id']
@@ -229,7 +233,7 @@ class Controller(polyinterface.Controller):
 
                                 try:
                                     # List 0=volume, 1=muted, 2=fixed(true/false)
-                                    group_volume = SonosControl.get_group_volume(self.sonos, household, group_id)
+                                    group_volume = self.SonosControl.get_group_volume(household, group_id)
                                     if group_volume is not None:
                                         self.nodes[group_address].setDriver('SVOL', group_volume[0])
                                         if group_volume[1] == 'true':
@@ -247,12 +251,12 @@ class Controller(polyinterface.Controller):
                         LOGGER.error('shortPoll Sonos Groups Error: ' + str(ex))
 
                     try:
-                        sonos_players = SonosControl.get_players(self.sonos, household)
+                        sonos_players = self.SonosControl.get_players(household)
                         if sonos_players is not None:
                             for player in sonos_players:
                                 player_id = player['id']
                                 player_address = 'p' + player_id.split('_')[1][0:-5].lower()
-                                player_volume = SonosControl.get_player_volume(self.sonos, player_id)
+                                player_volume = self.SonosControl.get_player_volume(player_id)
                                 # List 0=volume, 1=muted, 2=fixed(true/false)
                                 if player_volume is not None:
                                     self.nodes[player_address].setDriver('SVOL', player_volume[0])
@@ -330,13 +334,13 @@ class Controller(polyinterface.Controller):
                 nls_file = open(file_input, 'a')
 
                 # print('Sonos Playlists')
-                sonos_playlists = SonosControl.get_playlists(self.sonos, household)
+                sonos_playlists = self.SonosControl.get_playlists(household)
                 for playlist in sonos_playlists:
                     name = sonos_playlists[playlist]
                     nls_file.write('PLAY_LIST-' + str(playlist) + ' = ' + name + '\n')
 
                 # print('Sonos Favorites')
-                sonos_favorites = SonosControl.get_favorites(self.sonos, household)
+                sonos_favorites = self.SonosControl.get_favorites(household)
                 for favorite in sonos_favorites:
                     name = sonos_favorites[favorite]
                     nls_file.write('FAVORITE-' + str(favorite) + ' = ' + name + '\n')
@@ -361,15 +365,15 @@ class Controller(polyinterface.Controller):
                 nls_file.close()
 
     def discover(self, *args, **kwargs):
-        if self.sonos is not None:
-            self.household = SonosControl.get_households(self.sonos)
+        if self.SonosControl is not None:
+            self.household = self.SonosControl.get_households()
 
         if self.household is not None:
             for key in self.household:
                 household = self.household[key]
 
                 try:
-                    sonos_groups = SonosControl.get_groups(self.sonos, household)
+                    sonos_groups = self.SonosControl.get_groups(household)
                     if sonos_groups is not None:
                         self.addNode(GroupParentNode(self, 'groups', 'groups', 'Sonos Groups'))
                         time.sleep(2)
@@ -386,7 +390,7 @@ class Controller(polyinterface.Controller):
                     LOGGER.error("SonosControl.get_groups Error: " + str(ex))
 
                 try:
-                    sonos_players = SonosControl.get_players(self.sonos, household)
+                    sonos_players = self.SonosControl.get_players(household)
                     if sonos_players is not None:
                         self.addNode(GroupParentNode(self, 'players', 'players', 'Sonos Players'))
                         time.sleep(2)
