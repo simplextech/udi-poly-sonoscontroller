@@ -41,7 +41,6 @@ class Controller(polyinterface.Controller):
         self.token_url = 'https://api.sonos.com/login/v3/oauth/access'
         self.household_url = 'https://api.ws.sonos.com/control/api/v1/households'
         self.household = {}
-        # self.sonos = None
         self.SonosControl = None
         self.server_data = {}
         self.cloud = CLOUD
@@ -106,8 +105,6 @@ class Controller(polyinterface.Controller):
             return True
 
     def auth_prompt(self):
-        # print('------------' + self.server_data['worker'] + '----------------------------')
-
         _redirect_uri = self.server_data['url']
         redirect_uri = requests.utils.quote(_redirect_uri)
 
@@ -118,7 +115,6 @@ class Controller(polyinterface.Controller):
                         '&state=' + self.server_data['worker'] + \
                         '&redirect_uri=' + redirect_uri
 
-        # self.addNotice({'myNotice': 'Click <a target="_blank" href="' + user_auth_url + '">here</a> to link your Sonos account'})
         self.addNotice(
             {'myNotice': 'Click <a href="' + user_auth_url + '">here</a> to link your Sonos account'})
 
@@ -130,11 +126,6 @@ class Controller(polyinterface.Controller):
                 self.discover()
 
     def get_token(self, code):
-        # print('-------- Getting the Sonos Token -----------')
-        # print('---- Code: ' + code + '----')
-        # print('---- Client Key: ' + self.server_data['clientId'])
-        # print('---- Secret: ' + self.server_data['clientSecret'])
-
         _encode_string = self.server_data['clientId'] + ':' + self.server_data['clientSecret']
         byte_encoded = base64.b64encode(_encode_string.encode('UTF-8'))
         string_encoded = byte_encoded.decode('UTF-8')
@@ -158,8 +149,6 @@ class Controller(polyinterface.Controller):
                          'expires_in': expires_in}
 
             self.saveCustomData(cust_data)
-
-            # self.sonos = SonosControl(access_token)
             self.SonosControl = SonosControl(access_token)
             return True
         else:
@@ -191,8 +180,6 @@ class Controller(polyinterface.Controller):
                              'expires_in': expires_in}
 
                 self.saveCustomData(cust_data)
-
-                # self.sonos = SonosControl(access_token)
                 self.SonosControl = SonosControl(access_token)
 
                 self.removeNoticesAll()
@@ -204,7 +191,6 @@ class Controller(polyinterface.Controller):
             return False
 
     def shortPoll(self):
-        # print('Running ShortPoll')
         if self.disco == 1:
             if self.household is not None:
                 for key in self.household:
@@ -381,7 +367,6 @@ class Controller(polyinterface.Controller):
                             coordinator_id = group['coordinatorId']
                             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
                             group_name = group['name'].split("+")[0]
-                            # self.addNode(GroupNode(self, 'groups', group_address, group_name, self.sonos, sonos_groups, household))
                             self.addNode(GroupNode(self, 'groups', group_address, group_name, sonos_groups, household))
                             time.sleep(2)
                     else:
@@ -398,7 +383,6 @@ class Controller(polyinterface.Controller):
                             player_id = player['id']
                             name = player['name']
                             player_address = 'p' + player_id.split('_')[1][0:-5].lower()
-                            # self.addNode(PlayerNode(self, 'players', player_address, name, self.sonos, sonos_players, household))
                             self.addNode(PlayerNode(self, 'players', player_address, name, sonos_players, household))
                             time.sleep(2)
                     else:
@@ -449,9 +433,7 @@ class Controller(polyinterface.Controller):
     commands = {
         # 'QUERY': query,
         'DISCOVER': discover,
-        'UPDATE_PROFILE': update_profile,
-        # 'REMOVE_NOTICES_ALL': remove_notices_all,
-        # 'REMOVE_NOTICE_TEST': remove_notice_test
+        'UPDATE_PROFILE': update_profile
     }
     drivers = [{'driver': 'ST', 'value': 1, 'uom': 2}]
 
