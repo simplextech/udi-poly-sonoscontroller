@@ -14,7 +14,7 @@ class GroupNode(polyinterface.Node):
     # def __init__(self, controller, primary, address, name, sonos, sonos_groups, household):
     def __init__(self, controller, primary, address, name, sonos_groups, household):
         super(GroupNode, self).__init__(controller, primary, address, name)
-        self.access_token = None
+        # self.access_token = None
         self.SonosControl = None
         # self.sonos = sonos
         self.sonos_groups = sonos_groups
