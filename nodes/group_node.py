@@ -58,6 +58,8 @@ class GroupNode(polyinterface.Node):
 
     def group_volume(self, command):
         # print('Volume command: ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         volume = command['value']
         for group in self.sonos_groups:
             # group_id = group['id']
@@ -75,6 +77,8 @@ class GroupNode(polyinterface.Node):
 
     def group_mute(self, command):
         # print('Mute Command: ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
             # group_id = group['id']
             # address = str(group_id.split(':')[1]).lower()
@@ -91,6 +95,8 @@ class GroupNode(polyinterface.Node):
 
     def group_unmute(self, command):
         # print('unMute Command: ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
             # group_id = group['id']
             # address = str(group_id.split(':')[1]).lower()
@@ -107,6 +113,8 @@ class GroupNode(polyinterface.Node):
 
     def group_playlist(self, command):
         # print('Playlist: ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         playlist = command['value']
         for group in self.sonos_groups:
             # group_id = group['id']
@@ -124,6 +132,8 @@ class GroupNode(polyinterface.Node):
 
     def group_favorite(self, command):
         # print('Favorite: ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         favorite = command['value']
         for group in self.sonos_groups:
             # group_id = group['id']
@@ -141,6 +151,8 @@ class GroupNode(polyinterface.Node):
 
     def group_play(self, command):
         # print('Play: ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
             # group_id = group['id']
             # address = str(group_id.split(':')[1]).lower()
@@ -157,6 +169,8 @@ class GroupNode(polyinterface.Node):
 
     def group_pause(self, command):
         # print('Pause: ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
             # group_id = group['id']
             # address = str(group_id.split(':')[1]).lower()
@@ -173,6 +187,8 @@ class GroupNode(polyinterface.Node):
 
     def group_skip_to_previous_track(self, command):
         # print('Previous Track ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
             # group_id = group['id']
             # address = str(group_id.split(':')[1]).lower()
@@ -189,6 +205,8 @@ class GroupNode(polyinterface.Node):
 
     def group_skip_to_next_track(self, command):
         # print('Previous Track ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
             # group_id = group['id']
             # address = str(group_id.split(':')[1]).lower()

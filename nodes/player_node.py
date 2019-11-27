@@ -32,6 +32,8 @@ class PlayerNode(polyinterface.Node):
 
     def get_player_volume(self):
         # print('Get Volume command')
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         for player in self.sonos_players:
             player_id = player['id']
             player_address = 'p' + player_id.split('_')[1][0:-5].lower()
@@ -51,6 +53,8 @@ class PlayerNode(polyinterface.Node):
 
     def set_player_volume(self, command):
         # print('Set Volume command: ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         volume = command['value']
         for player in self.sonos_players:
             player_id = player['id']
@@ -64,6 +68,8 @@ class PlayerNode(polyinterface.Node):
 
     def set_player_mute(self, command):
         # print('Mute Command: ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         for player in self.sonos_players:
             player_id = player['id']
             player_address = 'p' + player_id.split('_')[1][0:-5].lower()
@@ -76,6 +82,8 @@ class PlayerNode(polyinterface.Node):
 
     def set_player_unmute(self, command):
         # print('unMute Command: ', command)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         for player in self.sonos_players:
             player_id = player['id']
             player_address = 'p' + player_id.split('_')[1][0:-5].lower()
@@ -87,6 +95,8 @@ class PlayerNode(polyinterface.Node):
                     polyinterface.LOGGER.error('Error: ' + str(_status))
 
     def send_say_tts(self, command):
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
         val = command['value']
         say_cmd = 'SAY_TTS-' + str(val)
         say_tts = self.controller.polyConfig['customParams'][say_cmd]
