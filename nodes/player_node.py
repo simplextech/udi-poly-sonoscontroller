@@ -11,11 +11,8 @@ LOGGER = polyinterface.LOGGER
 
 
 class PlayerNode(polyinterface.Node):
-    # def __init__(self, controller, primary, address, name, sonos, sonos_players, household):
     def __init__(self, controller, primary, address, name, sonos_players, household):
         super(PlayerNode, self).__init__(controller, primary, address, name)
-        # self.sonos = sonos
-        # self.access_token = None
         self.SonosControl = None
         self.sonos_players = sonos_players
         self.household = household
