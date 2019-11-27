@@ -125,7 +125,7 @@ class Controller(polyinterface.Controller):
         LOGGER.info('OAUTH Received: {}'.format(oauth))
         if 'code' in oauth:
             if self.get_token(oauth['code']):
-                self.removeNoticesAll()
+                self.remove_notices_all()
                 self.discover()
 
     def get_token(self, code):
