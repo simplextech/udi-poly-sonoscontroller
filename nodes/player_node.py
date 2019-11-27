@@ -4,7 +4,6 @@ except ImportError:
     import pgc_interface as polyinterface
     CLOUD = True
 
-# from sonos import SonosControl as SonosControl
 from sonos import SonosControl
 
 LOGGER = polyinterface.LOGGER
@@ -18,7 +17,6 @@ class PlayerNode(polyinterface.Node):
         self.household = household
 
     def start(self):
-        # print('Starting Player: ' + self.name + ' ------------------')
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
 
@@ -28,7 +26,6 @@ class PlayerNode(polyinterface.Node):
             self.setDriver('ST', 0, force=True)
 
     def get_player_volume(self):
-        # print('Get Volume command')
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         for player in self.sonos_players:
@@ -49,7 +46,6 @@ class PlayerNode(polyinterface.Node):
                     return False
 
     def set_player_volume(self, command):
-        # print('Set Volume command: ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         volume = command['value']
@@ -64,7 +60,6 @@ class PlayerNode(polyinterface.Node):
                     polyinterface.LOGGER.error('Error: ' + str(_status))
 
     def set_player_mute(self, command):
-        # print('Mute Command: ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         for player in self.sonos_players:
@@ -78,7 +73,6 @@ class PlayerNode(polyinterface.Node):
                     polyinterface.LOGGER.error('Error: ' + str(_status))
 
     def set_player_unmute(self, command):
-        # print('unMute Command: ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         for player in self.sonos_players:
