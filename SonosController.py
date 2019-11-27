@@ -46,6 +46,18 @@ class Controller(polyinterface.Controller):
         self.cloud = CLOUD
         self.disco = 0
 
+    def start(self):
+        LOGGER.info('Started SonosController NodeServer')
+        self.check_params()
+        if self.get_credentials():
+            if self.refresh_token():
+                self.removeNoticesAll()
+                self.discover()
+            else:
+                self.auth_prompt()
+        else:
+            self.auth_prompt()
+
     def get_credentials(self):
         LOGGER.info('---- Environment: ' + self.poly.stage + ' ----')
 
