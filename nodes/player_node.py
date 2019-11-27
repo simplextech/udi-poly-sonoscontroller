@@ -60,7 +60,7 @@ class PlayerNode(polyinterface.Node):
                 if _status:
                     self.setDriver('SVOL', volume)
                 else:
-                    polyinterface.LOGGER.error('Error: ' + _status)
+                    polyinterface.LOGGER.error('Error: ' + str(_status))
 
     def set_player_mute(self, command):
         # print('Mute Command: ', command)
@@ -72,7 +72,7 @@ class PlayerNode(polyinterface.Node):
                 if _status:
                     self.setDriver('GV0', 1)
                 else:
-                    polyinterface.LOGGER.error('Error: ' + _status)
+                    polyinterface.LOGGER.error('Error: ' + str(_status))
 
     def set_player_unmute(self, command):
         # print('unMute Command: ', command)
@@ -84,7 +84,7 @@ class PlayerNode(polyinterface.Node):
                 if _status:
                     self.setDriver('GV0', 0)
                 else:
-                    polyinterface.LOGGER.error('Error: ' + _status)
+                    polyinterface.LOGGER.error('Error: ' + str(_status))
 
     def send_say_tts(self, command):
         val = command['value']
