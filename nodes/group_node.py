@@ -27,9 +27,6 @@ class GroupNode(polyinterface.Node):
         self.SonosControl = SonosControl(access_token)
 
         for group in self.sonos_groups:
-            # group_id = group['id']
-            # address = str(group_id.split(':')[1]).lower()
-
             group_id = group['id']
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
@@ -57,14 +54,10 @@ class GroupNode(polyinterface.Node):
                     self.setDriver('GV0', 0, force=True)
 
     def group_volume(self, command):
-        # print('Volume command: ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         volume = command['value']
         for group in self.sonos_groups:
-            # group_id = group['id']
-            # address = str(group_id.split(':')[1]).lower()
-
             group_id = group['id']
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
@@ -73,16 +66,12 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('SVOL', volume)
                 else:
-                    print('Error group_node.group_volume: ' + str(_status))
+                    LOGGER.error('Error group_node.group_volume: ' + str(_status))
 
     def group_mute(self, command):
-        # print('Mute Command: ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
-            # group_id = group['id']
-            # address = str(group_id.split(':')[1]).lower()
-
             group_id = group['id']
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
@@ -91,16 +80,12 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('GV0', 1)
                 else:
-                    print('Error: ' + str(_status))
+                    LOGGER.error('Error: ' + str(_status))
 
     def group_unmute(self, command):
-        # print('unMute Command: ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
-            # group_id = group['id']
-            # address = str(group_id.split(':')[1]).lower()
-
             group_id = group['id']
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
@@ -109,17 +94,13 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('GV0', 0)
                 else:
-                    print('Error: ' + str(_status))
+                    LOGGER.error('Error: ' + str(_status))
 
     def group_playlist(self, command):
-        # print('Playlist: ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         playlist = command['value']
         for group in self.sonos_groups:
-            # group_id = group['id']
-            # address = str(group_id.split(':')[1]).lower()
-
             group_id = group['id']
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
@@ -128,17 +109,13 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('ST', 1)
                 else:
-                    print('Error: ' + str(_status))
+                    LOGGER.error('Error: ' + str(_status))
 
     def group_favorite(self, command):
-        # print('Favorite: ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         favorite = command['value']
         for group in self.sonos_groups:
-            # group_id = group['id']
-            # address = str(group_id.split(':')[1]).lower()
-
             group_id = group['id']
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
@@ -147,16 +124,12 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('ST', 1)
                 else:
-                    print('Error: ' + str(_status))
+                    LOGGER.error('Error: ' + str(_status))
 
     def group_play(self, command):
-        # print('Play: ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
-            # group_id = group['id']
-            # address = str(group_id.split(':')[1]).lower()
-
             group_id = group['id']
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
@@ -165,16 +138,12 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('ST', 1)
                 else:
-                    print('Error: ' + str(_status))
+                    LOGGER.error('Error: ' + str(_status))
 
     def group_pause(self, command):
-        # print('Pause: ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
-            # group_id = group['id']
-            # address = str(group_id.split(':')[1]).lower()
-
             group_id = group['id']
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
@@ -183,16 +152,13 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('ST', 3)
                 else:
-                    print('Error: ' + str(_status))
+                    LOGGER.error('Error: ' + str(_status))
 
     def group_skip_to_previous_track(self, command):
         # print('Previous Track ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
-            # group_id = group['id']
-            # address = str(group_id.split(':')[1]).lower()
-
             group_id = group['id']
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
@@ -201,16 +167,12 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     pass
                 else:
-                    print('Error: ' + str(_status))
+                    LOGGER.error('Error: ' + str(_status))
 
     def group_skip_to_next_track(self, command):
-        # print('Previous Track ', command)
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
         for group in self.sonos_groups:
-            # group_id = group['id']
-            # address = str(group_id.split(':')[1]).lower()
-
             group_id = group['id']
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
@@ -219,7 +181,7 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     pass
                 else:
-                    print('Error: ' + str(_status))
+                    LOGGER.error('Error: ' + str(_status))
 
     def group_shuffle_on(self, command):
         # print('Shuffle: ', command)
