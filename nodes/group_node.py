@@ -71,7 +71,7 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('SVOL', volume)
                 else:
-                    print('Error: ' + _status)
+                    print('Error group_node.group_volume: ' + str(_status))
 
     def group_mute(self, command):
         # print('Mute Command: ', command)
@@ -87,7 +87,7 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('GV0', 1)
                 else:
-                    print('Error: ' + _status)
+                    print('Error: ' + str(_status))
 
     def group_unmute(self, command):
         # print('unMute Command: ', command)
@@ -103,7 +103,7 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('GV0', 0)
                 else:
-                    print('Error: ' + _status)
+                    print('Error: ' + str(_status))
 
     def group_playlist(self, command):
         # print('Playlist: ', command)
@@ -120,7 +120,7 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('ST', 1)
                 else:
-                    print('Error: ' + _status)
+                    print('Error: ' + str(_status))
 
     def group_favorite(self, command):
         # print('Favorite: ', command)
@@ -137,7 +137,7 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('ST', 1)
                 else:
-                    print('Error: ' + _status)
+                    print('Error: ' + str(_status))
 
     def group_play(self, command):
         # print('Play: ', command)
@@ -153,7 +153,7 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('ST', 1)
                 else:
-                    print('Error: ' + _status)
+                    print('Error: ' + str(_status))
 
     def group_pause(self, command):
         # print('Pause: ', command)
@@ -169,7 +169,7 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     self.setDriver('ST', 3)
                 else:
-                    print('Error: ' + _status)
+                    print('Error: ' + str(_status))
 
     def group_skip_to_previous_track(self, command):
         # print('Previous Track ', command)
@@ -185,7 +185,7 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     pass
                 else:
-                    print('Error: ' + _status)
+                    print('Error: ' + str(_status))
 
     def group_skip_to_next_track(self, command):
         # print('Previous Track ', command)
@@ -201,7 +201,7 @@ class GroupNode(polyinterface.Node):
                 if _status:
                     pass
                 else:
-                    print('Error: ' + _status)
+                    print('Error: ' + str(_status))
 
     def group_shuffle_on(self, command):
         # print('Shuffle: ', command)
