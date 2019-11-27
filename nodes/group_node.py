@@ -15,7 +15,7 @@ class GroupNode(polyinterface.Node):
     def __init__(self, controller, primary, address, name, sonos_groups, household):
         super(GroupNode, self).__init__(controller, primary, address, name)
         self.access_token = None
-        self.sonos = None
+        self.SonosControl = None
         # self.sonos = sonos
         self.sonos_groups = sonos_groups
         self.household = household
@@ -24,7 +24,7 @@ class GroupNode(polyinterface.Node):
     def start(self):
         # print('Starting Group: ' + self.name + ' ------------------')
         self.access_token = self.controller.polyConfig['customData']['access_token']
-        self.sonos = SonosControl(self.access_token)
+        self.SonosControl = SonosControl(self.access_token)
 
         for group in self.sonos_groups:
             # group_id = group['id']
