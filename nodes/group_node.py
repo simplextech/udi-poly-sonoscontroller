@@ -23,8 +23,8 @@ class GroupNode(polyinterface.Node):
 
     def start(self):
         # print('Starting Group: ' + self.name + ' ------------------')
-        self.access_token = self.controller.polyConfig['customData']['access_token']
-        self.SonosControl = SonosControl(self.access_token)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
 
         for group in self.sonos_groups:
             # group_id = group['id']
@@ -48,7 +48,7 @@ class GroupNode(polyinterface.Node):
                     playbackstate = 0
                 self.setDriver('ST', playbackstate)
 
-                volume = SonosControl.get_group_volume(self.sonos, self.household, group_id)
+                volume = self.SonosControl.get_group_volume(self.household, group_id)
                 # List 0=volume, 1=muted, 2=fixed(true/false)
                 self.setDriver('SVOL', volume[0], force=True)
                 if volume[1] == 'true':
@@ -67,7 +67,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = SonosControl.set_group_volume(self.sonos, self.household, group_id, volume)
+                _status = self.SonosControl.set_group_volume(self.household, group_id, volume)
                 if _status:
                     self.setDriver('SVOL', volume)
                 else:
@@ -83,7 +83,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = SonosControl.set_group_mute(self.sonos, self.household, group_id, mute=True)
+                _status = self.SonosControl.set_group_mute(self.household, group_id, mute=True)
                 if _status:
                     self.setDriver('GV0', 1)
                 else:
@@ -99,7 +99,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = SonosControl.set_group_mute(self.sonos, self.household, group_id, mute=False)
+                _status = self.SonosControl.set_group_mute(self.household, group_id, mute=False)
                 if _status:
                     self.setDriver('GV0', 0)
                 else:
@@ -116,7 +116,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = SonosControl.set_playlist(self.sonos, group_id, playlist, self.shuffle)
+                _status = self.SonosControl.set_playlist(group_id, playlist, self.shuffle)
                 if _status:
                     self.setDriver('ST', 1)
                 else:
@@ -133,7 +133,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = SonosControl.set_favorite(self.sonos, group_id, favorite)
+                _status = self.SonosControl.set_favorite(group_id, favorite)
                 if _status:
                     self.setDriver('ST', 1)
                 else:
@@ -149,7 +149,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = SonosControl.set_play(self.sonos, group_id)
+                _status = self.SonosControl.set_play(group_id)
                 if _status:
                     self.setDriver('ST', 1)
                 else:
@@ -165,7 +165,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = SonosControl.set_pause(self.sonos, group_id)
+                _status = self.SonosControl.set_pause(group_id)
                 if _status:
                     self.setDriver('ST', 3)
                 else:
@@ -181,7 +181,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = SonosControl.skipToPreviousTrack(self.sonos, group_id)
+                _status = self.SonosControl.skipToPreviousTrack(group_id)
                 if _status:
                     pass
                 else:
@@ -197,7 +197,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = SonosControl.skipToNextTrack(self.sonos, group_id)
+                _status = self.SonosControl.skipToNextTrack(group_id)
                 if _status:
                     pass
                 else:
