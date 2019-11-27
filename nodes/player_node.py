@@ -4,13 +4,16 @@ except ImportError:
     import pgc_interface as polyinterface
     CLOUD = True
 
-from sonos import SonosControl as SonosControl
+# from sonos import SonosControl as SonosControl
+from sonos import SonosControl
+
+LOGGER = polyinterface.LOGGER
 
 
 class PlayerNode(polyinterface.Node):
     def __init__(self, controller, primary, address, name, sonos, sonos_players, household):
         super(PlayerNode, self).__init__(controller, primary, address, name)
-        # access_token = self.polyConfig['customParams']['access_token']
+        # access_token = controller.polyConfig['customParams']['access_token']
         # self.sonos = SonosControl(access_token)
         self.sonos = sonos
         self.sonos_players = sonos_players
