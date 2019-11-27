@@ -15,15 +15,15 @@ class PlayerNode(polyinterface.Node):
     def __init__(self, controller, primary, address, name, sonos_players, household):
         super(PlayerNode, self).__init__(controller, primary, address, name)
         # self.sonos = sonos
-        self.access_token = None
-        self.sonos = None
+        # self.access_token = None
+        self.SonosControl = None
         self.sonos_players = sonos_players
         self.household = household
 
     def start(self):
         # print('Starting Player: ' + self.name + ' ------------------')
-        self.access_token = self.controller.polyConfig['customData']['access_token']
-        self.sonos = SonosControl(self.access_token)
+        access_token = self.controller.polyConfig['customData']['access_token']
+        self.SonosControl = SonosControl(access_token)
 
         if self.get_player_volume():
             self.setDriver('ST', 1, force=True)
@@ -36,7 +36,7 @@ class PlayerNode(polyinterface.Node):
             player_id = player['id']
             player_address = 'p' + player_id.split('_')[1][0:-5].lower()
             if player_address == self.address:
-                volume = SonosControl.get_player_volume(self.sonos, player_id)
+                volume = self.SonosControl.get_player_volume(player_id)
                 if volume:
                     # List 0=volume, 1=muted, 2=fixed(true/false)
                     self.setDriver('SVOL', volume[0])
@@ -56,7 +56,7 @@ class PlayerNode(polyinterface.Node):
             player_id = player['id']
             player_address = 'p' + player_id.split('_')[1][0:-5].lower()
             if player_address == self.address:
-                _status = SonosControl.set_player_volume(self.sonos, player_id, volume)
+                _status = self.SonosControl.set_player_volume(player_id, volume)
                 if _status:
                     self.setDriver('SVOL', volume)
                 else:
@@ -68,7 +68,7 @@ class PlayerNode(polyinterface.Node):
             player_id = player['id']
             player_address = 'p' + player_id.split('_')[1][0:-5].lower()
             if player_address == self.address:
-                _status = SonosControl.set_player_mute(self.sonos, player_id)
+                _status = self.SonosControl.set_player_mute(player_id)
                 if _status:
                     self.setDriver('GV0', 1)
                 else:
@@ -80,7 +80,7 @@ class PlayerNode(polyinterface.Node):
             player_id = player['id']
             player_address = 'p' + player_id.split('_')[1][0:-5].lower()
             if player_address == self.address:
-                _status = SonosControl.set_player_unmute(self.sonos, player_id)
+                _status = self.SonosControl.set_player_unmute(player_id)
                 if _status:
                     self.setDriver('GV0', 0)
                 else:
@@ -109,7 +109,7 @@ class PlayerNode(polyinterface.Node):
                 player_address = 'p' + player_id.split('_')[1][0:-5].lower()
                 if player_address == self.address:
                     polyinterface.LOGGER.info("Sending to VoiceRSS for Player: " + player_id)
-                    _status = SonosControl.send_voice_rss(self.sonos, player_id, raw_url)
+                    _status = self.SonosControl.send_voice_rss(player_id, raw_url)
                     polyinterface.LOGGER.info("send_say_tts: " + str(_status))
         else:
             polyinterface.LOGGER.info(("VoiceRSS API Key is NOT Set"))
