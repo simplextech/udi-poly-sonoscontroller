@@ -38,6 +38,7 @@ class SonosControl:
             return household
         else:
             household = None
+            print("Error sonos_control.get_households: " + r.content)
             return household
 
     def get_groups(self, household):
