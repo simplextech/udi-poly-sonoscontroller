@@ -127,7 +127,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return r.status_code
+            print("sonos_control.set_group_volume: " + str(r.status_code))
+            return False
 
     def set_group_mute(self, household, group, mute):
         if mute:
