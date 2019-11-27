@@ -142,7 +142,8 @@ class SonosControl:
             print(r.content)
             return True
         else:
-            return r.status_code
+            print("Error sonos_control.set_group_mute: " + str(r.status_code))
+            return False
 
     def set_favorite(self, group, value):
         setFavorite_url = self.groups_url + group + '/favorites'
@@ -151,7 +152,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return r.status_code
+            print("Error sonos_control.set_favorite: " + str(r.status_code))
+            return False
 
     def set_playlist(self, group, value, shuffle):
         setPlaylist_url = self.groups_url + group + '/playlists'
@@ -163,7 +165,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return r.status_code
+            print("Error sonos_control.set_playlist: " + str(r.status_code))
+            return False
 
     def set_pause(self, group):
         setPause_url = self.groups_url + group + '/playback/pause'
@@ -171,7 +174,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return r.status_code
+            print("Error sonos_control.set_pause: " + str(r.status_code))
+            return False
 
     def set_play(self, group):
         setPlay_url = self.groups_url + group + '/playback/play'
@@ -179,7 +183,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return r.status_code
+            print("Error sonos_control.set_play: " + str(r.status_code))
+            return False
 
     def skipToPreviousTrack(self, group):
         setPlay_url = self.groups_url + group + '/playback/skipToPreviousTrack'
@@ -187,7 +192,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return r.status_code
+            print("Error sonos_control.skipToPreviousTrack: " + str(r.status_code))
+            return False
 
     def skipToNextTrack(self, group):
         setPlay_url = self.groups_url + group + '/playback/skipToNextTrack'
@@ -195,7 +201,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return r.status_code
+            print("Error sonos_control.skipToNextTrack: " + str(r.status_code))
+            return False
 
     def get_player_volume(self, player):
         player_volume_url = self.players_url + player + '/playerVolume'
@@ -206,7 +213,7 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return volume
         else:
-            print("get_player_volume: " + str(r.content))
+            print("Error sonos_control.get_player_volume: " + str(r.status_code))
             return None
 
     def set_player_volume(self, player, volume):
@@ -216,7 +223,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return r.status_code
+            print("Error sonos_control.set_player_volume: " + str(r.status_code))
+            return False
 
     def set_player_mute(self, player):
         payload = "{\r\n  \"muted\": true\r\n}"
@@ -225,7 +233,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return r.status_code
+            print("Error sonos_control.set_player_mute: " + str(r.status_code))
+            return False
 
     def set_player_unmute(self, player):
         payload = "{\r\n  \"muted\": false\r\n}"
@@ -234,7 +243,8 @@ class SonosControl:
         if r.status_code == requests.codes.ok:
             return True
         else:
-            return r.status_code
+            print("Error sonos_control.set_player_unmute: " + str(r.status_code))
+            return False
 
     def send_voice_rss(self, player, raw_url):
         stream_url = requests.utils.requote_uri(raw_url)
@@ -252,5 +262,5 @@ class SonosControl:
             print("Success: " + str(r.content))
             return True
         else:
-            print("DEBUG: " + str(r.content))
+            print("Error sonos_control.send_voice_rss: " + str(r.content))
             return False
