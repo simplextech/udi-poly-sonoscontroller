@@ -46,12 +46,15 @@ class GroupNode(polyinterface.Node):
                 self.setDriver('ST', playbackstate)
 
                 volume = self.SonosControl.get_group_volume(self.household, group_id)
-                # List 0=volume, 1=muted, 2=fixed(true/false)
-                self.setDriver('SVOL', volume[0], force=True)
-                if volume[1] == 'true':
-                    self.setDriver('GV0', 1, force=True)
+                if volume is not None:
+                    # List 0=volume, 1=muted, 2=fixed(true/false)
+                    self.setDriver('SVOL', volume[0], force=True)
+                    if volume[1] == 'true':
+                        self.setDriver('GV0', 1, force=True)
+                    else:
+                        self.setDriver('GV0', 0, force=True)
                 else:
-                    self.setDriver('GV0', 0, force=True)
+                    LOGGER.info("Group Volume None for: " + str(group))
 
     def group_volume(self, command):
         access_token = self.controller.polyConfig['customData']['access_token']
