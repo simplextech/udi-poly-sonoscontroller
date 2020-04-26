@@ -1,3 +1,5 @@
+from http.client import RemoteDisconnected
+
 import requests
 
 
@@ -111,18 +113,21 @@ class SonosControl:
 
     def get_group_volume(self, household, group):
         groupVolume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
-        r = requests.get(groupVolume_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
-            r_json = r.json()
-            if r_json['volume']:
-                # List 0=volume, 1=muted, 2=fixed(true/false)
-                volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
-                return volume
+        try:
+            r = requests.get(groupVolume_url, headers=self.headers)
+            if r.status_code == requests.codes.ok:
+                r_json = r.json()
+                if r_json['volume']:
+                    # List 0=volume, 1=muted, 2=fixed(true/false)
+                    volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
+                    return volume
+                else:
+                    print("Error sonos_control.get_group_volume: " + str(r.content))
+                    return None
             else:
-                print("Error sonos_control.get_group_volume: " + str(r.content))
                 return None
-        else:
-            return None
+        except RemoteDisconnected as ex:
+            pass
 
     def set_group_volume(self, household, group, volume):
         payload = {"volume": volume}
