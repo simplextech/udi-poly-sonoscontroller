@@ -394,6 +394,7 @@ class Controller(polyinterface.Controller):
         self.poly.installprofile()
         time.sleep(3)
         self.disco = 1
+        self.setDriver('ST', 1, force=True)
 
     def delete(self):
         LOGGER.info('Removing SonosController Nodeserver')
@@ -404,8 +405,8 @@ class Controller(polyinterface.Controller):
     def process_config(self, config):
         # this seems to get called twice for every change, why?
         # What does config represent?
-        LOGGER.info("process_config: Enter config={}".format(config));
-        LOGGER.info("process_config: Exit");
+        LOGGER.info("process_config: Enter config={}".format(config))
+        LOGGER.info("process_config: Exit")
 
     def check_params(self):
         self.voice_rss()
