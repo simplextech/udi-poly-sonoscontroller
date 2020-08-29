@@ -67,11 +67,8 @@ class SonosControl:
         Get Household Groups
         """
         groups_url = self.household_url + '/' + household + '/groups'
-        # r = requests.get(groups_url, headers=self.headers)
         r_json = self.sonos_api(groups_url)
         if r_json is not None:
-            # if r.status_code == requests.codes.ok:
-            #     r_json = r.json()
             if r_json['groups']:
                 return r_json['groups']
             else:
