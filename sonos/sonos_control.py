@@ -238,24 +238,20 @@ class SonosControl:
             return False
 
     def skip_to_previous_track(self, group):
-        set_play_url = self.groups_url + group + '/playback/skip_to_previous_track'
-        r = requests.post(set_play_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
+        skip_to_previous_track_url = self.groups_url + group + '/playback/skipToPreviousTrack'
+        if self.sonos_post_api(skip_to_previous_track_url, payload=None):
             return True
         else:
-            print("Error sonos_control.skip_to_previous_track: " + str(r.content))
+            LOGGER.error("sonos_control.skip_to_previous_track")
             return False
 
     def skip_to_next_track(self, group):
-        set_play_url = self.groups_url + group + '/playback/skip_to_next_track'
-        r = requests.post(set_play_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
+        skip_to_next_track_url = self.groups_url + group + '/playback/skipToNextTrack'
+        if self.sonos_post_api(skip_to_next_track_url, payload=None):
             return True
         else:
-            print("Error sonos_control.skip_to_next_track: " + str(r.content))
+            LOGGER.error("sonos_control.skip_to_next_track")
             return False
-
-
 
     def set_player_volume(self, player, volume):
         payload = "{\r\n  \"volume\": " + volume + "\r\n}"
