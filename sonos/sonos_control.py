@@ -240,11 +240,10 @@ class SonosControl:
 
     def set_pause(self, group):
         set_pause_url = self.groups_url + group + '/playback/pause'
-        r = requests.post(set_pause_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
+        if self.sonos_post_api(set_pause_url, payload=None):
             return True
         else:
-            print("Error sonos_control.set_pause: " + str(r.content))
+            LOGGER.error("sonos_control.set_pause")
             return False
 
     def set_play(self, group):
