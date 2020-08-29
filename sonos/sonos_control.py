@@ -99,9 +99,6 @@ class SonosControl:
         Get Favorites
         """
         favorites_url = self.household_url + '/' + household + '/favorites'
-        # r = requests.get(favorites_url, headers=self.headers)
-        # if r.status_code == requests.codes.ok:
-        #     r_json = r.json()
         r_json = self.sonos_api(favorites_url)
         if r_json is not None:
             favorites = r_json['items']
