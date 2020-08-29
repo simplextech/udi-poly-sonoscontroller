@@ -222,7 +222,7 @@ class Controller(polyinterface.Controller):
                                     group_volume = self.SonosControl.get_group_volume(household, group_id)
                                     if group_volume is not None:
                                         self.nodes[group_address].setDriver('SVOL', group_volume[0])
-                                        if group_volume[1] == 'true':
+                                        if group_volume[1]:
                                             self.nodes[group_address].setDriver('GV0', 1)
                                         else:
                                             self.nodes[group_address].setDriver('GV0', 0)
