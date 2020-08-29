@@ -36,7 +36,8 @@ class PlayerNode(polyinterface.Node):
                 if volume:
                     # List 0=volume, 1=muted, 2=fixed(true/false)
                     self.setDriver('SVOL', volume[0])
-                    if volume[1] == 'true':
+                    # if volume[1] == 'true':
+                    if volume[1]:
                         self.setDriver('GV0', 1, force=True)
                     else:
                         self.setDriver('GV0', 0, force=True)
