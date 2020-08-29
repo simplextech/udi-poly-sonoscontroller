@@ -294,6 +294,21 @@ class Controller(polyinterface.Controller):
         if 'SAY_TTS-5' not in self.polyConfig['customParams']:
             self.addCustomParam({'SAY_TTS-5': 'empty'})
             time.sleep(2)
+        if 'SAY_TTS-6' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-6': 'empty'})
+            time.sleep(2)
+        if 'SAY_TTS-7' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-7': 'empty'})
+            time.sleep(2)
+        if 'SAY_TTS-8' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-8': 'empty'})
+            time.sleep(2)
+        if 'SAY_TTS-9' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-9': 'empty'})
+            time.sleep(2)
+        if 'SAY_TTS-10' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-10': 'empty'})
+            time.sleep(2)
 
     def update_nls(self):
         """
@@ -347,6 +362,21 @@ class Controller(polyinterface.Controller):
                 if 'SAY_TTS-5' in self.polyConfig['customParams']:
                     SAY_TTS5 = self.polyConfig['customParams']['SAY_TTS-5']
                     nls_file.write('SAY_TTS-5' + ' = ' + SAY_TTS5 + '\n')
+                if 'SAY_TTS-6' in self.polyConfig['customParams']:
+                    SAY_TTS6 = self.polyConfig['customParams']['SAY_TTS-6']
+                    nls_file.write('SAY_TTS-6' + ' = ' + SAY_TTS6 + '\n')
+                if 'SAY_TTS-7' in self.polyConfig['customParams']:
+                    SAY_TTS7 = self.polyConfig['customParams']['SAY_TTS-7']
+                    nls_file.write('SAY_TTS-7' + ' = ' + SAY_TTS7 + '\n')
+                if 'SAY_TTS-8' in self.polyConfig['customParams']:
+                    SAY_TTS8 = self.polyConfig['customParams']['SAY_TTS-8']
+                    nls_file.write('SAY_TTS-8' + ' = ' + SAY_TTS8 + '\n')
+                if 'SAY_TTS-9' in self.polyConfig['customParams']:
+                    SAY_TTS9 = self.polyConfig['customParams']['SAY_TTS-9']
+                    nls_file.write('SAY_TTS-9' + ' = ' + SAY_TTS9 + '\n')
+                if 'SAY_TTS-10' in self.polyConfig['customParams']:
+                    SAY_TTS10 = self.polyConfig['customParams']['SAY_TTS-10']
+                    nls_file.write('SAY_TTS-10' + ' = ' + SAY_TTS10 + '\n')
 
                 nls_file.close()
 
