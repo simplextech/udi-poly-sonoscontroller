@@ -27,42 +27,55 @@ class SonosControl:
             'Content-Type': "application/json"
         }
 
+    def sonos_api(self, url, payload=None):
+        if payload is None:
+            req = requests.get(url, headers=self.headers)
+        else:
+            req = requests.post(url, headers=self.headers, payload=payload)
+        print(req.json())
+        if req.status_code == requests.codes.ok:
+
+            if req.json() is not None:
+                return req.json()
+        else:
+            return None
+
     def get_households(self):
         """
         Get the Household ID's
         """
-        r = requests.get(self.household_url, headers=self.headers)
-        r_json = r.json()
-        if len(r_json['households']) > 1:
-            household_key = 0
-            for household in r_json['households']:
-                # print(household['id'])
-                household.update({household_key: household['id']})
-                household_key += 1
+        r_json = self.sonos_api(self.household_url)
+        if r_json is not None:
+            if len(r_json['households']) > 1:
+                household_key = 0
+                for household in r_json['households']:
+                    household.update({household_key: household['id']})
+                    household_key += 1
+                    return household
+            elif len(r_json['households']) == 1:
+                household = {'0': r_json['households'][0]['id']}
                 return household
-        elif len(r_json['households']) == 1:
-            # print(r_json['households'][0]['id'])
-            household = {'0': r_json['households'][0]['id']}
-            return household
-        else:
-            household = None
-            print("Error sonos_control.get_households: " + r.content)
-            return household
+            else:
+                household = None
+                LOGGER.error("Error sonos_control.get_households: " + r_json)
+                return household
 
     def get_groups(self, household):
         """
         Get Household Groups
         """
         groups_url = self.household_url + '/' + household + '/groups'
-        r = requests.get(groups_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
-            r_json = r.json()
+        # r = requests.get(groups_url, headers=self.headers)
+        r_json = self.sonos_api(groups_url)
+        if r_json is not None:
+            # if r.status_code == requests.codes.ok:
+            #     r_json = r.json()
             if r_json['groups']:
                 return r_json['groups']
             else:
                 return None
         else:
-            print("Error sonos_control.get_groups: " + str(r.content))
+            LOGGER.error("Error sonos_control.get_groups: " + r_json)
             return None
 
     def get_players(self, household):
