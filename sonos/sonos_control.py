@@ -1,4 +1,12 @@
+from http.client import RemoteDisconnected
 import requests
+
+try:
+    import polyinterface
+except ImportError:
+    import pgc_interface as polyinterface
+
+LOGGER = polyinterface.LOGGER
 
 
 class SonosControl:
@@ -19,42 +27,72 @@ class SonosControl:
             'Content-Type': "application/json"
         }
 
+    def sonos_get_api(self, url):
+        try:
+            req = requests.get(url, headers=self.headers)
+            if req.status_code == requests.codes.ok:
+                if req.json() is not None:
+                    return req.json()
+                else:
+                    LOGGER.error('SonosControl.sonos_get_api: API response was None')
+                    return None
+        except RemoteDisconnected as Ex:
+            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            return None
+        except ConnectionResetError as Ex:
+            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            return None
+
+    def sonos_post_api(self, url, payload=None):
+        try:
+            req = requests.post(url, headers=self.headers, json=payload)
+            if req.status_code == requests.codes.ok:
+                return True
+            else:
+                LOGGER.error('SonosControl.sonos_api: ' + req.json())
+                return False
+        except RemoteDisconnected as Ex:
+                LOGGER.error('SonosControl.sonos_api: ' + Ex)
+                return None
+        except ConnectionResetError as Ex:
+            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            return None
+
     def get_households(self):
         """
         Get the Household ID's
         """
-        r = requests.get(self.household_url, headers=self.headers)
-        r_json = r.json()
-        if len(r_json['households']) > 1:
-            household_key = 0
-            for household in r_json['households']:
-                # print(household['id'])
-                household.update({household_key: household['id']})
-                household_key += 1
+        r_json = self.sonos_get_api(self.household_url)
+        if r_json is not None:
+            if len(r_json['households']) > 1:
+                household_key = 0
+                for household in r_json['households']:
+                    household.update({household_key: household['id']})
+                    household_key += 1
+                    return household
+            elif len(r_json['households']) == 1:
+                household = {'0': r_json['households'][0]['id']}
                 return household
-        elif len(r_json['households']) == 1:
-            # print(r_json['households'][0]['id'])
-            household = {'0': r_json['households'][0]['id']}
-            return household
+            else:
+                household = None
+                LOGGER.error("Error sonos_control.get_households: " + r_json)
+                return household
         else:
-            household = None
-            print("Error sonos_control.get_households: " + r.content)
-            return household
+            return None
 
     def get_groups(self, household):
         """
         Get Household Groups
         """
         groups_url = self.household_url + '/' + household + '/groups'
-        r = requests.get(groups_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
-            r_json = r.json()
+        r_json = self.sonos_get_api(groups_url)
+        if r_json is not None:
             if r_json['groups']:
                 return r_json['groups']
             else:
                 return None
         else:
-            print("Error sonos_control.get_groups: " + str(r.content))
+            LOGGER.error("Error sonos_control.get_groups: " + r_json)
             return None
 
     def get_players(self, household):
@@ -64,15 +102,14 @@ class SonosControl:
         :return:
         """
         players_url = self.household_url + '/' + household + '/groups'
-        r = requests.get(players_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
-            r_json = r.json()
+        r_json = self.sonos_get_api(players_url)
+        if r_json is not None:
             if r_json['players']:
                 return r_json['players']
             else:
                 return None
         else:
-            print("Error sonos_control.get_players: " + str(r.content))
+            LOGGER.error("Error sonos_control.get_players: " + r_json)
             return None
 
     def get_favorites(self, household):
@@ -80,16 +117,15 @@ class SonosControl:
         Get Favorites
         """
         favorites_url = self.household_url + '/' + household + '/favorites'
-        r = requests.get(favorites_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
-            r_json = r.json()
+        r_json = self.sonos_get_api(favorites_url)
+        if r_json is not None:
             favorites = r_json['items']
             sonos_favorites = {}
             for fav in favorites:
                 sonos_favorites.update({fav['id']: fav['name']})
             return sonos_favorites
         else:
-            print("Error sonos_control.get_favoritess: " + str(r.content))
+            LOGGER.error("Error sonos_control.get_favoritess: " + r_json)
             return None
 
     def get_playlists(self, household):
@@ -97,157 +133,152 @@ class SonosControl:
         Get Playlists
         """
         playlists_url = self.household_url + '/' + household + '/playlists'
-        r = requests.get(playlists_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
-            r_json = r.json()
+        r_json = self.sonos_get_api(playlists_url)
+        if r_json is not None:
             playlists = r_json['playlists']
             sonos_playlists = {}
             for pl in playlists:
                 sonos_playlists.update({pl['id']: pl['name']})
             return sonos_playlists
         else:
-            print("Error sonos_control.get_playlists: " + str(r.content))
+            LOGGER.error("Error sonos_control.get_playlists: " + r_json)
             return None
 
     def get_group_volume(self, household, group):
-        groupVolume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
-        r = requests.get(groupVolume_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
-            r_json = r.json()
+        group_volume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
+        r_json = self.sonos_get_api(group_volume_url)
+        if r_json is not None:
             if r_json['volume']:
                 # List 0=volume, 1=muted, 2=fixed(true/false)
                 volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
                 return volume
             else:
-                print("Error sonos_control.get_group_volume: " + str(r.content))
+                LOGGER.error("Error sonos_control.get_group_volume: " + r_json)
+                return None
+        else:
+            return None
+
+    def get_player_volume(self, player):
+        player_volume_url = self.players_url + player + '/playerVolume'
+        r_json = self.sonos_get_api(player_volume_url)
+        if r_json is not None:
+            # List 0=volume, 1=muted, 2=fixed(true/false)
+            volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
+            if volume is not None:
+                return volume
+            else:
+                LOGGER.error("Error sonos_control.get_player_volume: " + r_json)
                 return None
         else:
             return None
 
     def set_group_volume(self, household, group, volume):
         payload = {"volume": volume}
-        setGroupVolume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
-        r = requests.post(setGroupVolume_url, headers=self.headers, json=payload)
-        if r.status_code == requests.codes.ok:
+        set_group_volume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
+        if self.sonos_post_api(set_group_volume_url, payload=payload):
             return True
         else:
-            print("sonos_control.set_group_volume: " + str(r.content))
+            LOGGER.error("sonos_control.set_group_volume")
             return False
 
     def set_group_mute(self, household, group, mute):
         if mute:
-            payload = "{\n\t\"muted\": true\n}"
+            payload = {"muted": True}
         else:
-            payload = "{\n\t\"muted\": false\n}"
+            payload = {"muted": False}
 
-        setMute_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume/mute'
-        r = requests.post(setMute_url, headers=self.headers, data=payload)
-        if r.status_code == requests.codes.ok:
-            print(r.content)
+        set_mute_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume/mute'
+        if self.sonos_post_api(set_mute_url, payload=payload):
             return True
         else:
-            print("Error sonos_control.set_group_mute: " + str(r.content))
+            LOGGER.error("sonos_control.set_group_mute")
             return False
 
     def set_favorite(self, group, value):
-        setFavorite_url = self.groups_url + group + '/favorites'
-        payload = "{\n\t\"favoriteId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": false\n\t}\n}"
-        r = requests.post(setFavorite_url, headers=self.headers, data=payload)
-        if r.status_code == requests.codes.ok:
+        set_favorite_url = self.groups_url + group + '/favorites'
+        payload = {"favoriteId": value,
+                   "playOnCompletion": True,
+                   "playMode": {"shuffle": False}}
+        if self.sonos_post_api(set_favorite_url, payload=payload):
             return True
         else:
-            print("Error sonos_control.set_favorite: " + str(r.content))
+            LOGGER.error("sonos_control.set_favorite")
             return False
 
     def set_playlist(self, group, value, shuffle):
-        setPlaylist_url = self.groups_url + group + '/playlists'
+        set_playlist_url = self.groups_url + group + '/playlists'
         if shuffle:
-            payload = "{\n\t\"playlistId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": true\n\t}\n}"
+            payload = {"playlistId": value,
+                       "playOnCompletion": True,
+                       "playMode": {"shuffle": True}}
         else:
-            payload = "{\n\t\"playlistId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": false\n\t}\n}"
-        r = requests.post(setPlaylist_url, headers=self.headers, data=payload)
-        if r.status_code == requests.codes.ok:
+            payload = {"playlistId": value,
+                       "playOnCompletion": True,
+                       "playMode": {"shuffle": False}}
+        if self.sonos_post_api(set_playlist_url, payload=payload):
             return True
         else:
-            print("Error sonos_control.set_playlist: " + str(r.content))
+            LOGGER.error("sonos_control.set_playlist")
             return False
 
     def set_pause(self, group):
-        setPause_url = self.groups_url + group + '/playback/pause'
-        r = requests.post(setPause_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
+        set_pause_url = self.groups_url + group + '/playback/pause'
+        if self.sonos_post_api(set_pause_url, payload=None):
             return True
         else:
-            print("Error sonos_control.set_pause: " + str(r.content))
+            LOGGER.error("sonos_control.set_pause")
             return False
 
     def set_play(self, group):
-        setPlay_url = self.groups_url + group + '/playback/play'
-        r = requests.post(setPlay_url, headers=self.headers)
+        set_play_url = self.groups_url + group + '/playback/play'
+        r = requests.post(set_play_url, headers=self.headers)
         if r.status_code == requests.codes.ok:
             return True
         else:
             print("Error sonos_control.set_play: " + str(r.content))
             return False
 
-    def skipToPreviousTrack(self, group):
-        setPlay_url = self.groups_url + group + '/playback/skipToPreviousTrack'
-        r = requests.post(setPlay_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
+    def skip_to_previous_track(self, group):
+        skip_to_previous_track_url = self.groups_url + group + '/playback/skipToPreviousTrack'
+        if self.sonos_post_api(skip_to_previous_track_url, payload=None):
             return True
         else:
-            print("Error sonos_control.skipToPreviousTrack: " + str(r.content))
+            LOGGER.error("sonos_control.skip_to_previous_track")
             return False
 
-    def skipToNextTrack(self, group):
-        setPlay_url = self.groups_url + group + '/playback/skipToNextTrack'
-        r = requests.post(setPlay_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
+    def skip_to_next_track(self, group):
+        skip_to_next_track_url = self.groups_url + group + '/playback/skipToNextTrack'
+        if self.sonos_post_api(skip_to_next_track_url, payload=None):
             return True
         else:
-            print("Error sonos_control.skipToNextTrack: " + str(r.content))
+            LOGGER.error("sonos_control.skip_to_next_track")
             return False
-
-    def get_player_volume(self, player):
-        player_volume_url = self.players_url + player + '/playerVolume'
-        r = requests.get(player_volume_url, headers=self.headers)
-        r_json = r.json()
-        # List 0=volume, 1=muted, 2=fixed(true/false)
-        volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
-        if r.status_code == requests.codes.ok:
-            return volume
-        else:
-            print("Error sonos_control.get_player_volume: " + str(r.content))
-            return None
 
     def set_player_volume(self, player, volume):
-        payload = "{\r\n  \"volume\": " + volume + "\r\n}"
         player_volume_url = self.players_url + player + '/playerVolume'
-        r = requests.post(player_volume_url, headers=self.headers, data=payload)
-        if r.status_code == requests.codes.ok:
+        payload = {"volume": volume}
+        if self.sonos_post_api(player_volume_url, payload=payload):
             return True
         else:
-            print("Error sonos_control.set_player_volume: " + str(r.content))
+            LOGGER.error("sonos_control.player_volume")
             return False
 
     def set_player_mute(self, player):
-        payload = "{\r\n  \"muted\": true\r\n}"
-        set_player_volume_url = self.players_url + player + '/playerVolume/mute'
-        r = requests.post(set_player_volume_url, headers=self.headers, data=payload)
-        if r.status_code == requests.codes.ok:
+        set_player_mute_url = self.players_url + player + '/playerVolume/mute'
+        payload = {"muted": True}
+        if self.sonos_post_api(set_player_mute_url, payload=payload):
             return True
         else:
-            print("Error sonos_control.set_player_mute: " + str(r.content))
+            LOGGER.error("sonos_control.set_player_mute")
             return False
 
     def set_player_unmute(self, player):
-        payload = "{\r\n  \"muted\": false\r\n}"
-        set_player_volume_url = self.players_url + player + '/playerVolume/mute'
-        r = requests.post(set_player_volume_url, headers=self.headers, data=payload)
-        if r.status_code == requests.codes.ok:
+        set_player_unmute_url = self.players_url + player + '/playerVolume/mute'
+        payload = {"muted": False}
+        if self.sonos_post_api(set_player_unmute_url, payload=payload):
             return True
         else:
-            print("Error sonos_control.set_player_unmute: " + str(r.content))
+            LOGGER.error("sonos_control.set_player_unmute")
             return False
 
     def send_voice_rss(self, player, raw_url):

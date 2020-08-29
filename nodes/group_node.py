@@ -46,12 +46,15 @@ class GroupNode(polyinterface.Node):
                 self.setDriver('ST', playbackstate)
 
                 volume = self.SonosControl.get_group_volume(self.household, group_id)
-                # List 0=volume, 1=muted, 2=fixed(true/false)
-                self.setDriver('SVOL', volume[0], force=True)
-                if volume[1] == 'true':
-                    self.setDriver('GV0', 1, force=True)
+                if volume is not None:
+                    # List 0=volume, 1=muted, 2=fixed(true/false)
+                    self.setDriver('SVOL', volume[0], force=True)
+                    if volume[1] == 'true':
+                        self.setDriver('GV0', 1, force=True)
+                    else:
+                        self.setDriver('GV0', 0, force=True)
                 else:
-                    self.setDriver('GV0', 0, force=True)
+                    LOGGER.info("Group Volume None for: " + str(group))
 
     def group_volume(self, command):
         access_token = self.controller.polyConfig['customData']['access_token']
@@ -163,7 +166,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = self.SonosControl.skipToPreviousTrack(group_id)
+                _status = self.SonosControl.skip_to_previous_track(group_id)
                 if _status:
                     pass
                 else:
@@ -177,7 +180,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = self.SonosControl.skipToNextTrack(group_id)
+                _status = self.SonosControl.skip_to_next_track(group_id)
                 if _status:
                     pass
                 else:

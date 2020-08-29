@@ -222,7 +222,7 @@ class Controller(polyinterface.Controller):
                                     group_volume = self.SonosControl.get_group_volume(household, group_id)
                                     if group_volume is not None:
                                         self.nodes[group_address].setDriver('SVOL', group_volume[0])
-                                        if group_volume[1] == 'true':
+                                        if group_volume[1]:
                                             self.nodes[group_address].setDriver('GV0', 1)
                                         else:
                                             self.nodes[group_address].setDriver('GV0', 0)
@@ -246,7 +246,7 @@ class Controller(polyinterface.Controller):
                                 # List 0=volume, 1=muted, 2=fixed(true/false)
                                 if player_volume is not None:
                                     self.nodes[player_address].setDriver('SVOL', player_volume[0])
-                                    if player_volume[1] == 'true':
+                                    if player_volume[1]:
                                         self.nodes[player_address].setDriver('GV0', 1)
                                     else:
                                         self.nodes[player_address].setDriver('GV0', 0)
@@ -394,6 +394,7 @@ class Controller(polyinterface.Controller):
         self.poly.installprofile()
         time.sleep(3)
         self.disco = 1
+        self.setDriver('ST', 1, force=True)
 
     def delete(self):
         LOGGER.info('Removing SonosController Nodeserver')
@@ -404,8 +405,8 @@ class Controller(polyinterface.Controller):
     def process_config(self, config):
         # this seems to get called twice for every change, why?
         # What does config represent?
-        LOGGER.info("process_config: Enter config={}".format(config));
-        LOGGER.info("process_config: Exit");
+        LOGGER.info("process_config: Enter config={}".format(config))
+        LOGGER.info("process_config: Exit")
 
     def check_params(self):
         self.voice_rss()
