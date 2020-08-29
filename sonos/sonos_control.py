@@ -213,18 +213,9 @@ class SonosControl:
 
     def set_favorite(self, group, value):
         set_favorite_url = self.groups_url + group + '/favorites'
-        # payload = "{\n\t\"favoriteId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": false\n\t}\n}"
-        payload = {
-            "favoriteId": value,
-            "playOnCompletion": True,
-            "playMode": {"shuffle": False}
-           }
-        # r = requests.post(set_favorite_url, headers=self.headers, data=payload)
-        # if r.status_code == requests.codes.ok:
-        #     return True
-        # else:
-        #     print("Error sonos_control.set_favorite: " + str(r.content))
-        #     return False
+        payload = {"favoriteId": value,
+                   "playOnCompletion": True,
+                   "playMode": {"shuffle": False}}
         if self.sonos_post_api(set_favorite_url, payload=payload):
             return True
         else:
@@ -234,14 +225,17 @@ class SonosControl:
     def set_playlist(self, group, value, shuffle):
         set_playlist_url = self.groups_url + group + '/playlists'
         if shuffle:
-            payload = "{\n\t\"playlistId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": true\n\t}\n}"
+            payload = {"playlistId": value,
+                       "playOnCompletion": True,
+                       "playMode": {"shuffle": True}}
         else:
-            payload = "{\n\t\"playlistId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": false\n\t}\n}"
-        r = requests.post(set_playlist_url, headers=self.headers, data=payload)
-        if r.status_code == requests.codes.ok:
+            payload = {"playlistId": value,
+                       "playOnCompletion": True,
+                       "playMode": {"shuffle": False}}
+        if self.sonos_post_api(set_playlist_url, payload=payload):
             return True
         else:
-            print("Error sonos_control.set_playlist: " + str(r.content))
+            LOGGER.error("sonos_control.set_playlist")
             return False
 
     def set_pause(self, group):
