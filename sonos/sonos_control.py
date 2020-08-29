@@ -1,6 +1,12 @@
 from http.client import RemoteDisconnected
-
 import requests
+
+try:
+    import polyinterface
+except ImportError:
+    import pgc_interface as polyinterface
+
+LOGGER = polyinterface.LOGGER
 
 
 class SonosControl:
