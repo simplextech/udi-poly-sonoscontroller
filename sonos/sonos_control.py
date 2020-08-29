@@ -174,15 +174,6 @@ class SonosControl:
     def set_group_volume(self, household, group, volume):
         payload = {"volume": volume}
         set_group_volume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
-        # r = requests.post(set_group_volume_url, headers=self.headers, json=payload)
-        # if r.status_code == requests.codes.ok:
-        #     return True
-        # else:
-        #     print("sonos_control.set_group_volume: " + str(r.content))
-        #     return False
-        # r_json = self.sonos_post_api(set_group_volume_url, payload=payload)
-        # if r_json is not None:
-        #     return True
         if self.sonos_post_api(set_group_volume_url, payload=payload):
             return True
         else:
@@ -191,20 +182,11 @@ class SonosControl:
 
     def set_group_mute(self, household, group, mute):
         if mute:
-            # payload = "{\n\t\"muted\": true\n}"
             payload = {"muted": True}
         else:
-            # payload = "{\n\t\"muted\": false\n}"
             payload = {"muted": False}
 
         set_mute_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume/mute'
-        # r = requests.post(set_mute_url, headers=self.headers, data=payload)
-        # if r.status_code == requests.codes.ok:
-        #     print(r.content)
-        #     return True
-        # else:
-        #     print("Error sonos_control.set_group_mute: " + str(r.content))
-        #     return False
         if self.sonos_post_api(set_mute_url, payload=payload):
             return True
         else:
