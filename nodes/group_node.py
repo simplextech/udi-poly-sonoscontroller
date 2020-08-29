@@ -166,7 +166,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = self.SonosControl.skipToPreviousTrack(group_id)
+                _status = self.SonosControl.skip_to_previous_track(group_id)
                 if _status:
                     pass
                 else:
@@ -180,7 +180,7 @@ class GroupNode(polyinterface.Node):
             coordinator_id = group['coordinatorId']
             group_address = 'g' + coordinator_id.split('_')[1][0:-5].lower()
             if group_address == self.address:
-                _status = self.SonosControl.skipToNextTrack(group_id)
+                _status = self.SonosControl.skip_to_next_track(group_id)
                 if _status:
                     pass
                 else:
