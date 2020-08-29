@@ -246,7 +246,7 @@ class Controller(polyinterface.Controller):
                                 # List 0=volume, 1=muted, 2=fixed(true/false)
                                 if player_volume is not None:
                                     self.nodes[player_address].setDriver('SVOL', player_volume[0])
-                                    if player_volume[1] == 'true':
+                                    if player_volume[1]:
                                         self.nodes[player_address].setDriver('GV0', 1)
                                     else:
                                         self.nodes[player_address].setDriver('GV0', 0)
