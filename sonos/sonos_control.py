@@ -208,17 +208,27 @@ class SonosControl:
         if self.sonos_post_api(set_mute_url, payload=payload):
             return True
         else:
-            LOGGER.error("sonos_control.set_group_volume")
+            LOGGER.error("sonos_control.set_group_mute")
             return False
 
     def set_favorite(self, group, value):
         set_favorite_url = self.groups_url + group + '/favorites'
-        payload = "{\n\t\"favoriteId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": false\n\t}\n}"
-        r = requests.post(set_favorite_url, headers=self.headers, data=payload)
-        if r.status_code == requests.codes.ok:
+        # payload = "{\n\t\"favoriteId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": false\n\t}\n}"
+        payload = {
+            "favoriteId": value,
+            "playOnCompletion": True,
+            "playMode": {"shuffle": False}
+           }
+        # r = requests.post(set_favorite_url, headers=self.headers, data=payload)
+        # if r.status_code == requests.codes.ok:
+        #     return True
+        # else:
+        #     print("Error sonos_control.set_favorite: " + str(r.content))
+        #     return False
+        if self.sonos_post_api(set_favorite_url, payload=payload):
             return True
         else:
-            print("Error sonos_control.set_favorite: " + str(r.content))
+            LOGGER.error("sonos_control.set_favorite")
             return False
 
     def set_playlist(self, group, value, shuffle):
