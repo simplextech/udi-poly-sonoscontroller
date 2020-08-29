@@ -254,13 +254,12 @@ class SonosControl:
             return False
 
     def set_player_volume(self, player, volume):
-        payload = "{\r\n  \"volume\": " + volume + "\r\n}"
         player_volume_url = self.players_url + player + '/playerVolume'
-        r = requests.post(player_volume_url, headers=self.headers, data=payload)
-        if r.status_code == requests.codes.ok:
+        payload = {"volume": volume}
+        if self.sonos_post_api(player_volume_url, payload=payload):
             return True
         else:
-            print("Error sonos_control.set_player_volume: " + str(r.content))
+            LOGGER.error("sonos_control.player_volume")
             return False
 
     def set_player_mute(self, player):
