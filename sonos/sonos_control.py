@@ -84,11 +84,8 @@ class SonosControl:
         :return:
         """
         players_url = self.household_url + '/' + household + '/groups'
-        # r = requests.get(players_url, headers=self.headers)
         r_json = self.sonos_api(players_url)
         if r_json is not None:
-            # if r.status_code == requests.codes.ok:
-            #     r_json = r.json()
             if r_json['players']:
                 return r_json['players']
             else:
