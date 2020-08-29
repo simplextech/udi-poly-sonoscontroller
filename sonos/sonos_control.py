@@ -115,9 +115,6 @@ class SonosControl:
         Get Playlists
         """
         playlists_url = self.household_url + '/' + household + '/playlists'
-        # r = requests.get(playlists_url, headers=self.headers)
-        # if r.status_code == requests.codes.ok:
-            # r_json = r.json()
         r_json = self.sonos_api(playlists_url)
         if r_json is not None:
             playlists = r_json['playlists']
