@@ -127,27 +127,23 @@ class SonosControl:
             return None
 
     def get_group_volume(self, household, group):
-        groupVolume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
-        try:
-            r = requests.get(groupVolume_url, headers=self.headers)
-            if r.status_code == requests.codes.ok:
-                r_json = r.json()
-                if r_json['volume']:
-                    # List 0=volume, 1=muted, 2=fixed(true/false)
-                    volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
-                    return volume
-                else:
-                    print("Error sonos_control.get_group_volume: " + str(r.content))
-                    return None
+        group_volume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
+        r_json = self.sonos_api(group_volume_url)
+        if r_json is not None:
+            if r_json['volume']:
+                # List 0=volume, 1=muted, 2=fixed(true/false)
+                volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
+                return volume
             else:
+                LOGGER.error("Error sonos_control.get_group_volume: " + r_json)
                 return None
-        except RemoteDisconnected as ex:
-            pass
+        else:
+            return None
 
     def set_group_volume(self, household, group, volume):
         payload = {"volume": volume}
-        setGroupVolume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
-        r = requests.post(setGroupVolume_url, headers=self.headers, json=payload)
+        set_group_volume_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume'
+        r = requests.post(set_group_volume_url, headers=self.headers, json=payload)
         if r.status_code == requests.codes.ok:
             return True
         else:
@@ -160,8 +156,8 @@ class SonosControl:
         else:
             payload = "{\n\t\"muted\": false\n}"
 
-        setMute_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume/mute'
-        r = requests.post(setMute_url, headers=self.headers, data=payload)
+        set_mute_url = self.household_url + '/' + household + '/groups/' + group + '/groupVolume/mute'
+        r = requests.post(set_mute_url, headers=self.headers, data=payload)
         if r.status_code == requests.codes.ok:
             print(r.content)
             return True
@@ -170,9 +166,9 @@ class SonosControl:
             return False
 
     def set_favorite(self, group, value):
-        setFavorite_url = self.groups_url + group + '/favorites'
+        set_favorite_url = self.groups_url + group + '/favorites'
         payload = "{\n\t\"favoriteId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": false\n\t}\n}"
-        r = requests.post(setFavorite_url, headers=self.headers, data=payload)
+        r = requests.post(set_favorite_url, headers=self.headers, data=payload)
         if r.status_code == requests.codes.ok:
             return True
         else:
@@ -180,12 +176,12 @@ class SonosControl:
             return False
 
     def set_playlist(self, group, value, shuffle):
-        setPlaylist_url = self.groups_url + group + '/playlists'
+        set_playlist_url = self.groups_url + group + '/playlists'
         if shuffle:
             payload = "{\n\t\"playlistId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": true\n\t}\n}"
         else:
             payload = "{\n\t\"playlistId\": \"" + value + "\",\n\t\"playOnCompletion\": true,\n\t\"playMode\": {\n\t\t\"shuffle\": false\n\t}\n}"
-        r = requests.post(setPlaylist_url, headers=self.headers, data=payload)
+        r = requests.post(set_playlist_url, headers=self.headers, data=payload)
         if r.status_code == requests.codes.ok:
             return True
         else:
@@ -193,8 +189,8 @@ class SonosControl:
             return False
 
     def set_pause(self, group):
-        setPause_url = self.groups_url + group + '/playback/pause'
-        r = requests.post(setPause_url, headers=self.headers)
+        set_pause_url = self.groups_url + group + '/playback/pause'
+        r = requests.post(set_pause_url, headers=self.headers)
         if r.status_code == requests.codes.ok:
             return True
         else:
@@ -202,30 +198,30 @@ class SonosControl:
             return False
 
     def set_play(self, group):
-        setPlay_url = self.groups_url + group + '/playback/play'
-        r = requests.post(setPlay_url, headers=self.headers)
+        set_play_url = self.groups_url + group + '/playback/play'
+        r = requests.post(set_play_url, headers=self.headers)
         if r.status_code == requests.codes.ok:
             return True
         else:
             print("Error sonos_control.set_play: " + str(r.content))
             return False
 
-    def skipToPreviousTrack(self, group):
-        setPlay_url = self.groups_url + group + '/playback/skipToPreviousTrack'
-        r = requests.post(setPlay_url, headers=self.headers)
+    def skip_to_previous_track(self, group):
+        set_play_url = self.groups_url + group + '/playback/skip_to_previous_track'
+        r = requests.post(set_play_url, headers=self.headers)
         if r.status_code == requests.codes.ok:
             return True
         else:
-            print("Error sonos_control.skipToPreviousTrack: " + str(r.content))
+            print("Error sonos_control.skip_to_previous_track: " + str(r.content))
             return False
 
-    def skipToNextTrack(self, group):
-        setPlay_url = self.groups_url + group + '/playback/skipToNextTrack'
-        r = requests.post(setPlay_url, headers=self.headers)
+    def skip_to_next_track(self, group):
+        set_play_url = self.groups_url + group + '/playback/skip_to_next_track'
+        r = requests.post(set_play_url, headers=self.headers)
         if r.status_code == requests.codes.ok:
             return True
         else:
-            print("Error sonos_control.skipToNextTrack: " + str(r.content))
+            print("Error sonos_control.skip_to_next_track: " + str(r.content))
             return False
 
     def get_player_volume(self, player):
