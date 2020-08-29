@@ -39,6 +39,9 @@ class SonosControl:
         except RemoteDisconnected as Ex:
             LOGGER.error('SonosControl.sonos_api: ' + Ex)
             return None
+        except ConnectionResetError as Ex:
+            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            return None
 
     def sonos_post_api(self, url, payload=None):
         try:
@@ -49,8 +52,11 @@ class SonosControl:
                 LOGGER.error('SonosControl.sonos_api: ' + req.json())
                 return False
         except RemoteDisconnected as Ex:
-            LOGGER.error('SonosControl.sonos_post_api: ' + Ex)
-            return False
+                LOGGER.error('SonosControl.sonos_api: ' + Ex)
+                return None
+        except ConnectionResetError as Ex:
+            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            return None
 
     def get_households(self):
         """
