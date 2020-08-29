@@ -28,17 +28,19 @@ class SonosControl:
         }
 
     def sonos_api(self, url, payload=None):
-        if payload is None:
-            req = requests.get(url, headers=self.headers)
-        else:
-            req = requests.post(url, headers=self.headers, payload=payload)
-        print(req.json())
-        if req.status_code == requests.codes.ok:
+        try:
+            if payload is None:
+                req = requests.get(url, headers=self.headers)
+            else:
+                req = requests.post(url, headers=self.headers, payload=payload)
 
-            if req.json() is not None:
-                return req.json()
-        else:
-            return None
+            if req.status_code == requests.codes.ok:
+                if req.json() is not None:
+                    return req.json()
+            else:
+                return None
+        except RemoteDisconnected as Ex:
+            LOGGER.error('SonosControl.sonos_api: ' + Ex)
 
     def get_households(self):
         """
@@ -85,15 +87,17 @@ class SonosControl:
         :return:
         """
         players_url = self.household_url + '/' + household + '/groups'
-        r = requests.get(players_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
-            r_json = r.json()
+        # r = requests.get(players_url, headers=self.headers)
+        r_json = self.sonos_api(players_url)
+        if r_json is not None:
+            # if r.status_code == requests.codes.ok:
+            #     r_json = r.json()
             if r_json['players']:
                 return r_json['players']
             else:
                 return None
         else:
-            print("Error sonos_control.get_players: " + str(r.content))
+            LOGGER.error("Error sonos_control.get_players: " + r_json)
             return None
 
     def get_favorites(self, household):
@@ -101,16 +105,18 @@ class SonosControl:
         Get Favorites
         """
         favorites_url = self.household_url + '/' + household + '/favorites'
-        r = requests.get(favorites_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
-            r_json = r.json()
+        # r = requests.get(favorites_url, headers=self.headers)
+        # if r.status_code == requests.codes.ok:
+        #     r_json = r.json()
+        r_json = self.sonos_api(favorites_url)
+        if r_json is not None:
             favorites = r_json['items']
             sonos_favorites = {}
             for fav in favorites:
                 sonos_favorites.update({fav['id']: fav['name']})
             return sonos_favorites
         else:
-            print("Error sonos_control.get_favoritess: " + str(r.content))
+            LOGGER.error("Error sonos_control.get_favoritess: " + r_json)
             return None
 
     def get_playlists(self, household):
@@ -118,16 +124,18 @@ class SonosControl:
         Get Playlists
         """
         playlists_url = self.household_url + '/' + household + '/playlists'
-        r = requests.get(playlists_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
-            r_json = r.json()
+        # r = requests.get(playlists_url, headers=self.headers)
+        # if r.status_code == requests.codes.ok:
+            # r_json = r.json()
+        r_json = self.sonos_api(playlists_url)
+        if r_json is not None:
             playlists = r_json['playlists']
             sonos_playlists = {}
             for pl in playlists:
                 sonos_playlists.update({pl['id']: pl['name']})
             return sonos_playlists
         else:
-            print("Error sonos_control.get_playlists: " + str(r.content))
+            LOGGER.error("Error sonos_control.get_playlists: " + r_json)
             return None
 
     def get_group_volume(self, household, group):
