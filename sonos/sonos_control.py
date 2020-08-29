@@ -143,9 +143,6 @@ class SonosControl:
         r_json = self.sonos_get_api(group_volume_url)
         if r_json is not None:
             if r_json['volume']:
-                print("====================================================")
-                print(r_json)
-                print("====================================================")
                 # List 0=volume, 1=muted, 2=fixed(true/false)
                 volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
                 return volume
@@ -157,8 +154,6 @@ class SonosControl:
 
     def get_player_volume(self, player):
         player_volume_url = self.players_url + player + '/playerVolume'
-        # r = requests.get(player_volume_url, headers=self.headers)
-        # r_json = r.json()
         r_json = self.sonos_get_api(player_volume_url)
         if r_json is not None:
             # List 0=volume, 1=muted, 2=fixed(true/false)
