@@ -109,11 +109,11 @@ class Controller(polyinterface.Controller):
         redirect_uri = requests.utils.quote(_redirect_uri)
 
         user_auth_url = self.auth_url + \
-                        '?client_id=' + self.server_data['clientId'] + \
-                        '&response_type=code' \
-                        '&scope=playback-control-all' \
-                        '&state=' + self.server_data['worker'] + \
-                        '&redirect_uri=' + redirect_uri
+            '?client_id=' + self.server_data['clientId'] + \
+            '&response_type=code' \
+            '&scope=playback-control-all' \
+            '&state=' + self.server_data['worker'] + \
+            '&redirect_uri=' + redirect_uri
 
         self.addNotice(
             {'myNotice': 'Click <a href="' + user_auth_url + '">here</a> to link your Sonos account'})
@@ -216,21 +216,16 @@ class Controller(polyinterface.Controller):
                                     playbackstate = 0
 
                                 self.nodes[group_address].setDriver('ST', playbackstate)
-
-                                try:
-                                    # List 0=volume, 1=muted, 2=fixed(true/false)
-                                    group_volume = self.SonosControl.get_group_volume(household, group_id)
-                                    if group_volume is not None:
-                                        self.nodes[group_address].setDriver('SVOL', group_volume[0])
-                                        if group_volume[1]:
-                                            self.nodes[group_address].setDriver('GV0', 1)
-                                        else:
-                                            self.nodes[group_address].setDriver('GV0', 0)
+                                # List 0=volume, 1=muted, 2=fixed(true/false)
+                                group_volume = self.SonosControl.get_group_volume(household, group_id)
+                                if group_volume is not None:
+                                    self.nodes[group_address].setDriver('SVOL', group_volume[0])
+                                    if group_volume[1]:
+                                        self.nodes[group_address].setDriver('GV0', 1)
                                     else:
-                                        LOGGER.error("shortPoll group_volume is None")
-                                except:  # Catch All
-                                    ex = sys.exc_info()[0]
-                                    LOGGER.error("shortPoll Sonos Groups Error: " + ex)
+                                        self.nodes[group_address].setDriver('GV0', 0)
+                                else:
+                                    LOGGER.error("shortPoll group_volume is None")
                         else:
                             LOGGER.error("shortPoll: Sonos Groups is None")
                     except KeyError as ex:
@@ -348,35 +343,35 @@ class Controller(polyinterface.Controller):
 
                 # Add new SAY_TTS Entries
                 if 'SAY_TTS-1' in self.polyConfig['customParams']:
-                    SAY_TTS1 = self.polyConfig['customParams']['SAY_TTS-1']
-                    nls_file.write('SAY_TTS-1' + ' = ' + SAY_TTS1 + '\n')
+                    say_tts1 = self.polyConfig['customParams']['SAY_TTS-1']
+                    nls_file.write('SAY_TTS-1' + ' = ' + say_tts1 + '\n')
                 if 'SAY_TTS-2' in self.polyConfig['customParams']:
-                    SAY_TTS2 = self.polyConfig['customParams']['SAY_TTS-2']
-                    nls_file.write('SAY_TTS-2' + ' = ' + SAY_TTS2 + '\n')
+                    say_tts2 = self.polyConfig['customParams']['SAY_TTS-2']
+                    nls_file.write('SAY_TTS-2' + ' = ' + say_tts2 + '\n')
                 if 'SAY_TTS-3' in self.polyConfig['customParams']:
-                    SAY_TTS3 = self.polyConfig['customParams']['SAY_TTS-3']
-                    nls_file.write('SAY_TTS-3' + ' = ' + SAY_TTS3 + '\n')
+                    say_tts3 = self.polyConfig['customParams']['SAY_TTS-3']
+                    nls_file.write('SAY_TTS-3' + ' = ' + say_tts3 + '\n')
                 if 'SAY_TTS-4' in self.polyConfig['customParams']:
-                    SAY_TTS4 = self.polyConfig['customParams']['SAY_TTS-4']
-                    nls_file.write('SAY_TTS-4' + ' = ' + SAY_TTS4 + '\n')
+                    say_tts4 = self.polyConfig['customParams']['SAY_TTS-4']
+                    nls_file.write('SAY_TTS-4' + ' = ' + say_tts4 + '\n')
                 if 'SAY_TTS-5' in self.polyConfig['customParams']:
-                    SAY_TTS5 = self.polyConfig['customParams']['SAY_TTS-5']
-                    nls_file.write('SAY_TTS-5' + ' = ' + SAY_TTS5 + '\n')
+                    say_tts5 = self.polyConfig['customParams']['SAY_TTS-5']
+                    nls_file.write('SAY_TTS-5' + ' = ' + say_tts5 + '\n')
                 if 'SAY_TTS-6' in self.polyConfig['customParams']:
-                    SAY_TTS6 = self.polyConfig['customParams']['SAY_TTS-6']
-                    nls_file.write('SAY_TTS-6' + ' = ' + SAY_TTS6 + '\n')
+                    say_tts6 = self.polyConfig['customParams']['SAY_TTS-6']
+                    nls_file.write('SAY_TTS-6' + ' = ' + say_tts6 + '\n')
                 if 'SAY_TTS-7' in self.polyConfig['customParams']:
-                    SAY_TTS7 = self.polyConfig['customParams']['SAY_TTS-7']
-                    nls_file.write('SAY_TTS-7' + ' = ' + SAY_TTS7 + '\n')
+                    say_tts7 = self.polyConfig['customParams']['SAY_TTS-7']
+                    nls_file.write('SAY_TTS-7' + ' = ' + say_tts7 + '\n')
                 if 'SAY_TTS-8' in self.polyConfig['customParams']:
-                    SAY_TTS8 = self.polyConfig['customParams']['SAY_TTS-8']
-                    nls_file.write('SAY_TTS-8' + ' = ' + SAY_TTS8 + '\n')
+                    say_tts8 = self.polyConfig['customParams']['SAY_TTS-8']
+                    nls_file.write('SAY_TTS-8' + ' = ' + say_tts8 + '\n')
                 if 'SAY_TTS-9' in self.polyConfig['customParams']:
-                    SAY_TTS9 = self.polyConfig['customParams']['SAY_TTS-9']
-                    nls_file.write('SAY_TTS-9' + ' = ' + SAY_TTS9 + '\n')
+                    say_tts9 = self.polyConfig['customParams']['SAY_TTS-9']
+                    nls_file.write('SAY_TTS-9' + ' = ' + say_tts9 + '\n')
                 if 'SAY_TTS-10' in self.polyConfig['customParams']:
-                    SAY_TTS10 = self.polyConfig['customParams']['SAY_TTS-10']
-                    nls_file.write('SAY_TTS-10' + ' = ' + SAY_TTS10 + '\n')
+                    say_tts10 = self.polyConfig['customParams']['SAY_TTS-10']
+                    nls_file.write('SAY_TTS-10' + ' = ' + say_tts10 + '\n')
 
                 nls_file.close()
 
