@@ -49,7 +49,7 @@ class SonosControl:
             if req.status_code == requests.codes.ok:
                 return True
             else:
-                LOGGER.error('SonosControl.sonos_api: ' + req.json())
+                LOGGER.error('SonosControl.sonos_api: ' + str(req.content))
                 return False
         except RemoteDisconnected as Ex:
                 LOGGER.error('SonosControl.sonos_api: ' + Ex)
