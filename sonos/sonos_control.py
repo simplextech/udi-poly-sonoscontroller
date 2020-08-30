@@ -49,7 +49,7 @@ class SonosControl:
             if req.status_code == requests.codes.ok:
                 return True
             else:
-                LOGGER.error('SonosControl.sonos_api: ' + req.json())
+                LOGGER.error('SonosControl.sonos_api: ' + str(req.content))
                 return False
         except RemoteDisconnected as Ex:
                 LOGGER.error('SonosControl.sonos_api: ' + Ex)
@@ -75,7 +75,7 @@ class SonosControl:
                 return household
             else:
                 household = None
-                LOGGER.error("Error sonos_control.get_households: " + r_json)
+                LOGGER.error("Error sonos_control.get_households")
                 return household
         else:
             return None
@@ -92,7 +92,7 @@ class SonosControl:
             else:
                 return None
         else:
-            LOGGER.error("Error sonos_control.get_groups: " + r_json)
+            LOGGER.error("Error sonos_control.get_groups")
             return None
 
     def get_players(self, household):
@@ -109,7 +109,7 @@ class SonosControl:
             else:
                 return None
         else:
-            LOGGER.error("Error sonos_control.get_players: " + r_json)
+            LOGGER.error("Error sonos_control.get_players")
             return None
 
     def get_favorites(self, household):
@@ -125,7 +125,7 @@ class SonosControl:
                 sonos_favorites.update({fav['id']: fav['name']})
             return sonos_favorites
         else:
-            LOGGER.error("Error sonos_control.get_favoritess: " + r_json)
+            LOGGER.error("Error sonos_control.get_favoritess")
             return None
 
     def get_playlists(self, household):
@@ -141,7 +141,7 @@ class SonosControl:
                 sonos_playlists.update({pl['id']: pl['name']})
             return sonos_playlists
         else:
-            LOGGER.error("Error sonos_control.get_playlists: " + r_json)
+            LOGGER.error("Error sonos_control.get_playlists")
             return None
 
     def get_group_volume(self, household, group):
@@ -153,7 +153,7 @@ class SonosControl:
                 volume = [r_json['volume'], r_json['muted'], r_json['fixed']]
                 return volume
             else:
-                LOGGER.error("Error sonos_control.get_group_volume: " + r_json)
+                LOGGER.error("Error sonos_control.get_group_volume")
                 return None
         else:
             return None
@@ -167,7 +167,7 @@ class SonosControl:
             if volume is not None:
                 return volume
             else:
-                LOGGER.error("Error sonos_control.get_player_volume: " + r_json)
+                LOGGER.error("Error sonos_control.get_player_volume")
                 return None
         else:
             return None
@@ -231,11 +231,10 @@ class SonosControl:
 
     def set_play(self, group):
         set_play_url = self.groups_url + group + '/playback/play'
-        r = requests.post(set_play_url, headers=self.headers)
-        if r.status_code == requests.codes.ok:
+        if self.sonos_post_api(set_play_url, payload=None):
             return True
         else:
-            print("Error sonos_control.set_play: " + str(r.content))
+            LOGGER.error("sonos_control.set_play")
             return False
 
     def skip_to_previous_track(self, group):
