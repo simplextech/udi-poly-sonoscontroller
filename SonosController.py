@@ -222,7 +222,7 @@ class Controller(polyinterface.Controller):
                                     group_volume = self.SonosControl.get_group_volume(household, group_id)
                                     if group_volume is not None:
                                         self.nodes[group_address].setDriver('SVOL', group_volume[0])
-                                        if group_volume[1] == 'true':
+                                        if group_volume[1]:
                                             self.nodes[group_address].setDriver('GV0', 1)
                                         else:
                                             self.nodes[group_address].setDriver('GV0', 0)
@@ -246,7 +246,7 @@ class Controller(polyinterface.Controller):
                                 # List 0=volume, 1=muted, 2=fixed(true/false)
                                 if player_volume is not None:
                                     self.nodes[player_address].setDriver('SVOL', player_volume[0])
-                                    if player_volume[1] == 'true':
+                                    if player_volume[1]:
                                         self.nodes[player_address].setDriver('GV0', 1)
                                     else:
                                         self.nodes[player_address].setDriver('GV0', 0)
@@ -293,6 +293,21 @@ class Controller(polyinterface.Controller):
             time.sleep(2)
         if 'SAY_TTS-5' not in self.polyConfig['customParams']:
             self.addCustomParam({'SAY_TTS-5': 'empty'})
+            time.sleep(2)
+        if 'SAY_TTS-6' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-6': 'empty'})
+            time.sleep(2)
+        if 'SAY_TTS-7' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-7': 'empty'})
+            time.sleep(2)
+        if 'SAY_TTS-8' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-8': 'empty'})
+            time.sleep(2)
+        if 'SAY_TTS-9' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-9': 'empty'})
+            time.sleep(2)
+        if 'SAY_TTS-10' not in self.polyConfig['customParams']:
+            self.addCustomParam({'SAY_TTS-10': 'empty'})
             time.sleep(2)
 
     def update_nls(self):
@@ -347,6 +362,21 @@ class Controller(polyinterface.Controller):
                 if 'SAY_TTS-5' in self.polyConfig['customParams']:
                     SAY_TTS5 = self.polyConfig['customParams']['SAY_TTS-5']
                     nls_file.write('SAY_TTS-5' + ' = ' + SAY_TTS5 + '\n')
+                if 'SAY_TTS-6' in self.polyConfig['customParams']:
+                    SAY_TTS6 = self.polyConfig['customParams']['SAY_TTS-6']
+                    nls_file.write('SAY_TTS-6' + ' = ' + SAY_TTS6 + '\n')
+                if 'SAY_TTS-7' in self.polyConfig['customParams']:
+                    SAY_TTS7 = self.polyConfig['customParams']['SAY_TTS-7']
+                    nls_file.write('SAY_TTS-7' + ' = ' + SAY_TTS7 + '\n')
+                if 'SAY_TTS-8' in self.polyConfig['customParams']:
+                    SAY_TTS8 = self.polyConfig['customParams']['SAY_TTS-8']
+                    nls_file.write('SAY_TTS-8' + ' = ' + SAY_TTS8 + '\n')
+                if 'SAY_TTS-9' in self.polyConfig['customParams']:
+                    SAY_TTS9 = self.polyConfig['customParams']['SAY_TTS-9']
+                    nls_file.write('SAY_TTS-9' + ' = ' + SAY_TTS9 + '\n')
+                if 'SAY_TTS-10' in self.polyConfig['customParams']:
+                    SAY_TTS10 = self.polyConfig['customParams']['SAY_TTS-10']
+                    nls_file.write('SAY_TTS-10' + ' = ' + SAY_TTS10 + '\n')
 
                 nls_file.close()
 
@@ -394,6 +424,7 @@ class Controller(polyinterface.Controller):
         self.poly.installprofile()
         time.sleep(3)
         self.disco = 1
+        self.setDriver('ST', 1, force=True)
 
     def delete(self):
         LOGGER.info('Removing SonosController Nodeserver')
@@ -404,8 +435,8 @@ class Controller(polyinterface.Controller):
     def process_config(self, config):
         # this seems to get called twice for every change, why?
         # What does config represent?
-        LOGGER.info("process_config: Enter config={}".format(config));
-        LOGGER.info("process_config: Exit");
+        LOGGER.info("process_config: Enter config={}".format(config))
+        LOGGER.info("process_config: Exit")
 
     def check_params(self):
         self.voice_rss()
