@@ -118,7 +118,7 @@ class SonosControl:
 
     def get_players(self, household):
         """
-        Get Househole Players
+        Get Household Players
         :param household:
         :return:
         """
@@ -146,7 +146,7 @@ class SonosControl:
                 sonos_favorites.update({fav['id']: fav['name']})
             return sonos_favorites
         else:
-            LOGGER.error("Error sonos_control.get_favoritess")
+            LOGGER.error("Error sonos_control.get_favorites")
             return None
 
     def get_playlists(self, household):
