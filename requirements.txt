@@ -1,4 +1,5 @@
+polyinterface
 requests
-polyinterface>=2.0.0
 markdown2
+urllib3
 
