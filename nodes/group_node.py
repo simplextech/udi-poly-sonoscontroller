@@ -56,6 +56,9 @@ class GroupNode(polyinterface.Node):
                 else:
                     LOGGER.info("Group Volume None for: " + str(group))
 
+                # Set Shuffle off by default
+                self.group_shuffle_off()
+
     def group_volume(self, command):
         access_token = self.controller.polyConfig['customData']['access_token']
         self.SonosControl = SonosControl(access_token)
