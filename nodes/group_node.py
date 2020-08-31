@@ -56,8 +56,8 @@ class GroupNode(polyinterface.Node):
                 else:
                     LOGGER.info("Group Volume None for: " + str(group))
 
-                # Set Shuffle off by default
-                self.group_shuffle_off()
+                # Set Shuffle status off by default
+                self.setDriver('GV1', 0)
 
     def group_volume(self, command):
         access_token = self.controller.polyConfig['customData']['access_token']
