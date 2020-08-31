@@ -1,6 +1,7 @@
 import socket
 from http.client import RemoteDisconnected
 import requests
+import requests.utils
 import urllib3
 
 try:
@@ -39,19 +40,19 @@ class SonosControl:
                     LOGGER.error('SonosControl.sonos_get_api: API response was None')
                     return None
         except RemoteDisconnected as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
         except ConnectionResetError as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
         except socket.gaierror as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
         except urllib3.exceptions.NewConnectionError as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
         except requests.exceptions.ConnectionError as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
 
     def sonos_post_api(self, url, payload=None):
@@ -63,19 +64,19 @@ class SonosControl:
                 LOGGER.error('SonosControl.sonos_api: ' + str(req.content))
                 return False
         except RemoteDisconnected as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
         except ConnectionResetError as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
         except socket.gaierror as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
         except urllib3.exceptions.NewConnectionError as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
         except requests.exceptions.ConnectionError as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + Ex)
+            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
 
     def get_households(self):
