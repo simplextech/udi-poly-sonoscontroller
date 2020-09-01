@@ -3,16 +3,9 @@ import base64
 import fileinput
 import re
 import requests
-
-# import logging
-# logging.basicConfig(level=logging.DEBUG)
-
-# from sonos import sonos_control, SonosControl
-# from nodes import group_node, GroupNode
-# from nodes import player_node, PlayerNode
-# from nodes import favorite_node, FavoriteNode
-# from nodes import playlist_node, PlaylistNode
-# from nodes import group_parent_node, GroupParentNode
+import requests.utils
+import sys
+import time
 
 from sonos import SonosControl
 from nodes import GroupNode
@@ -26,8 +19,6 @@ try:
 except ImportError:
     import pgc_interface as polyinterface
     CLOUD = True
-import sys
-import time
 
 LOGGER = polyinterface.LOGGER
 
