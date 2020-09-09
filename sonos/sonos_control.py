@@ -39,21 +39,6 @@ class SonosControl:
                 else:
                     LOGGER.error('SonosControl.sonos_get_api: API response was None')
                     return None
-        # except RemoteDisconnected as Ex:
-        #     LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-        #     return None
-        # except ConnectionResetError as Ex:
-        #     LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-        #     return None
-        # except socket.gaierror as Ex:
-        #     LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-        #     return None
-        # except urllib3.exceptions.NewConnectionError as Ex:
-        #     LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-        #     return None
-        # except requests.exceptions.ConnectionError as Ex:
-        #     LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-        #     return None
         except(ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror, 
             urllib3.exceptions.NewConnectionError, urllib3.exceptions.ConnectionResetError) as Ex:
             LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
@@ -67,21 +52,6 @@ class SonosControl:
             else:
                 LOGGER.error('SonosControl.sonos_api: ' + str(req.content))
                 return False
-        # except RemoteDisconnected as Ex:
-        #     LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-        #     return None
-        # except ConnectionResetError as Ex:
-        #     LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-        #     return None
-        # except socket.gaierror as Ex:
-        #     LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-        #     return None
-        # except urllib3.exceptions.NewConnectionError as Ex:
-        #     LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-        #     return None
-        # except requests.exceptions.ConnectionError as Ex:
-        #     LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-        #     return None
         except(ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror, 
             urllib3.exceptions.NewConnectionError, urllib3.exceptions.ConnectionResetError) as Ex:
             LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
