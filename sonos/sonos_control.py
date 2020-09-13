@@ -39,7 +39,7 @@ class SonosControl:
                 else:
                     LOGGER.error('SonosControl.sonos_get_api: API response was None')
                     return None
-        except(ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror, 
+        except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror, 
             urllib3.exceptions.NewConnectionError, urllib3.exceptions.ConnectionResetError) as Ex:
             LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
@@ -52,7 +52,7 @@ class SonosControl:
             else:
                 LOGGER.error('SonosControl.sonos_api: ' + str(req.content))
                 return False
-        except(ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror, 
+        except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror, 
             urllib3.exceptions.NewConnectionError, urllib3.exceptions.ConnectionResetError) as Ex:
             LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
             return None
