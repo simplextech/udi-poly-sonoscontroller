@@ -6,6 +6,7 @@ import requests
 import requests.utils
 import sys
 import time
+import logging
 
 from sonos import SonosControl
 from nodes import GroupNode
@@ -21,6 +22,7 @@ except ImportError:
     CLOUD = True
 
 LOGGER = polyinterface.LOGGER
+logging.getLogger('urllib3').setLevel(logging.debug)
 
 
 class Controller(polyinterface.Controller):
