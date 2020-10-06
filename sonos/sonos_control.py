@@ -32,35 +32,49 @@ class SonosControl:
             'Content-Type': "application/json"
         }
 
+    def name_resolution(self):
+        if socket.gethostbyname(self.api_host):
+            return True
+        else:
+            return False
+
     def sonos_get_api(self, url):
-        try:
-            # session = requests.Session()
-            req = requests.get(url, headers=self.headers)
-            # req = session.get(url, headers=self.headers)
-            if req.status_code == requests.codes.ok:
-                if req.json() is not None:
-                    return req.json()
-                else:
-                    LOGGER.error('SonosControl.sonos_get_api: API response was None')
-                    return None
-        except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror,
-               urllib3.exceptions.NewConnectionError) as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
+        if self.name_resolution():
+            try:
+                # session = requests.Session()
+                req = requests.get(url, headers=self.headers)
+                # req = session.get(url, headers=self.headers)
+                if req.status_code == requests.codes.ok:
+                    if req.json() is not None:
+                        return req.json()
+                    else:
+                        LOGGER.error('SonosControl.sonos_get_api: API response was None')
+                        return None
+            except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror,
+                   urllib3.exceptions.NewConnectionError) as Ex:
+                LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
+                return None
+        else:
+            LOGGER.error("sonos_control: Name Resolution Failure")
             return None
 
     def sonos_post_api(self, url, payload=None):
-        try:
-            # session = requests.session()
-            req = requests.post(url, headers=self.headers, json=payload)
-            # req = session.post(url, headers=self.headers, json=payload)
-            if req.status_code == requests.codes.ok:
-                return True
-            else:
-                LOGGER.error('SonosControl.sonos_api: ' + str(req.content))
-                return False
-        except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror,
-               urllib3.exceptions.NewConnectionError) as Ex:
-            LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
+        if self.name_resolution():
+            try:
+                # session = requests.session()
+                req = requests.post(url, headers=self.headers, json=payload)
+                # req = session.post(url, headers=self.headers, json=payload)
+                if req.status_code == requests.codes.ok:
+                    return True
+                else:
+                    LOGGER.error('SonosControl.sonos_api: ' + str(req.content))
+                    return False
+            except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror,
+                   urllib3.exceptions.NewConnectionError) as Ex:
+                LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
+                return None
+        else:
+            LOGGER.error("sonos_control: Name Resolution Failure")
             return None
 
     def get_households(self):
