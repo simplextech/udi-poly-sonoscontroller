@@ -212,7 +212,7 @@ class Controller(polyinterface.Controller):
                                 if group_address in self.nodes:
                                     self.nodes[group_address].setDriver('ST', playbackstate)
                                 else:
-                                    LOGGER.error("shortPoll:playbackstate: Group does not exist")
+                                    LOGGER.info("shortPoll:playbackstate: Group does not exist run Re-Discover")
 
                                 # List 0=volume, 1=muted, 2=fixed(true/false)
                                 group_volume = self.SonosControl.get_group_volume(household, group_id)
