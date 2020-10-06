@@ -33,7 +33,7 @@ class PlayerNode(polyinterface.Node):
             player_address = 'p' + player_id.split('_')[1][0:-5].lower()
             if player_address == self.address:
                 volume = self.SonosControl.get_player_volume(player_id)
-                if volume:
+                if volume is not None:
                     # List 0=volume, 1=muted, 2=fixed(true/false)
                     self.setDriver('SVOL', volume[0])
                     if volume[1]:
@@ -42,7 +42,7 @@ class PlayerNode(polyinterface.Node):
                         self.setDriver('GV0', 0, force=True)
                     return True
                 else:
-                    polyinterface.LOGGER.error('Error: ' + volume)
+                    polyinterface.LOGGER.error('Error: get_player_volume is None')
                     return False
 
     def set_player_volume(self, command):
