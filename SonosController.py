@@ -6,6 +6,7 @@ import requests
 import requests.utils
 import sys
 import time
+import logging
 
 from sonos import SonosControl
 from nodes import GroupNode
@@ -21,6 +22,8 @@ except ImportError:
     CLOUD = True
 
 LOGGER = polyinterface.LOGGER
+# logging.getLogger('urllib3').setLevel(logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class Controller(polyinterface.Controller):
@@ -206,21 +209,28 @@ class Controller(polyinterface.Controller):
                                 else:
                                     playbackstate = 0
 
-                                self.nodes[group_address].setDriver('ST', playbackstate)
+                                if group_address in self.nodes:
+                                    self.nodes[group_address].setDriver('ST', playbackstate)
+                                else:
+                                    LOGGER.error("shortPoll:playbackstate: Group does not exist")
+
                                 # List 0=volume, 1=muted, 2=fixed(true/false)
                                 group_volume = self.SonosControl.get_group_volume(household, group_id)
                                 if group_volume is not None:
-                                    self.nodes[group_address].setDriver('SVOL', group_volume[0])
-                                    if group_volume[1]:
-                                        self.nodes[group_address].setDriver('GV0', 1)
+                                    if group_address in self.nodes:
+                                        self.nodes[group_address].setDriver('SVOL', group_volume[0])
+                                        if group_volume[1]:
+                                            self.nodes[group_address].setDriver('GV0', 1)
+                                        else:
+                                            self.nodes[group_address].setDriver('GV0', 0)
                                     else:
-                                        self.nodes[group_address].setDriver('GV0', 0)
+                                        LOGGER.info("shortPoll:group_volume: Group does not exist run Re-Discover")
                                 else:
-                                    LOGGER.error("shortPoll group_volume is None")
+                                    LOGGER.error("shortPoll:group_volume: None")
                         else:
-                            LOGGER.error("shortPoll: Sonos Groups is None")
+                            LOGGER.error("shortPoll:sonos_groups: Sonos Groups is None")
                     except KeyError as ex:
-                        LOGGER.error('shortPoll Sonos Groups Error: ' + str(ex))
+                        LOGGER.error('shortPoll:sonos_groups: Sonos Groups Error: ' + str(ex))
 
                     try:
                         sonos_players = self.SonosControl.get_players(household)
@@ -231,11 +241,14 @@ class Controller(polyinterface.Controller):
                                 player_volume = self.SonosControl.get_player_volume(player_id)
                                 # List 0=volume, 1=muted, 2=fixed(true/false)
                                 if player_volume is not None:
-                                    self.nodes[player_address].setDriver('SVOL', player_volume[0])
-                                    if player_volume[1]:
-                                        self.nodes[player_address].setDriver('GV0', 1)
+                                    if player_address in self.nodes:
+                                        self.nodes[player_address].setDriver('SVOL', player_volume[0])
+                                        if player_volume[1]:
+                                            self.nodes[player_address].setDriver('GV0', 1)
+                                        else:
+                                            self.nodes[player_address].setDriver('GV0', 0)
                                     else:
-                                        self.nodes[player_address].setDriver('GV0', 0)
+                                        LOGGER.info("shortPoll: Player node does not exist Run Re-Discover")
                                 else:
                                     LOGGER.error("shortPoll: SonosControl.get_player_volume is None")
                         else:
