@@ -11,8 +11,8 @@ except ImportError:
     import pgc_interface as polyinterface
 
 LOGGER = polyinterface.LOGGER
-logging.getLogger('urllib3').setLevel(logging.DEBUG)
-
+# logging.getLogger('urllib3').setLevel(logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 class SonosControl:
     def __init__(self, access_token):
