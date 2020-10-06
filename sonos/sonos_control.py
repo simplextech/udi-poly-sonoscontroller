@@ -12,7 +12,7 @@ except ImportError:
 
 LOGGER = polyinterface.LOGGER
 # logging.getLogger('urllib3').setLevel(logging.DEBUG)
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 class SonosControl:
     def __init__(self, access_token):
@@ -34,7 +34,9 @@ class SonosControl:
 
     def sonos_get_api(self, url):
         try:
-            req = requests.get(url, headers=self.headers)
+            session = requests.Session()
+            # req = requests.get(url, headers=self.headers)
+            req = session.get(url, headers=self.headers)
             if req.status_code == requests.codes.ok:
                 if req.json() is not None:
                     return req.json()
@@ -48,7 +50,9 @@ class SonosControl:
 
     def sonos_post_api(self, url, payload=None):
         try:
-            req = requests.post(url, headers=self.headers, json=payload)
+            session = requests.session()
+            # req = requests.post(url, headers=self.headers, json=payload)
+            req = session.post(url, headers=self.headers, json=payload)
             if req.status_code == requests.codes.ok:
                 return True
             else:
