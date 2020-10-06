@@ -4,7 +4,7 @@ import requests
 import requests.utils
 import urllib3
 import ssl
-import logging
+# import logging
 
 try:
     import polyinterface
