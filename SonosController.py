@@ -22,8 +22,8 @@ except ImportError:
     CLOUD = True
 
 LOGGER = polyinterface.LOGGER
-# logging.getLogger('urllib3').setLevel(logging.DEBUG)
-logging.setLevel(DEBUG)
+logging.getLogger('urllib3').setLevel(logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 
 class Controller(polyinterface.Controller):
@@ -209,7 +209,7 @@ class Controller(polyinterface.Controller):
                                 else:
                                     playbackstate = 0
 
-                                if self.getNode[group_address]:
+                                if self.polyinterface.getNode[group_address]:
                                     self.nodes[group_address].setDriver('ST', playbackstate)
                                 else:
                                     LOGGER.error("shortPoll:playbackstate: Group does not exist")
@@ -217,7 +217,7 @@ class Controller(polyinterface.Controller):
                                 # List 0=volume, 1=muted, 2=fixed(true/false)
                                 group_volume = self.SonosControl.get_group_volume(household, group_id)
                                 if group_volume is not None:
-                                    if self.getNode[group_address]:
+                                    if self.polyinterface.getNode[group_address]:
                                         self.nodes[group_address].setDriver('SVOL', group_volume[0])
                                         if group_volume[1]:
                                             self.nodes[group_address].setDriver('GV0', 1)
@@ -241,7 +241,7 @@ class Controller(polyinterface.Controller):
                                 player_volume = self.SonosControl.get_player_volume(player_id)
                                 # List 0=volume, 1=muted, 2=fixed(true/false)
                                 if player_volume is not None:
-                                    if self.getNode[player_address]:
+                                    if self.polyinterface.getNode[player_address]:
                                         self.nodes[player_address].setDriver('SVOL', player_volume[0])
                                         if player_volume[1]:
                                             self.nodes[player_address].setDriver('GV0', 1)
