@@ -3,6 +3,7 @@ from http.client import RemoteDisconnected
 import requests
 import requests.utils
 import urllib3
+import logging
 
 try:
     import polyinterface
@@ -10,6 +11,7 @@ except ImportError:
     import pgc_interface as polyinterface
 
 LOGGER = polyinterface.LOGGER
+logging.getLogger('urllib3').setLevel(logging.DEBUG)
 
 
 class SonosControl:
