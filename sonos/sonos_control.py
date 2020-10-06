@@ -3,6 +3,7 @@ from http.client import RemoteDisconnected
 import requests
 import requests.utils
 import urllib3
+import ssl
 import logging
 
 try:
@@ -51,7 +52,7 @@ class SonosControl:
                         LOGGER.error('SonosControl.sonos_get_api: API response was None')
                         return None
             except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror,
-                   urllib3.exceptions.NewConnectionError) as Ex:
+                   urllib3.exceptions.NewConnectionError, ssl.SSLError, urllib3.exceptions.MaxRetryError) as Ex:
                 LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
                 return None
         else:
@@ -70,7 +71,7 @@ class SonosControl:
                     LOGGER.error('SonosControl.sonos_api: ' + str(req.content))
                     return False
             except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror,
-                   urllib3.exceptions.NewConnectionError) as Ex:
+                   urllib3.exceptions.NewConnectionError, ssl.SSLError, urllib3.exceptions.MaxRetryError) as Ex:
                 LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
                 return None
         else:
