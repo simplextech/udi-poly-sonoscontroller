@@ -22,7 +22,7 @@ except ImportError:
     CLOUD = True
 
 LOGGER = polyinterface.LOGGER
-logging.getLogger('urllib3').setLevel(logging.debug)
+logging.getLogger('urllib3').setLevel(logging.DEBUG)
 
 
 class Controller(polyinterface.Controller):
