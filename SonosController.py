@@ -224,7 +224,7 @@ class Controller(polyinterface.Controller):
                                         else:
                                             self.nodes[group_address].setDriver('GV0', 0)
                                     else:
-                                        LOGGER.error("shortPoll:group_volume: Group does not exist")
+                                        LOGGER.info("shortPoll:group_volume: Group does not exist run Re-Discover")
                                 else:
                                     LOGGER.error("shortPoll:group_volume: None")
                         else:
@@ -248,7 +248,7 @@ class Controller(polyinterface.Controller):
                                         else:
                                             self.nodes[player_address].setDriver('GV0', 0)
                                     else:
-                                        LOGGER.error("shortPoll: Player node does not exist")
+                                        LOGGER.info("shortPoll: Player node does not exist Run Re-Discover")
                                 else:
                                     LOGGER.error("shortPoll: SonosControl.get_player_volume is None")
                         else:
