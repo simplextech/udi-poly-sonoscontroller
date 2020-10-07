@@ -42,9 +42,7 @@ class SonosControl:
     def sonos_get_api(self, url):
         if self.name_resolution():
             try:
-                # session = requests.Session()
                 req = requests.get(url, headers=self.headers)
-                # req = session.get(url, headers=self.headers)
                 if req.status_code == requests.codes.ok:
                     if req.json() is not None:
                         return req.json()
@@ -52,7 +50,8 @@ class SonosControl:
                         LOGGER.error('SonosControl.sonos_get_api: API response was None')
                         return None
             except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror,
-                   urllib3.exceptions.NewConnectionError, ssl.SSLError, urllib3.exceptions.MaxRetryError) as Ex:
+                   urllib3.exceptions.NewConnectionError, ssl.SSLError, urllib3.exceptions.MaxRetryError,
+                   requests.exceptions.SSLError) as Ex:
                 LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
                 return None
         else:
@@ -62,18 +61,17 @@ class SonosControl:
     def sonos_post_api(self, url, payload=None):
         if self.name_resolution():
             try:
-                # session = requests.session()
                 req = requests.post(url, headers=self.headers, json=payload)
-                # req = session.post(url, headers=self.headers, json=payload)
                 if req.status_code == requests.codes.ok:
                     return True
                 else:
                     LOGGER.error('SonosControl.sonos_api: ' + str(req.content))
                     return False
             except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror,
-                   urllib3.exceptions.NewConnectionError, ssl.SSLError, urllib3.exceptions.MaxRetryError) as Ex:
+                   urllib3.exceptions.NewConnectionError, ssl.SSLError, urllib3.exceptions.MaxRetryError,
+                   requests.exceptions.SSLError) as Ex:
                 LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
-                return None
+                return False
         else:
             LOGGER.error("sonos_control: Name Resolution Failure")
             return None
