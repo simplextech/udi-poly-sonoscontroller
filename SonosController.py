@@ -23,7 +23,7 @@ except ImportError:
 
 LOGGER = polyinterface.LOGGER
 # logging.getLogger('urllib3').setLevel(logging.DEBUG)
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 
 class Controller(polyinterface.Controller):
