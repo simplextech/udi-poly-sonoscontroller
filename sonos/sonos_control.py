@@ -4,7 +4,6 @@ import requests
 import requests.utils
 import urllib3
 import ssl
-# import logging
 
 try:
     import polyinterface
@@ -12,8 +11,6 @@ except ImportError:
     import pgc_interface as polyinterface
 
 LOGGER = polyinterface.LOGGER
-# logging.getLogger('urllib3').setLevel(logging.DEBUG)
-# logging.basicConfig(level=logging.DEBUG)
 
 class SonosControl:
     def __init__(self, access_token):
