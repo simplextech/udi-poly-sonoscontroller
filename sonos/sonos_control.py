@@ -34,9 +34,13 @@ class SonosControl:
         }
 
     def name_resolution(self):
-        if socket.gethostbyname(self.api_host):
-            return True
-        else:
+        try:
+            if socket.gethostbyname(self.api_host):
+                return True
+            else:
+                return False
+        except socket.gaierror as Ex:
+            LOGGER.error('Name Resolution Error: ' + str(Ex))
             return False
 
     def sonos_get_api(self, url):
