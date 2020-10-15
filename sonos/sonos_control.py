@@ -300,20 +300,23 @@ class SonosControl:
             return False
 
     def send_voice_rss(self, player, raw_url):
-        stream_url = requests.utils.requote_uri(raw_url)
-        payload = {
-            'name': "Sonos TTS",
-            'appId': "net.simplextech",
-            'streamUrl': stream_url,
-            'clipType': "CUSTOM",
-            'priority': "high"
-        }
-        print("VoiceRSS Payload: " + str(payload))
-        audio_clip_url = self.players_url + player + '/audioClip'
-        r = requests.post(audio_clip_url, headers=self.headers, json=payload)
-        if r.status_code == requests.codes.ok:
-            print("Success: " + str(r.content))
-            return True
+        if self.name_resolution():
+            stream_url = requests.utils.requote_uri(raw_url)
+            payload = {
+                'name': "Sonos TTS",
+                'appId': "net.simplextech",
+                'streamUrl': stream_url,
+                'clipType': "CUSTOM",
+                'priority': "high"
+            }
+            print("VoiceRSS Payload: " + str(payload))
+            audio_clip_url = self.players_url + player + '/audioClip'
+            r = requests.post(audio_clip_url, headers=self.headers, json=payload)
+            if r.status_code == requests.codes.ok:
+                print("Success: " + str(r.content))
+                return True
+            else:
+                print("Error sonos_control.send_voice_rss: " + str(r.content))
+                return False
         else:
-            print("Error sonos_control.send_voice_rss: " + str(r.content))
             return False
