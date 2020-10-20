@@ -36,7 +36,9 @@ class SonosControl:
                 return True
             else:
                 return False
-        except socket.gaierror as Ex:
+        except(socket.gaierror, TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected,
+               urllib3.exceptions.NewConnectionError, ssl.SSLError, urllib3.exceptions.MaxRetryError,
+               requests.exceptions.SSLError) as Ex:
             LOGGER.error('Name Resolution Error: ' + str(Ex))
             return False
 
@@ -309,14 +311,19 @@ class SonosControl:
                 'clipType': "CUSTOM",
                 'priority': "high"
             }
-            print("VoiceRSS Payload: " + str(payload))
+            LOGGER.info("VoiceRSS Payload: " + str(payload))
             audio_clip_url = self.players_url + player + '/audioClip'
-            r = requests.post(audio_clip_url, headers=self.headers, json=payload)
-            if r.status_code == requests.codes.ok:
-                print("Success: " + str(r.content))
+            if self.sonos_post_api(audio_clip_url, payload=payload):
                 return True
             else:
-                print("Error sonos_control.send_voice_rss: " + str(r.content))
+                LOGGER.error("sonos_control.set_player_unmute")
                 return False
+            # r = requests.post(audio_clip_url, headers=self.headers, json=payload)
+            # if r.status_code == requests.codes.ok:
+            #     print("Success: " + str(r.content))
+            #     return True
+            # else:
+            #     print("Error sonos_control.send_voice_rss: " + str(r.content))
+            #     return False
         else:
             return False
