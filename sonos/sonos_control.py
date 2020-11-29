@@ -54,7 +54,7 @@ class SonosControl:
                         return None
             except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror,
                    urllib3.exceptions.NewConnectionError, ssl.SSLError, urllib3.exceptions.MaxRetryError,
-                   requests.exceptions.SSLError) as Ex:
+                   requests.exceptions.SSLError, urllib3.exceptions.ProtocolError) as Ex:
                 LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
                 return None
         else:
@@ -72,7 +72,7 @@ class SonosControl:
                     return False
             except(TimeoutError, ConnectionError, ConnectionResetError, RemoteDisconnected, socket.gaierror,
                    urllib3.exceptions.NewConnectionError, ssl.SSLError, urllib3.exceptions.MaxRetryError,
-                   requests.exceptions.SSLError) as Ex:
+                   requests.exceptions.SSLError, urllib3.exceptions.ProtocolError) as Ex:
                 LOGGER.error('SonosControl.sonos_api: ' + str(Ex))
                 return False
         else:
